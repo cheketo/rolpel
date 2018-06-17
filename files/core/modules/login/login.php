@@ -12,7 +12,7 @@
   
   <div class="login-box-body">
     <div class="login-logo">
-    <span style="color:#FFF;font-size:1em;">Roller <i class="fa fa-cog animated faa-spin"></i> Service</span>
+    <span style="color:#FFF;font-size:1em;"><i class="fa fa-dropbox animated faa-tada"></i> RolPel S.R.L. </span>
   </div>
   <!-- /.login-logo -->
     <p class="login-box-msg" style="color:#CCC;">INICIAR SESI&Oacute;N</p>

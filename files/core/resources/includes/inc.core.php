@@ -1,5 +1,5 @@
 <?php
-	session_name("rollerservice");
+	session_name("rolpel");
 	session_cache_expire(15800);
 	session_start();
 	

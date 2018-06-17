@@ -8,7 +8,7 @@ class CoreDataBase
 	var $Error;
 	var $LastQuery;
 	
-	public function Connect($UserDB='roller', $PasswordDB='Oraprod1810', $DataBase='roller', $ServerDB='127.0.0.1',$TypeDB='Mysql'){
+	public function Connect($UserDB='rolpel', $PasswordDB='Oraprod1810', $DataBase='rolpel', $ServerDB='127.0.0.1',$TypeDB='Mysql'){
 		
 		$this->UserDB 		= $UserDB;
 		$this->PasswordDB	= $PasswordDB;

@@ -201,7 +201,7 @@ class CoreLogin
 	{
 		session_destroy();
 		//Unset Cookies
-		setcookie("rollerservice", "", 0 ,"/");
+		setcookie("rolpel", "", 0 ,"/");
 		setcookie(CoreUser::TABLE_ID, "", 0 ,"/");
 		setcookie("profile_id", "", 0 ,"/");
 		setcookie("first_name", "", 0 ,"/");

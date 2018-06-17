@@ -18,7 +18,7 @@
     <!--<span class="logo-mini"><b>R<i class="fa fa-cog"></i>S</b></span>-->
     <span class="logo-mini"><b><?php echo $ShortOrgName; ?></b></span>
     <!-- logo for regular state and mobile devices -->
-    <!--<span class="logo-lg">Roller<i class="fa fa-cog"></i>Service</span>-->
+    
     <span class="logo-lg"><?php echo $OrgName; ?></span>
   </a>
 

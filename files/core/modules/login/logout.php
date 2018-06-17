@@ -1,10 +1,10 @@
 <?php
-session_name("rollerservice");
+session_name("rolpel");
 session_cache_expire(15800);
 session_start();
 session_destroy();
 //Unset Cookies
-setcookie("rollerservice", "", 0 ,"/");
+setcookie("rolpel", "", 0 ,"/");
 setcookie("user_id", "", 0 ,"/");
 setcookie("profile_id", "", 0 ,"/");
 setcookie("first_name", "", 0 ,"/");
