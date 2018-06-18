@@ -11,7 +11,7 @@
   <div class="box animated fadeIn">
     <div class="box-header flex-justify-center">
       <div class="col-md-8 col-sm-12">
-        
+
           <div class="innerContainer main_form">
             <form id="new_company_form">
             <h4 class="subTitleB"><i class="fa fa-id-card"></i> Datos de la Empresa</h4>
@@ -28,7 +28,7 @@
               <div class="col-xs-12 col-sm-6">
                 <span class="input-group">
                   <span class="input-group-addon"><i class="fa fa-globe"></i></span>
-                  <?php echo Core::InsertElement('select','international','','form-control chosenSelect MainForm','data-placeholder="Nacionalidad" validateEmpty="Ingrese un tipo de nacionalidad."',array("N"=>"Nacional","Y"=>"Internacional"),' ',''); ?>
+                  <?php echo Core::InsertElement('select','international','','form-control chosenSelect MainForm','data-placeholder="Nacionalidad" validateEmpty="Ingrese un tipo de nacionalidad."',array("N"=>"Nacional","Y"=>"Internacional")); ?>
                 </span>
               </div>
             </div>
@@ -47,10 +47,10 @@
               </div>
             </div>
             <br>
-            
+
             <div id="Billing" class="Hidden">
               <h4 class="subTitleB"><i class="fa fa-file-excel-o"></i> Datos de Facturaci&oacute;n</h4>
-              
+
               <div id="BillingInternational">
                 <div class="row form-group inline-form-custom">
                   <div class="col-xs-12">
@@ -60,8 +60,8 @@
                     </span>
                   </div>
                 </div>
-              </div>  
-              
+              </div>
+
               <div id="BillingNational">
                 <div class="row form-group inline-form-custom">
                   <div class="col-xs-12">
@@ -86,8 +86,8 @@
                   </div>
                 </div>
               </div>
-              
-            </div>  
+
+            </div>
             </form>
             <br>
             <div class="row">
@@ -104,7 +104,7 @@
           <h4 class="subTitleB"><i class="fa fa-map-pin"></i> Sucursales</h4>
           <div id="MapsErrorMessage" class="Hidden ErrorText Red">Complete los datos de la sucursal central.</div>
           <div id="branches_container">
-            
+
             <div class="row branch_row listRow2 bg-gray" style="margin:0px!important;">
               <div class="col-lg-1 col-md-2 col-sm-3 col-xs-0 flex-justify-center hideMobile990">
 									<div class="listRowInner">
@@ -118,7 +118,7 @@
 									  <button type="button" class="btn btnBlue EditBranch LoadedMap" branch="1"><i class="fa fa-pencil"></i></button>
 								</div>
 							</div>
-								
+
             </div>
 
       </div>

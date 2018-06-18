@@ -1,7 +1,7 @@
 <?php
 trait CoreSearchList
 {
-    var $Where				= '1=1';
+  var $Where				= '1=1';
 	var $Regs				= array();
 	var $TotalRegs;
 	var $Page				= 1;
@@ -14,19 +14,19 @@ trait CoreSearchList
 	var $Fields 			= '*';
 	var $GridButtons		= '<button aria-label="Ver listado" class="ShowList GridElement btn Hidden hint--bottom-left hint--bounce"><i class="fa fa-list"></i></button><button aria-label="Ver grilla" class="ShowGrid ListElement btn hint--bottom-left hint--bounce"><i class="fa fa-th-large"></i></button>';
 	var $FilterButtons		= '<button aria-label="Buscar" class="ShowFilters SearchElement btn hint--bottom hint--bounce"><i class="fa fa-search"></i></button>';
-	
+
     public function GetWhere()
 	{
 		return $this->Where;
 	}
-	
+
 	public function SetWhereCondition($Key="",$Operation="=",$Value="",$Connector="AND")
 	{
 		if(isset($Key))
 		{
 			switch(strtoupper($Operation))
 			{
-				case 'LIKE': 
+				case 'LIKE':
 					$Value = "'%".$Value."%'";
 				break;
 				case 'IN':
@@ -37,42 +37,42 @@ trait CoreSearchList
 				break;
 			}
 			$this->Where .= " ".$Connector." ".$Key." ".$Operation." ".$Value."";
-			return $this->GetWhere();	
+			return $this->GetWhere();
 		}
 	}
-	
+
 	public function AddWhereString($String="")
 	{
 		$this->Where .= $String;
 		return $this->GetWhere();
 	}
-	
+
 	public function SetWhere($Where="")
 	{
 		$this->Where = $Where;
 		return $this->GetWhere();
 	}
-	
+
 	public function SetRegsPerView($Regs)
 	{
 		$this->RegsPerView = $Regs;
 	}
-	
+
 	public function GetRegsPerView()
 	{
 		return $this->RegsPerView;
 	}
-	
+
 	public function GetRegs()
 	{
 		if(!$this->Regs)
 		{
 			$this->Regs = Core::Select($this->GetTable(),$this->GetFields(),$this->GetWhere(),$this->GetOrder(),$this->GetGroupBy(),$this->GetLimit());
-			
+
 		}
 		return $this->Regs;
 	}
-	
+
 	public function GetTotalRegs()
 	{
 		if($this->TotalRegs)
@@ -80,7 +80,7 @@ trait CoreSearchList
 		else
 			return "0";
 	}
-	
+
 	public function CalculateTotalRegs()
 	{
 		$this->TotalRegs = Core::NumRows($this->GetTable(),$this->GetFields(),$this->GetWhere(),$this->GetOrder(),$this->GetGroupBy());
@@ -89,57 +89,57 @@ trait CoreSearchList
 		else
 			return "0";
 	}
-	
+
 	public function SetPage($Page)
 	{
 		$this->Page = $Page;
 	}
-	
+
 	public function GetPage()
 	{
 		return $this->Page;
 	}
-	
+
 	public function SetOrder($Order)
 	{
 		$this->Order = $Order;
 	}
-	
+
 	public function GetOrder()
 	{
 		return $this->Order;
 	}
-	
+
 	public function SetGroupBy($GroupBy)
 	{
 		$this->GroupBy = $GroupBy;
 	}
-	
+
 	public function GetGroupBy()
 	{
 		return $this->GroupBy;
 	}
-	
+
 	public function SetTable($Table)
 	{
 		$this->SearchTable = $Table;
 	}
-	
+
 	public function GetTable()
 	{
 		return $this->SearchTable;
 	}
-	
+
 	public function SetFields($Fields)
 	{
 		$this->Fields = $Fields;
 	}
-	
+
 	public function GetFields()
 	{
 		return $this->Fields;
 	}
-	
+
 	public function GetTotalPages()
 	{
 		$Total			= $this->GetTotalRegs();
@@ -148,18 +148,18 @@ trait CoreSearchList
 		{
 			return 0;
 		}else{
-			return intval(ceil($Total/$RegsPerView)); 	
+			return intval(ceil($Total/$RegsPerView));
 		}
-		
+
 	}
-	
+
 	public function GetLimit()
 	{
 		$TotalRegs	= $this->CalculateTotalRegs();
 		$TotalPages	= $this->GetTotalPages();
 		$Page		= $this->GetPage();
 		$RegPerView	= $this->GetRegsPerView();
-		
+
 		if($Page<=$TotalPages)
 		{
 			$From = $RegPerView * ($Page-1);
@@ -172,10 +172,10 @@ trait CoreSearchList
 		}
 		return $From.", ".$To;
 	}
-	
+
 	public function InsertSearchList($ShowGrid=false,$ShowFilters=true)
 	{
-		
+
 		if($ShowFilters) $FilterButtons = $this->FilterButtons;
 		if($ShowGrid) $GridButtons = $this->GridButtons;
 		return '<div class="box">
@@ -233,17 +233,17 @@ trait CoreSearchList
 				    		</ul>
 				    	</div>
 				    </div>
-			          
-			          
-			          
+
+
+
 			      </div>
-			      
+
 			      <!-- Paginator -->
 			    </div>
 			  </div><!-- /.box -->
 			  ';
 	}
-	
+
 	public function InsertSearchResults()
 	{
 		if($_POST['show_grid'])
@@ -254,9 +254,9 @@ trait CoreSearchList
 				$GridClass = 'Hidden';
 			$Grid = '<div class="GridView row horizontal-list flex-justify-center GridElement '.$GridClass.' animated fadeIn"><ul>'.$this->MakeGrid().'</ul></div><!-- /.horizontal-list -->';
 		}
-	
-			
-		
+
+
+
 		$this->ConfigureSearchRequest();
 		return '<div class="contentContainer txC" id="SearchResult" object="'.get_class($this).'">
 			        '.$Grid.'
@@ -268,7 +268,7 @@ trait CoreSearchList
 			        '.Core::InsertElement('hidden','totalregs',$this->GetTotalRegs()).'
 			      </div><!-- /Content Container -->';
 	}
-	
+
 	public function InsertDefaultSearchButtons()
 	{
 		return '<!-- Select All -->
@@ -283,14 +283,14 @@ trait CoreSearchList
 		    	<!-- /Activate All -->
 		    	';
 	}
-	
+
 	protected function InsertSearchField()
 	{
 		$this->SetSearchFields();
 		$Activated = 'sort-activated';
 		$SearcherHTML = '<div class="row"><form id="CoreSearcherForm" name="CoreSearcherForm">';
 		foreach($this->SearchFields as $Order => $HTML)
-		{	
+		{
 			$OrderButton = $this->NoOrderSearchFields[$Order]?'<span class="input-group-addon"></span>':'<span class="input-group-addon order-arrows '.$Activated.'" order="'.$Order.'" mode="asc"><i class="fa fa-sort-alpha-asc"></i></span>';
 			$SearcherHTML	.='<div class="input-group col-lg-3 col-md-3 col-sm-5 col-xs-11" style="margin:2px;">
 								'.$OrderButton.'
@@ -299,33 +299,33 @@ trait CoreSearchList
         	$Activated = '';
 		}
 		foreach($this->HiddenSearchFields as $ID => $Value)
-		{	
+		{
 			$SearcherHTML	.= Core::InsertElement('hidden',$ID,$Value);
 		}
 		$SearcherHTML .= '</form></div>';
         return $SearcherHTML;
 	}
-	
+
 	public function Search()
 	{
 		echo $this->InsertSearchResults();
 	}
-	
+
 	public function SetSearchRequest($Fields=array())
 	{
 		$this->SetTable(self::SEARCH_TABLE);
 		// $this->SetFields('*');
-		
+
 		$Fields = empty($Fields)? $this->ConfigureSearchColumns():$Fields;
-		
+
 		foreach($Fields as $Field => $Config)
 		{
 			if(!$Config['condition']) $Config['condition'] = 'LIKE';
 			$this->SetWhereCondition($Field,$Config['condition'],$Config['value']);
 		}
-		
+
 		$Mode = $_POST['view_order_mode']? $_POST['view_order_mode']: 'ASC';
-		
+
 		if($_POST['view_order_field'])
 			$this->SetOrder($_POST['view_order_field']." ".$Mode);
 
@@ -334,16 +334,16 @@ trait CoreSearchList
 		if(intval($_POST['view_page'])>0)
 			$this->SetPage($_POST['view_page']);
 	}
-	
+
 	protected function ConfigureSearchColumns()
 	{
-		
+
 		foreach($this->HiddenSearchFields as $ID => $Value)
-		{	
+		{
 			$_POST[$ID] = $Value;
 			$_POST[$ID.'_condition']='=';
 		}
-		
+
 		if(!$_POST['status'])
 		{
 			if($_GET['status'])
@@ -354,14 +354,14 @@ trait CoreSearchList
 			}
 			$_POST['status_condition']='=';
 		}
-		
+
 		if(!$_POST[CoreOrganization::TABLE_ID])
 		{
 			$_POST[CoreOrganization::TABLE_ID] = $_SESSION[CoreOrganization::TABLE_ID];
 			$_POST[CoreOrganization::TABLE_ID.'_condition']='=';
 		}
-			
-		
+
+
 		$Fields = array();
 		$Columns = Core::TableData(self::SEARCH_TABLE);
 		foreach($Columns as $Column)
@@ -371,7 +371,7 @@ trait CoreSearchList
 				if(!$_POST[$Column['Field']]) $_POST[$Column['Field']] = $_GET[$Column['Field']];
 				if($_POST[$Column['Field'].'_condition'])
 				{
-					$Fields[$Column['Field']] = array('value'=>$_POST[$Column['Field']],'condition'=>$_POST[$Column['Field'].'_condition']);	
+					$Fields[$Column['Field']] = array('value'=>$_POST[$Column['Field']],'condition'=>$_POST[$Column['Field'].'_condition']);
 				}else{
 					$Column['Type'] = explode(")",$Column['Type']);
 					switch($Column['Type'][0])
@@ -394,12 +394,12 @@ trait CoreSearchList
 		}
 		return $Fields;
 	}
-	
+
 	public function ConfigureSearchRequest()
 	{
 		$this->SetSearchRequest();
 	}
-	
+
 	public function MakeList()
 	{
 		return $this->MakeRegs("List");
@@ -409,14 +409,14 @@ trait CoreSearchList
 	{
 		return $this->MakeRegs("Grid");
 	}
-	
+
 	public function MakeRegs($Mode="list")
 	{
 		$this->SetGroupBy(self::TABLE_ID);
 		// $Rows	= self::GroupRowsByID($this->GetRegs());
 		$Rows	= $this->GetRegs();
 		//echo Core::LastQuery();
-		
+
 		foreach($Rows as $Row)
 		{
 			$Class	= get_class($this);
@@ -424,7 +424,7 @@ trait CoreSearchList
 			switch(strtolower($Mode))
 			{
 				case "list":
-					
+
 					$RowBackground = $RowBackground == ' listRow2 '? '':' listRow2 ';
 					$Regs	.= '<div class="row listRow'.$RowBackground.'" id="row_'.$Object->ID.'">
 									'.self::MakeListHTML($Object).'
@@ -448,7 +448,7 @@ trait CoreSearchList
         if(!$Regs) $Regs.= self::MakeNoRegsHTML();
 		return $Regs;
 	}
-	
+
 	public function GroupRowsByID($Rows)
 	{
 		$Regs = array();

@@ -2,15 +2,15 @@
 
 class CompanyBranch
 {
-    use CoreCrud,CoreImage;
-    
-    const TABLE				= 'company_branch';
-	const TABLE_ID			= 'branch_id';
-	const DEFAULT_IMG		= '../../../../skin/images/branches/default/default.png';
-	const DEFAULT_IMG2		= '../../../../skin/images/branches/default/default2.png';
-	const DEFAULT_IMG_DIR	= '../../../../skin/images/branches/default/';
-	const IMG_DIR			= '../../../../skin/images/branches/';
-	
+  use CoreCrud,CoreImage;
+
+  const TABLE				     = 'company_branch';
+	const TABLE_ID			   = 'branch_id';
+	const DEFAULT_IMG		   = '../../../../skin/images/branches/default/default.png';
+	const DEFAULT_IMG2		 = '../../../../skin/images/branches/default/default2.png';
+	const DEFAULT_IMG_DIR	 = '../../../../skin/images/branches/default/';
+	const IMG_DIR			     = '../../../../skin/images/branches/';
+
 	public static function GetBranches($Branches)
 	{
 	    $TotalBranches = array();
@@ -25,7 +25,7 @@ class CompanyBranch
 			            $Branch['branch_logo'] = self::DEFAULT_IMG;
 			        else
 			            $Branch['branch_logo'] = self::DEFAULT_IMG2;
-			            
+
 			        $TotalBranches[] = $Branch;
 			        $ID=$Branch['branch_id'];
 			    }
@@ -34,19 +34,17 @@ class CompanyBranch
 		}
 		return $TotalBranches;
 	}
-    
+
     public static function InsertBranchInfo($ID,$DeleteInfo=false)
 	{
-	    echo "1";
-		
-		// DELETE ALL BRANCHES
+	  // DELETE ALL BRANCHES
 		if($DeleteInfo)
 		{
 			Core::Delete('company_agent',Company::TABLE_ID."=".$ID);
 			Core::Delete('relation_company_broker',Company::TABLE_ID."=".$ID);
 			Core::Delete(self::TABLE,Company::TABLE_ID."=".$ID);
 		}
-		
+
 		// BRANCHES
 		for($I=1;$I<=$_POST['total_branches'];$I++)
 		{
@@ -57,42 +55,42 @@ class CompanyBranch
 				$Branches[$I]['fax']			= $_POST['fax_'.$I];
 				$Branches[$I]['email']			= $_POST['email_'.$I];
 				$Branches[$I]['phone']			= $_POST['phone_'.$I];
-				
+
 				if($I==1)
 					$Branches[$I]['main_branch']			= 'Y';
 				else
 					$Branches[$I]['main_branch']			= 'N';
-					
+
 				// LOCATION DATA
 				$Branches[$I]['lat']			= $_POST['map'.$I.'_lat'];
 				$Branches[$I]['lng']			= $_POST['map'.$I.'_lng'];
-				
+
 				$Branches[$I]['address']		= $_POST['map'.$I.'_address_short'];
 				if(!$Branches[$I]['address'])
 					$Branches[$I]['address']	= $_POST['address_'.$I];
 				$Branches[$I]['postal_code']	= $_POST['map'.$I.'_postal_code'];
 				if(!$Branches[$I]['postal_code'])
 					$Branches[$I]['postal_code']= $_POST['postal_code_'.$I];
-				
+
 				$Branches[$I]['zone_short']		= $_POST['map'.$I.'_zone_short'];
 				$Branches[$I]['region_short']	= $_POST['map'.$I.'_region_short'];
 				$Branches[$I]['province_short']	= $_POST['map'.$I.'_province_short'];
 				$Branches[$I]['country_short']	= $_POST['map'.$I.'_country_short'];
-				
+
 				$Branches[$I]['zone']			= $_POST['map'.$I.'_zone'];
 				$Branches[$I]['region'] 		= $_POST['map'.$I.'_region'];
 				$Branches[$I]['province']		= $_POST['map'.$I.'_province'];
 				$Branches[$I]['country']		= $_POST['map'.$I.'_country'];
-			
+
 				// INSERT NEW LOCATIONS
 				$Branches[$I]['country_id']		= Geolocation::InsertCountry($Branches[$I]['country'],$Branches[$I]['country_short']);
 				$Branches[$I]['province_id']	= Geolocation::InsertProvince($Branches[$I]['province'],$Branches[$I]['province_short'],$Branches[$I]['country_id']);
 				$Branches[$I]['region_id']		= Geolocation::InsertRegion($Branches[$I]['region'],$Branches[$I]['region_short'],$Branches[$I]['country_id'],$Branches[$I]['province_id']);
 				$Branches[$I]['zone_id']		= Geolocation::InsertZone($Branches[$I]['zone'],$Branches[$I]['zone_short'],$Branches[$I]['country_id'],$Branches[$I]['province_id'],$Branches[$I]['region_id']);
-				
+
 				$BranchID 		                = Core::Insert("company_branch",Company::TABLE_ID.",country_id,province_id,region_id,zone_id,name,address,phone,email,website,fax,postal_code,main_branch,lat,lng,creation_date,created_by,".CoreOrganization::TABLE_ID,$ID.",".$Branches[$I]['country_id'].",".$Branches[$I]['province_id'].",".$Branches[$I]['region_id'].",".$Branches[$I]['zone_id'].",'".$Branches[$I]['name']."','".$Branches[$I]['address']."','".$Branches[$I]['phone']."','".$Branches[$I]['email']."','".$Branches[$I]['website']."','".$Branches[$I]['fax']."','".$Branches[$I]['postal_code']."','".$Branches[$I]['main_branch']."',".$Branches[$I]['lat'].",".$Branches[$I]['lng'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
 				// echo Core::LastQuery();
-				
+
 				// AGENTS DATA
 				$Agents = array();
 				for($A=1;$A<=$_POST['branch_total_agents_'.$I];$A++)
@@ -107,7 +105,7 @@ class CompanyBranch
 						$Agents[]		= array('name'=>$AgentName,'charge'=>$AgentCharge,'email'=>$AgentEmail,'phone'=>$AgentPhone,'extra'=>$AgentExtra);
 					}
 				}
-				
+
 				// INSERT AGENTS
 				$Fields="";
 				foreach($Agents as $Agent)
@@ -118,7 +116,7 @@ class CompanyBranch
 				}
 				if($Fields)
 				    Core::Insert('company_agent',Company::TABLE_ID.',branch_id,name,charge,email,phone,extra,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
-				
+
 				// INSERT BROKERS
 				$Brokers = explode(",",$_POST['brokers_'.$I]);
 				$Fields="";
@@ -136,7 +134,7 @@ class CompanyBranch
 			}
 		}
 	}
-	
+
 	public function Getbranchmodal($ID=1,$Data=array())
     {
     	if($_POST['total_branches'])
@@ -152,7 +150,7 @@ class CompanyBranch
 			$Results	= Core::Select('relation_company_broker','broker_id',self::TABLE_ID.'='.$Data[self::TABLE_ID]);
 			foreach($Results as $Broker)
 		    {
-		      $Brokers .= $Brokers? ','.$Broker['broker_id'] : $Broker['broker_id']; 
+		      $Brokers .= $Brokers? ','.$Broker['broker_id'] : $Broker['broker_id'];
 		    }
 		    $Agents	= Core::Select('company_agent','*','branch_id='.$Data['branch_id']);
 		    $A=0;
@@ -171,13 +169,13 @@ class CompanyBranch
 		    // 	$NoAgents = '<span id="empty_agent_'.$ID.'" class="Info-Card-Empty info-card-empty">No hay representantes ingresados</span>';
 		    // }
 		}
-		
+
 		if(!$A)
 	    {
 	    	$NoAgents = '<span id="empty_agent_'.$ID.'" class="Info-Card-Empty info-card-empty">No hay representantes ingresados</span>';
 	    }
-        
-    	
+
+
     	if($ID>1)
     	{
     		$BranchNameHTML = '<div class="row form-group inline-form-custom">
@@ -192,7 +190,7 @@ class CompanyBranch
     		$BranchName = 'Central';
     		$BranchNameHTML = Core::InsertElement('hidden','branch_name_'.$ID,$BranchName);
     	}
-    	
+
     	if(Core::IsMobile())
     	{
     		$TopEm = 7;
@@ -201,12 +199,12 @@ class CompanyBranch
     		$TopEm = 11;
     		$BodyEm = 41;
     	}
-    	
+
         $HTML .= '
         <!-- //// BEGIN BRANCH MODAL '.$ID.' //// -->
         <div id="branch_modal_'.$ID.'" class="modal fade '.$NewClass.'" role="dialog" style="opacity:1!important;">
             <div class="modal-dialog" style="top:'.$TopEm.'em;">
-                
+
                 <div class="modal-content">
                     <div class="modal-header">
                         <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
@@ -235,7 +233,7 @@ class CompanyBranch
                                 '.Core::InsertAutolocationMap($ID,$Data).'
                             </div>
                         </div>
-                        
+
                         <br>
                         <h4 class="subTitleB"><i class="fa fa-phone"></i> Datos de contacto</h4>
                         <div class="row form-group inline-form-custom">
@@ -330,26 +328,20 @@ class CompanyBranch
                                 </div>
                             </div>
                         </div>
+
+                        <br>
                         
-                        <br>
-                        <h4 class="subTitleB"><i class="fa fa-briefcase"></i> Corredores</h4>
-                        <div id="agent_list_'.$ID.'" branch="'.$ID.'" class="row">
-                            <div class="col-xs-12">
-                                '.Core::InsertElement('multiple','brokers_'.$ID,$Brokers,'form-control chosenSelect BrokerSelect','data-placeholder="Seleccionar Corredores" branch="'.$ID.'"',Core::Select('core_user',"user_id,CONCAT(first_name,' ',last_name) as name","status='A' AND profile_id = 361",'name'),' ','').'
-                            </div>
-                        </div>
-                        <br>
                     </div>
                     <div class="modal-footer txC" style="background-color:#6f69bd!important;">
-						<button type="button" name="button" class="btn btn-success btnBlue SaveBranchEdition" id="SaveBranchEdition'.$ID.'" data-dismiss="modal" branch="'.$ID.'">Guardar</button>
-						<button type="button" name="button" class="btn btn-success btnRed CancelBranchEdition" id="CancelBranchEdition'.$ID.'" data-dismiss="modal" branch="'.$ID.'">Cancelar</button>
-					</div>
+          						<button type="button" name="button" class="btn btn-success btnBlue SaveBranchEdition" id="SaveBranchEdition'.$ID.'" data-dismiss="modal" branch="'.$ID.'">Guardar</button>
+          						<button type="button" name="button" class="btn btn-success btnRed CancelBranchEdition" id="CancelBranchEdition'.$ID.'" data-dismiss="modal" branch="'.$ID.'">Cancelar</button>
+          					</div>
                 </div>
             </div>
         </div>
         <!-- //// END BRANCH MODAL '.$ID.' //// -->
         ';
-    
+
         echo $HTML;
     }
 }

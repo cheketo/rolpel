@@ -1,26 +1,36 @@
 <?php
-	session_name("rolpel");
-	session_cache_expire(15800);
+	/****************************************\
+	|            SYSTEM CONFIG               |
+	\****************************************/
+	include_once("../../../config.php");
+
+	/****************************************\
+	|            	SET SESSION                |
+	\****************************************/
+	session_name($SESSION_CONFIG['name']);
+	session_cache_expire($SESSION_CONFIG['time']);
 	session_start();
-	
-	// $ROOT = $_SERVER['DOCUMENT_ROOT'];
-	// $GOLBALS['ROOT'] = $ROOT;
-	define("PROCESS", "../../../core/resources/processes/proc.core.php");
-	
-	/* SETTING DB CONNECTION */
+
+	/****************************************\
+	|            	DB CONNECTION              |
+	\****************************************/
 	include_once("../../../core/resources/classes/class.core.data.base.php");
 	$GLOBALS['DB'] = new CoreDataBase();
-	if(!$GLOBALS['DB']->Connect())
+	if(!$GLOBALS['DB']->Connect($DB_CONFIG))
 	{
 		header("Location: ../../../core/resources/includes/inc.core.error.php?error=".$GLOBALS['DB']->Error);
 		die();
 	}
-	
-	/* LOADING CLASSES */
+
+	/****************************************\
+	|            LOADING CLASSES             |
+	\****************************************/
 	include_once("../../../core/resources/classes/class.core.php");
 	spl_autoload_register("Core::Autoload");
 
-	/* SECURIRTY CHECKS */
+	/****************************************\
+	|           SECURITY CHECKS              |
+	\****************************************/
 	$Security		= new CoreSecurity();
 	if($Security->CheckProfile())
 	{
@@ -30,19 +40,27 @@
 		$Cookies	->SetCookies();
 		$CoreUser->GetOrganization();
 	}
-	
-	/* ADDING SLASHES TO PUBLIC VARIABLES */
+
+	/****************************************\
+	|            ADDING SLASHES              |
+	\****************************************/
 	$_POST	= Core::AddSlashesArray($_POST);
 	$_GET	= Core::AddSlashesArray($_GET);
-	
-	/* SETTING MENU OF THE DOCUMENT */
+
+	/****************************************\
+	|            	SETTING MENU               |
+	\****************************************/
 	$Menu = new CoreMenu();
-	
-	/* SETTING HEAD OF THE DOCUMENT */
+
+	/****************************************\
+	|            	 SETTING HEAD              |
+	\****************************************/
 	$Head	= new CoreHead();
 	$Head	->SetFavicon("../../../../skin/images/body/icons/favicon.ico");
 	$Head	->SetOrganization($CoreUser->Data['organization']['name']);
-	
-	/* SETTING FOOT OF THE DOCUMENT */
+
+	/****************************************\
+	|            	SETTING FOOTER             |
+	\****************************************/
 	$Foot	= new CoreFoot();
 ?>

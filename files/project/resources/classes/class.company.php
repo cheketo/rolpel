@@ -1,9 +1,9 @@
 <?php
 
-class Company 
+class Company
 {
 	use CoreSearchList,CoreCrud,CoreImage;
-	
+
 	const TABLE				= 'company';
 	const TABLE_ID			= 'company_id';
 	const SEARCH_TABLE		= 'view_company_list';
@@ -22,7 +22,7 @@ class Company
 			self::SetImg($this->Data['logo']);
 		}
 	}
-	
+
 	public static function CheckCUIT($CUIT)
 	{
 		$CUIT = preg_replace('/[^\d]/','',(string)$CUIT);
@@ -41,25 +41,25 @@ class Company
 		$Verif = $Verif==11?0:$Verif;
 		return $Digit==$Verif;
 	}
-	
+
 	public static function SearchCompanies()
 	{
 		$Providers =  Core::Select(self::SEARCH_TABLE,"company_id as id,name as text","status='A' AND name LIKE '%".$_GET['text']."%' AND organization_id=".$_SESSION['organization_id'],'name','company_id',100);
 		if(empty($Providers))
 			$Providers[0]=array("id"=>"","text"=>"no-result");
 		else
-		echo json_encode($Providers,JSON_HEX_QUOT);	
+		echo json_encode($Providers,JSON_HEX_QUOT);
 	}
-	
+
 	public static function SearchProviders()
 	{
 		$Providers =  Core::Select(self::SEARCH_TABLE,"company_id as id,name as text","status='A' AND provider='Y' AND name LIKE '%".$_GET['text']."%' AND organization_id=".$_SESSION['organization_id'],'name','company_id',100);
 		if(empty($Providers))
 			$Providers[0]=array("id"=>"","text"=>"no-result");
 		else
-		echo json_encode($Providers,JSON_HEX_QUOT);	
+		echo json_encode($Providers,JSON_HEX_QUOT);
 	}
-	
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// SEARCHLIST FUNCTIONS ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ class Company
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeListHTML($Object)
 	{
 		if($Object->Data['international']=='Y')
@@ -105,7 +105,7 @@ class Company
 				<span class="smallTitle">Tipo</span>
 				<span class="listTextStrong">
 					<span class="label label-primary">'.$Object->Data['relation_text'].'</span><br>
-					<span class="label label-brown">'.$Object->Data['international_text'].'</span>
+					<span class="label label-brown">'.$Object->Data['type'].'</span>
 				</span>
 			</div>
 		</div>
@@ -120,7 +120,7 @@ class Company
 		<div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeItemsListHTML($Object)
 	{
 		foreach($Object->Data['branches'] as $Item)
@@ -164,7 +164,7 @@ class Company
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeGridHTML($Object)
 	{
 		$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
@@ -186,7 +186,7 @@ class Company
 		            </div>';
 		return $HTML;
 	}
-	
+
 	public static function MakeNoRegsHTML()
 	{
 		$Entities = 'empresas';
@@ -194,7 +194,7 @@ class Company
 		$Entities = strtoupper($_GET['provider'])=='Y'? 'proveedores':$Entities;
 		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron '.$Entities.'.</h4><p>Puede crear una nueva empresa haciendo click <a href="new.php">aqui</a>.</p></div>';
 	}
-	
+
 	protected function SetSearchFields()
 	{
 		$this->SearchFields['name'] = Core::InsertElement('text','name','','form-control','placeholder="Nombre"');
@@ -204,19 +204,19 @@ class Company
 		$this->SearchFields['iibb'] = Core::InsertElement('text','iibb','','form-control','placeholder="IIBB"');
 		$this->SearchFields['vat'] = Core::InsertElement('text','vat','','form-control','placeholder="VAT"');
 		$this->SearchFields['address'] = Core::InsertElement('text','address','','form-control','placeholder="Dirección"');
-		$this->SearchFields['international'] = Core::InsertElement('select','international','','form-control chosenSelect','',array("N"=>"Nacional","Y"=>"Internacional"),'','Cualquier Nacionalidad');
+		$this->SearchFields['type_id'] = Core::InsertElement('select','type_id','','form-control chosenSelect','',Core::Select('company_type','type_id,name',"status='A'"),'','Cualquier Tipo');
 		if(!$_GET['provider'] && !$_GET['customer'])
 			$this->SearchFields['relation_text'] = Core::InsertElement('select','relation_text','','form-control chosenSelect','',array("Cliente y Proveedor"=>"Cliente y Proveedor","Cliente"=>"Cliente","Proveedor"=>"Proveedor"),'','Cualquier Relaci&oacute;n');;
-		
+
 		// $this->SearchFields['profile'] = Core::InsertElement('select','profile_id','','form-control chosenSelect','data-placeholder="Perfil"',Core::Select(CoreProfile::TABLE,CoreProfile::TABLE_ID.',title',CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID]." AND status='A' AND ".CoreProfile::TABLE_ID." >= ".$_SESSION[CoreProfile::TABLE_ID]),' ', 'Todos los Perfiles');
 		// $this->SearchFields['group_title'] = Core::InsertElement('multiple','group_id','','form-control chosenSelect','data-placeholder="Grupo"',Core::Select(CoreGroup::TABLE,CoreGroup::TABLE_ID.',title',CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID]." AND status='A' AND ".CoreGroup::TABLE_ID." IN (SELECT ".CoreGroup::TABLE_ID." FROM core_relation_group_profile WHERE ".CoreProfile::TABLE_ID." >= ".$_SESSION[CoreProfile::TABLE_ID].")","title"),' ', '');
 	}
-	
+
 	protected function InsertSearchButtons()
 	{
 		return '<a href="new.php" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Empresa"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
 	}
-	
+
 	public function ConfigureSearchRequest()
 	{
 		if($_POST['cuit']) $_POST['cuit'] = Core::FromCUITToNumber($_POST['cuit']);
@@ -232,10 +232,10 @@ class Company
 			$this->AddWhereString(" AND balance<=".$Price);
 			$_POST['balance_restricted']=true;
 		}
-		
+
 		if($_POST['view_order_field']=="balance_from" || $_POST['view_order_field']=="balance_to")
 			$_POST['view_order_field'] = "balance";
-			
+
 		$this->SetSearchRequest();
 	}
 
@@ -253,7 +253,7 @@ class Company
 		{
 			if(!$_POST['cuit']) echo 'CUIT incompleto';
 			if(!$_POST['iva']) echo 'IVA incompleto';
-			if(!$_POST['gross_income_number']) echo 'IIBB incompleto';
+			// if(!$_POST['gross_income_number']) echo 'IIBB incompleto';
 		}else{
 			if(!$_POST['vat']) echo 'VAT incompleto';
 		}
@@ -262,7 +262,7 @@ class Company
 	{
 		// Validate data from POST
 		$this->ValidateInformation();
-		
+
 		// Basic Data
 		$Type 			= $_POST['type'];
 		$Name			= $_POST['name'];
@@ -293,17 +293,17 @@ class Company
 		$Image 		= $Object->ProcessImg($_POST['newimage']);
 		Core::Update(self::TABLE,"logo='".$Image."'",self::TABLE_ID."=".$ID);
 		// Tax::SetIVA($CUIT,$IVA);
-	}	
-	
+	}
+
 	public function Update()
 	{
 		// Validate data from POST
 		$this->ValidateInformation();
-		
+
 		// Set Object
 		$ID 	= $_POST['id'];
 		$Object	= new Company($ID);
-		
+
 		// Basic Data
 		$Type 			= $_POST['type'];
 		$Name			= $_POST['name'];
@@ -328,15 +328,15 @@ class Company
 			break;
 		}
 		$Image			= $Object->ProcessImg($_POST['newimage']);
-		
+
 		$Update		= Core::Update(self::TABLE,"name='".$Name."',type_id='".$Type."',international='".$International."',cuit=".$CUIT.",iva_id='".$IVA."',iibb='".$GrossIncome."',vat='".$VAT."',customer='".$Customer."',provider='".$Provider."', logo='".$Image."',updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
 		//echo $this->LastQuery();
-		
+
 		// Tax::SetIVA($CUIT,$IVA);
 		CompanyBranch::InsertBranchInfo($ID,true);
 		// $Object->InsertBranchInfo(1);
 	}
-	
+
 	public function Validate()
 	{
 		echo self::ValidateValue('name',$_POST['name'],$_POST['actualname']);

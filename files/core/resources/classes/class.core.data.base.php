@@ -7,15 +7,15 @@ class CoreDataBase
 	var $StreamConnection;
 	var $Error;
 	var $LastQuery;
-	
-	public function Connect($UserDB='rolpel', $PasswordDB='Oraprod1810', $DataBase='rolpel', $ServerDB='127.0.0.1',$TypeDB='Mysql'){
-		
-		$this->UserDB 		= $UserDB;
-		$this->PasswordDB	= $PasswordDB;
-		$this->DataBase		= $DataBase;
-		$this->ServerDB		= $ServerDB;
-		$this->TypeDB		= $TypeDB;
-		
+
+	public function Connect($DB_CONFIG)
+	{
+		$this->UserDB 		= $DB_CONFIG['user'];
+		$this->PasswordDB	= $DB_CONFIG['password'];
+		$this->DataBase		= $DB_CONFIG['name'];
+		$this->ServerDB		= $DB_CONFIG['host'];
+		$this->TypeDB			= $DB_CONFIG['type'];
+
 		$this->StartConnection();
 		if(!$this->StreamConnection){
 			$this->Error = "No ha sido posible conectarse a la base de datos. Error en la conexi&oacute;n: ".$this->ConnectionError();
@@ -120,14 +120,14 @@ class CoreDataBase
 		$this->ExecQuery($Query);
 		return $this->GetInsertId();
 	}
-	
+
 	public function Update($Table,$Fields='',$Where='',$Order='',$GroupBy='',$Limit='')
 	{
 		$Query	= $this->QueryBuild("UPDATE",$Table,$Fields,$Where,$Order,$GroupBy,$Limit);
 		$this->ExecQuery($Query);
 		return $this->AffectedRows();
 	}
-	
+
 	public function Delete($Table,$Where)
 	{
 		$Query	= $this->queryBuild("DELETE",$Table,$Where);
@@ -281,16 +281,16 @@ class CoreDataBase
 			break;
 		}
 	}
-	
+
 	protected function GetError($Error)
 	{
 		$CreatorID = $_SESSION['user_id']?$_SESSION['user_id']:"0";
 		echo $this->LastQuery();
 		$this->Insert('core_log_error',"error,type,description,created_by,creation_date","'".addslashes($Error)."','MySQL','".addslashes($this->LastQuery())."',".$CreatorID.",NOW()");
-		
+
 		echo $Error;
 	}
-	
+
 	public function LastQuery()
 	{
 		return $this->LastQuery;
