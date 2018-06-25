@@ -249,14 +249,14 @@ class Company
 		if(!$_POST['type']) echo 'Tipo incompleto';
 		if(!$_POST['relation']) echo 'Falta relaci&oacute;n';
 		if(!$_POST['international']) echo 'Nacionalidad incompleta';
-		if($_POST['international']=="N")
-		{
-			if(!$_POST['cuit']) echo 'CUIT incompleto';
-			if(!$_POST['iva']) echo 'IVA incompleto';
-			// if(!$_POST['gross_income_number']) echo 'IIBB incompleto';
-		}else{
-			if(!$_POST['vat']) echo 'VAT incompleto';
-		}
+		// if($_POST['international']=="N")
+		// {
+		// 	if(!$_POST['cuit']) echo 'CUIT incompleto';
+		// 	if(!$_POST['iva']) echo 'IVA incompleto';
+		// 	// if(!$_POST['gross_income_number']) echo 'IIBB incompleto';
+		// }else{
+		// 	if(!$_POST['vat']) echo 'VAT incompleto';
+		// }
 	}
 	public function Insert()
 	{

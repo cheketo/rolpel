@@ -67,7 +67,7 @@
                   <div class="col-xs-12">
                     <span class="input-group">
                       <span class="input-group-addon"><i class="fa fa-book"></i></span>
-                      <?php echo Core::InsertElement('select','iva','','form-control chosenSelect MainForm','validateEmpty="Ingrese IVA" data-placeholder="IVA"',Core::Select('tax_iva_type','type_id,name',"status='A'",'name'),' ',''); ?>
+                      <?php echo Core::InsertElement('select','iva','','form-control chosenSelect MainForm','data-placeholder="IVA"',Core::Select('tax_iva_type','type_id,name',"status='A'",'name'),' ',''); ?>
                     </span>
                   </div>
                 </div>
@@ -75,7 +75,7 @@
                   <div class="col-xs-12 col-sm-6">
                     <span class="input-group">
                       <span class="input-group-addon"><i class="fa fa-ticket"></i></span>
-                      <?php echo Core::InsertElement('text','cuit','','form-control inputMask MainForm','data-inputmask="\'mask\': \'99-99999999-9\'" placeholder="N&uacute;mero CUIT" validateEmpty="Ingrese un CUIT."'); ?>
+                      <?php echo Core::InsertElement('text','cuit','','form-control inputMask MainForm','data-inputmask="\'mask\': \'99-99999999-9\'" placeholder="N&uacute;mero CUIT"'); ?>
                     </span>
                   </div>
                   <div class="col-xs-12 col-sm-6">

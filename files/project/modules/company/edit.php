@@ -1,35 +1,35 @@
 <?php
     include("../../../core/resources/includes/inc.core.php");
-    
+
     $ID           = $_GET['id'];
     $Edit         = new Company($ID);
     $Data         = $Edit->GetData();
     Core::ValidateID($Data);
     // $Branches = Core::Select('customer_branch a, geolocation_country b, geolocation_province c, geolocation_region d, geolocation_zone e','a.*,b.name as country, c.name as province, d.name as region, e.name as zone','a.country_id = b.country_id AND a.province_id = c.province_id AND a.region_id = d.region_id AND a.zone_id = e.zone_id AND customer_id='.$ID,'a.branch_id');
     $Branches = $Data['branches'];
-    
+
     $Head->SetTitle($Data['name']);
     $Head->SetIcon($Menu->GetHTMLicon());
     $Head->SetSubTitle($Menu->GetTitle());
-    
+
     if($Data['customer']=='Y' && $Data['provider']=='Y')
       $Relation = 3;
     elseif($Data['provider']=='Y')
       $Relation = 2;
     elseif($Data['customer']=='Y')
       $Relation = 1;
-     
+
     $Head->SetStyle('../../../../skin/css/maps.css'); // Google Maps CSS
     $Head->setHead();
     include('../../../project/resources/includes/inc.top.php');
-    
+
 ?>
   <div class="box animated fadeIn">
     <div class="box-header flex-justify-center">
       <div class="col-md-8 col-sm-12">
-        
+
           <div class="innerContainer main_form">
-            
+
             <form id="new_company_form">
               <h4 class="subTitleB"><i class="fa fa-id-card"></i> Datos de la Empresa</h4>
               <?php echo Core::InsertElement("hidden","id",$ID); ?>
@@ -64,7 +64,7 @@
                   </span>
                 </div>
               </div>
-              
+
               <br>
               <div id="Billing" class="Hidden">
                 <h4 class="subTitleB"><i class="fa fa-file-excel-o"></i> Datos de Facturaci&oacute;n</h4>
@@ -83,7 +83,7 @@
                     <div class="col-xs-12">
                       <span class="input-group">
                         <span class="input-group-addon"><i class="fa fa-book"></i></span>
-                        <?php echo Core::InsertElement('select','iva',$Data['iva_id'],'form-control chosenSelect MainForm','validateEmpty="Ingrese IVA" data-placeholder="IVA"',Core::Select('tax_iva_type','type_id,name',"status='A'",'name'),' ',''); ?>
+                        <?php echo Core::InsertElement('select','iva',$Data['iva_id'],'form-control chosenSelect MainForm','data-placeholder="IVA"',Core::Select('tax_iva_type','type_id,name',"status='A'",'name'),' ',''); ?>
                       </span>
                     </div>
                   </div>
@@ -91,7 +91,7 @@
                     <div class="col-xs-12 col-sm-6">
                       <span class="input-group">
                         <span class="input-group-addon"><i class="fa fa-ticket"></i></span>
-                        <?php echo Core::InsertElement('text','cuit',$Data['cuit'],'form-control inputMask MainForm','data-inputmask="\'mask\': \'99-99999999-9\'" placeholder="N&uacute;mero CUIT" validateEmpty="Ingrese un CUIT."'); ?>
+                        <?php echo Core::InsertElement('text','cuit',$Data['cuit'],'form-control inputMask MainForm','data-inputmask="\'mask\': \'99-99999999-9\'" placeholder="N&uacute;mero CUIT"'); ?>
                       </span>
                     </div>
                     <div class="col-xs-12 col-sm-6">
@@ -104,7 +104,7 @@
                 </div>
               </div>
             </form>
-            
+
             <br>
             <div class="row">
               <div class="col-md-12 col-xs-12 simple_upload_image">
@@ -120,7 +120,7 @@
           <h4 class="subTitleB"><i class="fa fa-map-pin"></i> Sucursales</h4>
           <div id="MapsErrorMessage" class="Hidden ErrorText Red">Complete los datos de la sucursal central.</div>
           <div id="branches_container">
-          <?php 
+          <?php
             $I=0;
             $Class = "bg-gray";
             $Image = CompanyBranch::DEFAULT_IMG;
@@ -128,7 +128,7 @@
             {
               $I++;
           ?>
-          
+
           <div id="branch_row_<?php echo $I ?>" class="row branch_row listRow2 <?php echo $Class ?>" style="margin:0px!important;">
             <div class="col-lg-1 col-md-2 flex-justify-center hideMobile990">
               <div class="listRowInner">
@@ -153,7 +153,7 @@
 					?>
             </div>
 
-      
+
           <div class="row txC" id="add_branch_button_container">
             <button id="add_branch" type="button" class="btn btn-primary Info-Card-Form-Btn"><i class="fa fa-plus"></i> Agregar una sucursal</button>
           </div>
@@ -166,17 +166,17 @@
     </div><!-- box -->
   </div><!-- box -->
   <div id="ModalBranchesContainer">
-    <?php 
-            
+    <?php
+
             $I=0;
             foreach($Branches as $Branch)
             {
               $I++;
-              
+
               CompanyBranch::Getbranchmodal($I,$Branch);
             }
   ?>
-  
+
   </div>
 <?php
 $Foot->SetScript('../../../core/resources/js/script.core.map.autolocation.js');
@@ -184,4 +184,3 @@ $Foot->SetScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCuMB_Fpcn6US
 $Foot->SetScript('../../../../vendors/inputmask3/jquery.inputmask.bundle.min.js');
 include('../../../project/resources/includes/inc.bottom.php');
 ?>
-

@@ -92,8 +92,8 @@ function AddAgent()
 			if(!$("#branch_total_agents_"+id).val() || $("#branch_total_agents_"+id).val()=='undefined')
 				$("#branch_total_agents_"+id).val(0);
 			var total = parseInt($("#branch_total_agents_"+id).val())+1;
-			
-			
+
+
 			$("#branch_total_agents_"+id).val(total);
 			var agent = $("#branch_total_agents_"+id).val();
 			if(charge)
@@ -120,9 +120,9 @@ function AddAgent()
 			}else{
 				extrahtml = '';
 			}
-			
+
 			$("#agent_list_"+id).append('<div class="col-md-6 col-sm-6 col-xs-12 AgentCard"><div class="info-card-item"><input type="hidden" id="agent_name_'+agent+'_'+id+'" value="'+name+'" /><input type="hidden" id="agent_charge_'+agent+'_'+id+'" value="'+charge+'" /><input type="hidden" id="agent_email_'+agent+'_'+id+'" value="'+email+'" /><input type="hidden" id="agent_phone_'+agent+'_'+id+'" value="'+phone+'" /><input type="hidden" id="agent_extra_'+agent+'_'+id+'" value="'+extra+'" /><div class="close-btn DeleteAgent"><i class="fa fa-times"></i></div><span><i class="fa fa-user"></i> <b>'+name+'</b></span>'+chargehtml+phonehtml+emailhtml+extrahtml+'</div></div>');
-			
+
 			$('#agentname_'+id).val('');
 			$('#agentcharge_'+id).val('');
 			$('#agentemail_'+id).val('');
@@ -164,9 +164,9 @@ function DeleteAgent()
 ///////////////////////// UPLOAD IMAGE ////////////////////////////////////
 $(function(){
 	$("#image_upload").on("click",function(){
-		$("#image").click();	
+		$("#image").click();
 	});
-	
+
 	$("#image").change(function(){
 		var process		= process_url+'?action=newimage&object=Company';
 		var haveData	= function(returningData)
@@ -243,8 +243,8 @@ function addBranchModal()
 			console.log("no returning data");
 		}
 		sumbitFields(process,haveData,noData);
-		
-		
+
+
 }
 
 function addBranch()
@@ -277,10 +277,10 @@ function SaveBranchEdition()
 	$(".SaveBranchEdition").click(function(e){
 		e.stopPropagation();
 		var id = $(this).attr('branch');
-		
+
 		// alert(validate.validateFields('branch_form_'+id));
 		// alert(validate.getLastValidation());
-		
+
 		if(validate.validateFields('branch_form_'+id) && validateMap(id))
 		{
 			$("#branch_modal_"+id).removeClass("NewBranch");
@@ -291,9 +291,9 @@ function SaveBranchEdition()
 		ShowErrorMapDiv();
 		return false;
 	});
-	
+
 	$(".branchname").on("keyup",function(){
-		var name = $(this).val();	
+		var name = $(this).val();
 		var id = $(this).attr('branch');
 		$("#BranchTitle"+id).html('Editar Sucursal '+name);
 	});
@@ -341,7 +341,7 @@ $(document).ready(function(){
 			$(this).addClass('Initializated');
 			initMap(id);
 		}
-		
+
 	});
 });
 
@@ -362,16 +362,16 @@ function showBillingType()
 	{
 		$("#BillingNational").addClass('Hidden');
 		$("#BillingInternational").removeClass('Hidden');
-		$("#iva").attr("validateEmpty2",$("#iva").attr("validateEmpty"));
-		$("#iva").removeAttr("validateEmpty");
-		$("#cuit").attr("validateEmpty2",$("#cuit").attr("validateEmpty"));
-		$("#cuit").removeAttr("validateEmpty");
+		// $("#iva").attr("validateEmpty2",$("#iva").attr("validateEmpty"));
+		// $("#iva").removeAttr("validateEmpty");
+		// $("#cuit").attr("validateEmpty2",$("#cuit").attr("validateEmpty"));
+		// $("#cuit").removeAttr("validateEmpty");
 	}else{
 		$("#BillingInternational").addClass('Hidden');
 		$("#BillingNational").removeClass('Hidden');
-		$("#iva").attr("validateEmpty",$("#iva").attr("validateEmpty2"));
-		$("#iva").removeAttr("validateEmpty2");
-		$("#cuit").attr("validateEmpty",$("#cuit").attr("validateEmpty2"));
-		$("#cuit").removeAttr("validateEmpty2");
+		// $("#iva").attr("validateEmpty",$("#iva").attr("validateEmpty2"));
+		// $("#iva").removeAttr("validateEmpty2");
+		// $("#cuit").attr("validateEmpty",$("#cuit").attr("validateEmpty2"));
+		// $("#cuit").removeAttr("validateEmpty2");
 	}
 }
