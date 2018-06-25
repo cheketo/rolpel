@@ -7,7 +7,7 @@
     $Head->SetTitle($Menu->GetTitle());
     $Head->SetIcon($Menu->GetHTMLicon());
     $Head->setHead();
-    
+
     $Menues = implode(",",$Edit->GetCheckedMenues());
     $RelatedGroups = CoreUser::GetUserGroups($ID);
     foreach($RelatedGroups as $Group)
@@ -33,7 +33,7 @@
             <div class="mw100">
               <h4 class="subTitleB"><i class="fa fa-pencil"></i> Datos Principales</h4>
               <div class="form-group">
-                <?php echo Core::InsertElement('text','user',$Data['user'],'form-control','placeholder="Usuario" tabindex="1" validateEmpty="El usuario es obligatorio." validateMinLength="3///El usuario debe contener 3 caracteres como m&iacute;nimo." validateFromFile='.PROCESS.'///El usuario ya existe///actualuser:='.$Data['user'].'///action:=validate///object:=CoreUser"'); ?>
+                <?php echo Core::InsertElement('text','user',$Data['user'],'form-control','placeholder="Usuario" tabindex="1" validateEmpty="El usuario es obligatorio." validateMinLength="3///El usuario debe contener 3 caracteres como m&iacute;nimo." validateFromFile="'.PROCESS.'///El usuario ya existe///actualuser:='.$Data['user'].'///action:=validate///object:=CoreUser"'); ?>
               </div>
               <div class="form-group">
                 <?php echo Core::InsertElement('password','password','','form-control','placeholder="Contrase&ntilde;a" validateMinLength="4///La contrase&ntilde;a debe contener 4 caracteres como m&iacute;nimo." tabindex="2"'); ?>
@@ -153,7 +153,7 @@
       <button type="button" class="btn btn-danger btnRed" id="BtnCancel"><i class="fa fa-times"></i> Cancelar</button>
     </div><!-- box-footer -->
   </div><!-- /.box -->
-  
+
 <?php include_once('modal.help.php');
 // Tree With Checkbox
 // DOCUMENTATION >  http://www.jquery-az.com/jquery-treeview-with-checkboxes-2-examples-with-bootstrap

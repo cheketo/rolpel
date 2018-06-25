@@ -12,13 +12,13 @@
         $Last = $Icon.strtoupper(substr($Words[count($Words)-1],0,1));
       }
       $ShortOrgName = strtoupper(substr($OrgName,0,1)).$Last;
-      
+
     ?>
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <!--<span class="logo-mini"><b>R<i class="fa fa-cog"></i>S</b></span>-->
     <span class="logo-mini"><b><?php echo $ShortOrgName; ?></b></span>
     <!-- logo for regular state and mobile devices -->
-    
+
     <span class="logo-lg"><?php echo $OrgName; ?></span>
   </a>
 
@@ -70,7 +70,7 @@
             <!-- Menu Footer-->
             <li class="user-footer">
               <div class="pull-left">
-                <a href="../user/profile.php" class="btn btn-github btn-flat">Perfil</a>
+                <a href="../../../core/modules/user/profile.php" class="btn btn-github btn-flat">Perfil</a>
               </div>
               <div class="pull-right">
                 <a id="Logout" class="btn btn-danger btn-flat">Cerrar Sesi&oacute;n</a>

@@ -1,9 +1,9 @@
 <?php
 
-class Quotation 
+class Quotation
 {
 	use CoreSearchList,CoreCrud,CoreImage;
-	
+
 	const TABLE				= 'quotation';
 	const TABLE_ID			= 'quotation_id';
 	const SEARCH_TABLE		= 'view_quotation_list';
@@ -22,7 +22,14 @@ class Quotation
 			$this->Data['items'] = $Data;
 		}
 	}
-	
+
+	public function GetSentEmails()
+	{
+		$this->Data['emails'] = Core::Select("quotation_email","*","quotation_id=".$this->ID);
+		return $this->Data['emails'];
+
+	}
+
 	public static function GetParams()
 	{
 		if($_GET['provider'] && $_GET['provider']!="undefined" )
@@ -39,6 +46,35 @@ class Quotation
 			$Params .= '&international=N';
 		return $Params;
 	}
+
+	public static function SaveAndMoveFiles($QuotationID,$FilesCount,$PrefixID="qfileid",$ProductID=0)
+	{
+		$IDs = "0";
+		for($I=1;$I<=$FilesCount;$I++)
+		{
+
+			$FileID = $_POST[$PrefixID.'_'.$I];
+			if($FileID)
+			{
+				$IDs .= ",".$FileID;
+			}
+		}
+		$Files = Core::Select("quotation_file_new","*","status='A' AND file_id IN (".$IDs.")");
+		$FilePath = '../../../../skin/files/quotation/'.$QuotationID.'/';
+		foreach($Files as $File)
+		{
+			$FileObj = new CoreFileData($File['url']);
+			$FileObj->MoveFileTo($FilePath);
+			$NewUrl = $FileObj->GetFile();
+
+			$Field = $File['file_id'].",".$QuotationID.",".$ProductID.",'".$File['name']."','".$NewUrl."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $Fields? "),(".$Field:$Field;
+		}
+		if($Fields)
+			Core::Insert("quotation_file","new_id,quotation_id,product_id,name,url,creation_date,created_by,organization_id",$Fields);
+		Core::Delete("quotation_file_new","status='A' AND DATEDIFF(CURDATE(),creation_date)>0");
+
+	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// SEARCHLIST FUNCTIONS ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +87,7 @@ class Quotation
 			if($Object->Data['status']!="F")
 			{
 				$HTML	.= '<a class="hint--bottom hint--bounce hint--success" aria-label="Crear Orden" process="'.PROCESS.'" id="purchase_'.$Object->ID.'" status="'.$Row->Data['status'].'"><button type="button" class="btn bg-olive"><i class="fa fa-truck"></i></button></a> ';
-				$HTML	.= '<a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" process="'.PROCESS.'" id="store_'.$Object->ID.'"><button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button></a>';	
+				$HTML	.= '<a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" process="'.PROCESS.'" id="store_'.$Object->ID.'"><button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button></a>';
 				$HTML	.= '<a href="edit.php?id='.$Object->ID.self::GetParams().'" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
 				$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="'.PROCESS.'" id="delete_'.$Object->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
 				$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la cotizaci&oacute;n de <b>'.$Object->Data['company'].'</b>?');
@@ -66,7 +102,7 @@ class Quotation
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeListHTML($Object)
 	{
 		$HTML = '<div class="col-lg-4 col-md-5 col-sm-5 col-xs-3">
@@ -80,7 +116,7 @@ class Quotation
 					<div class="listRowInner">
 						<span class="smallTitle">Total</span>
 						<span class="listTextStrong">
-							<span class="label label-brown">'.$Object->Data['currency'].' '.$Object->Data['total_quotation'].'</span>
+							<span class="label label-brown">$ '.$Object->Data['total_quotation'].'</span>
 						</span>
 					</div>
 				</div>
@@ -95,7 +131,7 @@ class Quotation
 				<div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeItemsListHTML($Object)
 	{
 		foreach($Object->Data['items'] as $Item)
@@ -105,15 +141,15 @@ class Quotation
 						<div class="row '.$RowClass.'" style="padding:5px;">
 							<div class="col-lg-4 col-sm-5 col-xs-12">
 								<div class="listRowInner">
-									<img class=" hideMobile990" src="'.Product::DEFAULT_IMG.'" alt="'.$Item['code'].'">
-									<span class="listTextStrong">'.$Item['code'].'</span>
+									<img class=" hideMobile990" src="'.Product::DEFAULT_IMG.'" alt="'.$Item['title'].'">
+									<span class="listTextStrong">'.$Item['title'].'</span>
 									<span class="smallTitle hideMobile990"><b>'.$Item['category'].' ('.$Item['brand'].')</b></span>
 								</div>
 							</div>
 							<div class="col-sm-2 col-xs-12">
 								<div class="listRowInner">
 									<span class="smallTitle">Precio</span>
-									<span class="emailTextResp"><span class="label label-brown">'.$Item['currency'].' '.$Item['price'].'</span></span>
+									<span class="emailTextResp"><span class="label label-brown">$ '.$Item['price'].'</span></span>
 								</div>
 							</div>
 							<div class="col-sm-3 col-xs-12">
@@ -126,7 +162,7 @@ class Quotation
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeGridHTML($Object)
 	{
 		$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
@@ -147,24 +183,24 @@ class Quotation
 		            </div>';
 		return $HTML;
 	}
-	
+
 	public static function MakeNoRegsHTML()
 	{
 		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron cotizaciones.</h4><p>Puede crear una nueva haciendo click <a href="new.php?'.self::GetParams().'">aqui</a>.</p></div>';
 	}
-	
+
 	protected function SetSearchFields()
 	{
-		$this->SearchFields['quotation_id'] = Core::InsertElement('text','quotation_id','','form-control','placeholder="C&oacute;digo"');
-		$this->SearchFields['code'] = Core::InsertElement('text','code','','form-control inputMask','placeholder="Art&iacute;culo"');
+		$this->SearchFields['quotation_id'] = Core::InsertElement('text','quotation_id','','form-control','placeholder="C&oacute;digo Cotiz."');
+		$this->SearchFields['title'] = Core::InsertElement('text','title','','form-control','placeholder="Producto"');
 		$this->SearchFields['quantity'] = Core::InsertElement('text','quantity','','form-control','placeholder="Cantidad"');
 	}
-	
+
 	protected function InsertSearchButtons()
 	{
 		return '<a href="new.php?'.self::GetParams().'" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Cotizaci&oacute;n"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
 	}
-	
+
 	public function ConfigureSearchRequest()
 	{
 		$_POST['view_order_mode'] = $_POST['view_order_mode']? $_POST['view_order_mode']:'DESC';
@@ -175,7 +211,7 @@ class Quotation
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// PROCESS METHODS ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	public function Insert()
 	{
 		// ITEMS DATA
@@ -197,31 +233,68 @@ class Quotation
 				}
 			}
 		}
-		
+
 		// Basic Data
-		$TypeID			= $_POST['type_id'];
-		$CompanyID		= $_POST['company'];
+		$CompanyID	= $_POST['company'];
+		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
-		$CurrencyID		= $_POST['currency'];
 		$Extra			= $_POST['extra'];
 		$Field			= $_POST['company_type'].'_id';
-		$NewID			= Core::Insert(self::TABLE,'type_id,company_id,'.$Field.',agent_id,currency_id,total,extra,delivery_date,status,creation_date,created_by,'.CoreOrganization::TABLE_ID,$TypeID.",".$CompanyID.",".$CompanyID.",".$AgentID.",".$CurrencyID.",".$Total.",'".$Extra."','".$Date."','A',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION['organization_id']);
+		$NewID			= Core::Insert(self::TABLE,Company::TABLE_ID.','.$Field.','.CompanyBranch::TABLE_ID.',agent_id,total,extra,delivery_date,status,creation_date,created_by,'.CoreOrganization::TABLE_ID,$CompanyID.",".$CompanyID.",".$BranchID.",".$AgentID.",".$Total.",'".$Extra."','".$Date."','A',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION['organization_id']);
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
 			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $NewID.",".$CompanyID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",".$CurrencyID.",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $NewID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,currency_id,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);	
+		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+
+		// INSERT FILES
+		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
+
+		// SEND EMAIL
+		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
 	}
-	
+
+	public static function Sendemail($QID,$Receiver,$ShowBrands,$ShowExtra)
+	{
+		if($Receiver)
+		{
+			//Create PDF file
+			$PDF = new Pdf();
+			$PDF->SetOutputType("F");
+			$Quotation = new Quotation($QID);
+			$File = $PDF->Quotation($QID,$ShowBrands,$ShowExtra);
+
+			//Create and send email
+			$Mail = new Mailer();
+			$Sender = 'ventas@rollerservice.com.ar';
+			//Add BCC
+			$BCC = "ventas@rollerservice.com.ar";
+			$Mail->AddBCC($BCC, "Ventas Roller Service");
+			$Subject = 'Cotización N°'.$QID;
+			//Set Batch TRUE to send emails through remote server
+			//$Mail->SetBatch(true);
+			$Sent = $Mail->QuotationEmail($QID,$Receiver,$Quotation->Data['company'],$Subject,$File,$Sender);
+
+			//Check for errors
+			if(!$Sent)
+			{
+			    echo "Mailer Error: " . $Mail->ErrorInfo;
+			}else{
+			    //Insert Sent Email
+			    Core::Insert("quotation_email",self::TABLE_ID.",email_from,email_to,subject,message,file,status,cc,bcc,creation_date,created_by,organization_id",$QID.",'".$Sender."','".$Receiver."','".$Subject."','".$Message."','".$File."','P','".$CC."','".$BCC."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+			}
+		}
+	}
+
 	public function Update()
 	{
 		$ID 	= $_POST['id'];
 		$Edit	= new Quotation($ID);
-		
+
 		// ITEMS DATA
 		$Total = 0;
 		$Items = array();
@@ -242,34 +315,41 @@ class Quotation
 				}
 			}
 		}
-		
+
 		// Basic Data
-		$CompanyID		= $_POST['company'];
+		$CompanyID	= $_POST['company'];
+		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
-		$CurrencyID		= $_POST['currency'];
 		$Extra			= $_POST['extra'];
-		$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",agent_id=".$AgentID.",currency_id=".$CurrencyID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
-		
+		$Field			= $_POST['company_type'].'_id';
+		$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",'.$Field.'='.$CompanyID.',".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
+
 		// DELETE OLD ITEMS
 		QuotationItem::DeleteItems($ID);
-		
+
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
 			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $ID.",".$CompanyID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",".$CurrencyID.",".$Item['creation_date'].",".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $ID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",".$Item['creation_date'].",".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,currency_id,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+
+		// INSERT FILES
+		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
+
+		// SEND EMAIL
+		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
 	}
-	
+
 	public function Store()
 	{
 		$ID	= $_POST['id'];
 		Core::Update(self::TABLE,"status = 'F'",self::TABLE_ID."=".$ID);
 	}
-	
+
 	public function Addnewfile()
 	{
 		if(count($_FILES['tfile'])>0)
@@ -288,23 +368,23 @@ class Quotation
 				$File->SaveFile();
 				$FileURL = $FileDir.$FileName.".".$File->GetExtension();
 			}else{
-				$FileURL = $File	-> BuildImage(200,200);	
+				$FileURL = $File	-> BuildImage(200,200);
 			}
-			
-			
-			
+
+
+
 			$ID = Core::Insert('quotation_file_new',"product_id,name,url,creation_date,created_by,organization_id",$ProductID.",'".$FileName."','".$FileURL."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
 			$File = array("id"=>$ID,"name"=>$FileName,"url"=>$FileURL,"ext"=>$Ext);
 			echo json_encode($File,JSON_HEX_QUOT);
 		}
 	}
-	
+
 	public function Removenewfile()
 	{
 		$FileID = $_GET['fid'];
 		Core::Update('quotation_file_new',"status='I',updated_by=".$_SESSION[CoreUser::TABLE_ID],"file_id=".$FileID);
 	}
-	
+
 	public function Newquotation()
 	{
 		$ProductID = $_POST['product'];
@@ -313,22 +393,20 @@ class Quotation
 		$Price = $_POST['tprice'];
 		$Quantity = $_POST['tquantity'];
 		$CompanyID = $_POST['tprovider'];
-		$CurrencyID = $_POST['tcurrency'];
-		
+
 		$Extra = $_POST['textra'];
 		$FilesCount = $_POST['filecount'];
 		$IDs = "0";
 		$Total = $Price*$Quantity;
-		
-		$International = Core::Select(Company::TABLE,'international',Company::TABLE_ID."=".$CompanyID)[0]['international'];
-		$TypeID = $International=='N'? 1:2;
-		
-		$QuotationID = Core::Insert(self::TABLE,"company_id,sender_id,currency_id,total,type_id,status,quotation_date,extra,creation_date,created_by,organization_id",$CompanyID.",".$CompanyID.",".$CurrencyID.",".$Total.",".$TypeID.",'A','".$Date."','".$Extra."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
-		$Field = $QuotationID.",".$CompanyID.",".$ProductID.",".$Price.",".$Quantity.",".$Total.",".$Days.",".$CurrencyID.",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
-		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,days,currency_id,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Field);
+
+		// $International = Core::Select(Company::TABLE,'international',Company::TABLE_ID."=".$CompanyID)[0]['international'];
+
+		$QuotationID = Core::Insert(self::TABLE,"company_id,sender_id,total,status,quotation_date,extra,creation_date,created_by,organization_id",$CompanyID.",".$CompanyID.",".$Total.",'A','".$Date."','".$Extra."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+		$Field = $QuotationID.",".$CompanyID.",".$ProductID.",".$Price.",".$Quantity.",".$Total.",".$Days.",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Field);
 		for($I=1;$I<=$FilesCount;$I++)
 		{
-			
+
 			$FileID = $_POST['fileid_'.$I];
 			if($FileID)
 			{
@@ -342,16 +420,16 @@ class Quotation
 			$FileObj = new CoreFileData($File['url']);
 			$FileObj->MoveFileTo($FilePath);
 			$NewUrl = $FileObj->GetFile();
-			
+
 			$Field = $File['file_id'].",".$QuotationID.",".$ProductID.",'".$File['name']."','".$NewUrl."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 			$Fields .= $Fields? "),(".$Field:$Field;
 		}
 		if($Fields)
 			Core::Insert("quotation_file","new_id,quotation_id,product_id,name,url,creation_date,created_by,organization_id",$Fields);
 		Core::Delete("quotation_file_new","status='A' AND DATEDIFF(CURDATE(),creation_date)>0");
-		echo json_encode(array("id"=>$QuotationID,"filepath"=>$FilePath,"currency"=>Currency::GetCurrencyPrefix($CurrencyID)),JSON_HEX_QUOT);
+		echo json_encode(array("id"=>$QuotationID,"filepath"=>$FilePath),JSON_HEX_QUOT);
 	}
-	
+
 	public function Fillproviderquotations()
 	{
 		$ProductID = $_POST['product'];
@@ -371,9 +449,9 @@ class Quotation
 			$HTML .= '<tr class="ClearWindow">
 		                <td>'.Core::FromDBToDate($Quotation['quotation_date']).'</td>
 		                <td>'.$Quotation['company'].'</td>
-		                <td><span class="label label-success">'.$Quotation['currency'].' '.$Quotation['price'].'</span></td>
+		                <td><span class="label label-success">$ '.$Quotation['price'].'</span></td>
 		                <td>'.$Quotation['quantity'].'</td>
-		                <td>'.$Quotation['currency'].' '.$Quotation['total_item'].'</td>
+		                <td>$ '.$Quotation['total_item'].'</td>
 		                <td>'.$Quotation['days'].' D&iacute;as</td>
 		                <td>'.$Quotation['extra'].'</td>
 		                <td>'.$FilesHTML.'</td>
@@ -381,7 +459,7 @@ class Quotation
 		}
 		echo $HTML;
 	}
-	
+
 	public function Fillcustomerquotations()
 	{
 		$ProductID = $_POST['product'];
@@ -391,9 +469,9 @@ class Quotation
 		{
 			$HTML .= '<tr class="ClearWindow">
 						<td><span class="label label-default">'.Core::FromDBToDate($Quotation['quotation_date']).'</span></td>
-		                <td><span class="label label-success">'.$Quotation['currency'].' '.$Quotation['price'].'</span></td>
+		                <td><span class="label label-success">$ '.$Quotation['price'].'</span></td>
 		                <td>'.$Quotation['quantity'].'</td>
-		                <td><span class="label label-success">'.$Quotation['currency'].' '.$Quotation['total_item'].'</span></td>
+		                <td><span class="label label-success">$ '.$Quotation['total_item'].'</span></td>
 		                <td><span class="label label-warning">'.$Quotation['days'].' D&iacute;as</span></td>
 		                <td>
 		                  <button type="button" class="btn btn-github SeeQuotation hint--bottom hint--bounce" aria-label="Ver Cotizaci&oacute;n" style="margin:0px;" item="'.$Quotation[self::TABLE_ID].'"><i class="fa fa-eye"></i></button>
@@ -402,6 +480,6 @@ class Quotation
 		}
 		echo $HTML;
 	}
-	
+
 }
 ?>

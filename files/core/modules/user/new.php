@@ -20,7 +20,7 @@
             <div class="mw100">
               <h4 class="subTitleB"><i class="fa fa-pencil"></i> Datos Principales</h4>
               <div class="form-group">
-                <?php echo Core::InsertElement('text','user','','form-control','placeholder="Usuario" tabindex="1" validateEmpty="El usuario es obligatorio." validateMinLength="3///El usuario debe contener 3 caracteres como m&iacute;nimo." validateFromFile='.PROCESS.'///El usuario ya existe///action:=validate///object:=CoreUser"'); ?>
+                <?php echo Core::InsertElement('text','user','','form-control','placeholder="Usuario" tabindex="1" validateEmpty="El usuario es obligatorio." validateMinLength="3///El usuario debe contener 3 caracteres como m&iacute;nimo." validateFromFile="'.PROCESS.'///El usuario ya existe///action:=validate///object:=CoreUser"'); ?>
               </div>
               <div class="form-group">
                 <?php echo Core::InsertElement('password','password','','form-control','placeholder="Contrase&ntilde;a" validateEmpty="La constrase&ntilde;a es obligatoria." validateMinLength="4///La contrase&ntilde;a debe contener 4 caracteres como m&iacute;nimo." tabindex="2"'); ?>
@@ -121,7 +121,7 @@
             <div class="smallThumbsList flex-justify-center">
               <ul id="UserImages">
                 <?php
-                  
+
                   foreach($CoreUser->GetImages() as $Image)
                   {
                     echo '<li><img src="'.$Image.'" class="ImgSelecteable"></li>';

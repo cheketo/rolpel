@@ -3,10 +3,10 @@
 /****************************************\
 |                 DATABSE                |
 \****************************************/
+$DB_CONFIG['type']     = 'Mysql';
 $DB_CONFIG['name']     = 'rolpel';
 $DB_CONFIG['user']     = 'root';
 $DB_CONFIG['password'] = 'mysql';
-$DB_CONFIG['type']     = 'Mysql';
 $DB_CONFIG['host']     = 'localhost';
 $DB_CONFIG['port']     = '';
 $DB_CONFIG['schema']   = '';

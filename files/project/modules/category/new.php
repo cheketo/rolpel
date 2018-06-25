@@ -11,7 +11,7 @@
     <div class="box-header flex-justify-center">
       <div class="col-lg-8 col-sm-12">
         <div class="innerContainer">
-          <h4 class="subTitleB"><i class="fa fa-plus-circle"></i> Complete los campos para agregar una nueva l&iacute;nea</h4>
+          <h4 class="subTitleB"><i class="fa fa-plus-circle"></i> Complete los campos para agregar una nueva categor&iacute;a</h4>
             <div class="row form-group inline-form-custom-2">
               <div class="col-xs-12 inner">
                 <label>Nombre</label>
@@ -39,6 +39,6 @@
     </div>
   </div>
 <?php
-  
+
   include('../../../project/resources/includes/inc.bottom.php');
 ?>

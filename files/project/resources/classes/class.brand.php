@@ -1,9 +1,9 @@
 <?php
 
-class Brand 
+class Brand
 {
 	use CoreSearchList,CoreCrud,CoreImage;
-	
+
 	var $Products			= array();
 	const TABLE				= 'product_brand';
 	const TABLE_ID			= 'brand_id';
@@ -13,12 +13,12 @@ class Brand
 	const IMG_DIR			= '../../../../skin/images/brands/';
 
 	public function __construct($ID=0)
-	{	
+	{
 		$this->ID = $ID;
 		$this->GetData();
 		self::SetImg($this->Data['img']);
 	}
-	
+
 	public function GetProducts()
 	{
 		if(empty($this->Products))
@@ -41,7 +41,7 @@ class Brand
 			$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la marca <b>'.$Object->Data['name'].'</b> ?');
 			$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La marca <b>'.$Object->Data['name'].'</b> ha sido eliminada.');
 			$HTML	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la marca <b>'.$Object->Data['name'].'</b>.');
-			
+
 		}else{
 			$HTML	.= '<a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" process="'.PROCESS.'" id="activate_'.$Object->ID.'"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
 			$HTML	.= Core::InsertElement('hidden','activate_question_'.$Object->ID,'&iquest;Desea activar la marca <b>'.$Object->Data['name'].'</b> ?');
@@ -50,7 +50,7 @@ class Brand
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeListHTML($Object)
 	{
 		$HTML = '<div class="col-lg-4 col-md-5 col-sm-5 col-xs-10">
@@ -61,7 +61,7 @@ class Brand
 		</div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeItemsListHTML($Object)
 	{
 		$Products = $Object->GetProducts();
@@ -73,8 +73,8 @@ class Brand
 							<div class="col-xs-6">
 								<div class="listRowInner">
 									<span class="itemRowtitle">
-										<span class="listTextStrong">Producto</span> 
-										<span class="label label-primary">'.$Item['code'].'</span>
+										<span class="listTextStrong">Producto</span>
+										<span class="label label-primary">'.$Item['title'].'</span>
 									</span>
 								</div>
 							</div>
@@ -89,7 +89,7 @@ class Brand
 		if(!$HTML) $HTML='<div class="bg-gray txC" style="padding:5px;">Sin productos asociados</div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeGridHTML($Object)
 	{
 		$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
@@ -109,19 +109,19 @@ class Brand
 		            </div>';
 		return $HTML;
 	}
-	
+
 	public static function MakeNoRegsHTML()
 	{
-		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron marcas.</h4><p>Puede crear una nueva marca haciendo click <a href="new.php">aqui</a>.</p></div>';	
+		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron marcas.</h4><p>Puede crear una nueva marca haciendo click <a href="new.php">aqui</a>.</p></div>';
 	}
-	
+
 	protected function SetSearchFields()
 	{
 		$this->SearchFields['name'] = Core::InsertElement('text','name','','form-control','placeholder="Nombre"');
-		$this->SearchFields['code'] = Core::InsertElement('text','code','','form-control','placeholder="Producto"');
-		$this->SearchFields['category'] = Core::InsertElement('text','category','','form-control','placeholder="L&iacute;nea"');	
+		$this->SearchFields['title'] = Core::InsertElement('text','title','','form-control','placeholder="Producto"');
+		$this->SearchFields['category'] = Core::InsertElement('text','category','','form-control','placeholder="L&iacute;nea"');
 	}
-	
+
 	protected function InsertSearchButtons()
 	{
 		return '<a href="new.php" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Marca"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
@@ -133,14 +133,14 @@ class Brand
 	public function Insert()
 	{
 		Core::Insert(self::TABLE,'name,creation_date,'.CoreOrganization::TABLE_ID,"'".$_POST['name']."',NOW(),".$_SESSION[CoreOrganization::TABLE_ID]);
-	}	
-	
+	}
+
 	public function Update()
 	{
 		Core::Update(self::TABLE,"name='".$_POST['name']."'",self::TABLE_ID."=".$_POST['id']);
 		// echo Core::LastQuery();
 	}
-	
+
 	public function Validate()
 	{
 		echo self::ValidateValue('name',$_POST['name'],$_POST['actualname']);

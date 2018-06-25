@@ -4,12 +4,12 @@
     $Edit         = new Category($ID);
     $Data         = $Edit->GetData();
     Core::ValidateID($Data);
-    $Head->SetTitle("Modificar L&iacute;nea ".$Data['title']);
+    $Head->SetTitle("Modificar Categor&iacute;a ".$Data['title']);
     $Head->SetIcon($Menu->GetHTMLicon());
     $Head->setHead();
-    
+
     include('../../../project/resources/includes/inc.top.php');
-    
+
 ?>
   <?php echo Core::InsertElement("hidden","action",'update'); ?>
   <?php echo Core::InsertElement("hidden","id",$ID); ?>
@@ -17,8 +17,8 @@
     <div class="box-header flex-justify-center">
       <div class="col-lg-8 col-sm-12">
         <div class="innerContainer">
-          <h4 class="subTitleB"><i class="fa fa-plus-circle"></i> Complete los campos para modificar la l&iacute;nea</h4>
-            
+          <h4 class="subTitleB"><i class="fa fa-plus-circle"></i> Complete los campos para modificar la categor&iacute;a</h4>
+
             <div class="row form-group inline-form-custom-2">
               <div class="col-xs-12 inner">
                 <label>Nombre</label>

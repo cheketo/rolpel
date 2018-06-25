@@ -1,9 +1,9 @@
 <?php
 
-class Purchase 
+class Purchase
 {
 	use CoreSearchList,CoreCrud,CoreImage;
-	
+
 	const TABLE				= 'purchase';
 	const TABLE_ID			= 'purchase_id';
 	const SEARCH_TABLE		= 'view_purchase_list';
@@ -14,7 +14,7 @@ class Purchase
 
 	public function __construct($ID=0)
 	{
-		
+
 		$this->ID = $ID;
 		if($this->ID!=0)
 		{
@@ -23,7 +23,7 @@ class Purchase
 			$this->Data['itmes'] = PurchaseItem::GetItems($Data);
 		}
 	}
-	
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// SEARCHLIST FUNCTIONS ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,40 +35,40 @@ class Purchase
 		{
 			$Row	=	new ProviderOrder($Rows[$i][$this->TableID]);
 			$Actions	= 	'<span class="roundItemActionsGroup"><a class="hint--bottom hint--bounce " aria-label="Ver M&aacute;s"><button type="button" class="btn bg-navy ExpandButton" id="expand_'.$Row->ID.'"><i class="fa fa-plus"></i></button></a> ';
-			
+
 			if($Row->Data['status']=="P")
 			{
-				$Actions	.= '<a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" process="'.PROCESS.'" id="store_'.$Row->ID.'"><button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button></a>';	
+				$Actions	.= '<a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" process="'.PROCESS.'" id="store_'.$Row->ID.'"><button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button></a>';
 			}
-			
+
 			if($Row->Data['status']=="P" || $Row->Data['status']=="I")
 			{
 				$Actions	.= '<a class="hint--bottom hint--bounce hint--success activateElement" aria-label="Activar" process="'.PROCESS.'" id="activate_'.$Row->ID.'"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
 			}
-			
+
 			if($Row->Data['status']=="A" && $Row->Data['payment_status']!="F")
 			{
 				$Actions	.= '<a class="hint--bottom hint--bounce hint--success Invoice" aria-label="Controlar Factura" href="invoice.php?id='.$Row->ID.'" status="'.$Row->Data['status'].'" id="payment_'.$Row->ID.'"><button type="button" class="btn bg-olive"><i class="fa fa-file-text"></i></button></a> ';
 			}
-			
+
 			if($Row->Data['status']!="P" && $Row->Data['status']!="Z"){
 				$Actions	.= '<a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="view.php?id='.$Row->ID.'" id="payment_'.$Row->ID.'"><button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button></a> ';
 			}
-			
+
 			// if($Row->Data['status']=="A" || $Row->Data['status']=="C")
 			// {
 			// 	$Actions	.= '<a class="completeElement" href="../stock/stock_entrance.php?id='.$Row->ID.'" title="Ingresar stock" id="complete_'.$Row->ID.'"><button type="button" class="btn btn-dropbox"><i class="fa fa-sign-in"></i></button></a>';
 			// }
-			
+
 			if($Row->Data['status']!="F" && $Row->Data['status']!="Z")
 			{
 				$Actions	.= '<a class="hint--bottom hint--bounce hint--info" aria-label="Editar" href="edit.php?status='.$Row->Data['status'].'&id='.$Row->ID.'"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
 			}
-			
+
 			if($Row->Data['payment_status']=="P" && $Row->Data['delivery_status']=="P" && $Row->Data['status']!="Z")
 			{
 				$Actions	.= '<a aria-label="Eliminar" class="hint--bottom hint--bounce hint--error deleteElement" process="'.PROCESS.'" id="delete_'.$Row->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
-				
+
 			}
 			$Actions	.= '</span>';
 			// echo '<pre>';
@@ -76,7 +76,7 @@ class Purchase
 			// echo '</pre>';
 			$Date = explode(" ",$Row->Data['delivery_date']);
 			$OrderDate = implode("/",array_reverse(explode("-",$Date[0])));
-			
+
 			$Items = '<div style="margin-top:10px;">';
 			$I=0;
 			$ItemsReceived = 0;
@@ -85,24 +85,24 @@ class Purchase
 			{
 				$I++;
 				$RowClass = $I % 2 != 0? 'bg-gray':'bg-gray-active';
-				
+
 				$Date = explode(" ",$Item['delivery_date']);
 				$DeliveryDate = implode("/",array_reverse(explode("-",$Date[0])));
 				$ItemTotal = $Item['currency']." ".$Item['total'];
 				$ItemPrice = $Item['currency']." ".$Item['price'];
-				
+
 				$ItemsReceived	+= $Item['quantity_received'];
 				$ItemsTotal		+= $Item['quantity'];
-				
+
 				$ItemQuantity = $Row->Data['status']!="P" && $Row->Data['status']!="Z"? $Item['quantity_received'].'/'.$Item['quantity'] : $Item['quantity'];
-				
+
 				$Stock = '<div class="col-md-3 hideMobile990">
 									<div class="listRowInner">
 										<span class="listTextStrong">Cantidad</span>
 										<span class="listTextStrong"><span class="label label-primary">'.$ItemQuantity.'</span></span>
 									</div>
 								</div>';
-				
+
 				$Items .= '
 							<div class="row '.$RowClass.'" style="padding:5px;">
 								<div class="col-md-3 col-sm-5">
@@ -117,7 +117,7 @@ class Purchase
 										<span class="listTextStrong"><span class="label label-info">'.$ItemPrice.'</span></span>
 									</div>
 								</div>
-								
+
 								<div class="col-md-2 col-sm-6">
 									<div class="listRowInner">
 										<span class="listTextStrong">Total Art.</span>
@@ -125,19 +125,19 @@ class Purchase
 									</div>
 								</div>
 								'.$Stock.'
-								
-									
+
+
 							</div>';
 			}
 			$Items .='</div>';
-			
+
 			switch($Row->Data['delivery_status'])
 			{
 				case 'A': $DeliveryStatus = '<span class="label label-warning">En Proceso('.$ItemsReceived.'/'.$ItemsTotal.')<span>'; break;
 				case 'F': $DeliveryStatus = '<span class="label label-success">Si('.$ItemsReceived.'/'.$ItemsTotal.')<span>'; break;
 				default: $DeliveryStatus = '<span class="label label-danger">No('.$ItemsReceived.'/'.$ItemsTotal.')<span>'; break;
 			}
-			
+
 			$Restrict	= $Row->Data['delivery_status']=='P' && $Row->Data['payment_status']=='P'? '':' undeleteable ';
 			switch(strtolower($Mode))
 			{
@@ -147,16 +147,16 @@ class Purchase
 											<span class="emailTextResp">'.$Row->Data['extra'].'</span>
 										</div>
 									</div>';
-									
+
 					$RowBackground = $i % 2 == 0? '':' listRow2 ';
-					
+
 					$Stock = $Row->Data['status']!="P" && $Row->Data['status']!="Z"? '<div class="col-lg-3 col-md-3 col-sm-2 hideMobile990">
 									<div class="listRowInner">
 										<span class="listTextStrong">Stock Recibido</span>
 										<span class="listTextStrong">'.$DeliveryStatus.'</span>
 									</div>
 								</div>' : '';
-					
+
 					$Regs	.= '<div class="row listRow'.$RowBackground.$Restrict.'" id="row_'.$Row->ID.'">
 									<div class="col-lg-3 col-md-5 col-sm-8 col-xs-10">
 										<div class="listRowInner">
@@ -165,7 +165,7 @@ class Purchase
 											<span class="smallDetails"><i class="fa fa-calendar"></i> '.$OrderDate.'</span>
 										</div>
 									</div>
-									
+
 									<div class="col-lg-2 col-md-3 col-sm-2 hideMobile990">
 										<div class="listRowInner">
 											<span class="listTextStrong">Total</span>
@@ -180,7 +180,7 @@ class Purchase
 									<div class="listActions flex-justify-center Hidden">
 										<div>'.$Actions.'</div>
 									</div>
-									
+
 								</div>';
 				break;
 				case "grid":
@@ -216,7 +216,7 @@ class Purchase
         }
 		return $Regs;
 	}
-	
+
 	protected function InsertSearchField()
 	{
 		return '<!-- Provider -->
@@ -246,7 +246,7 @@ class Purchase
           </div>
           ';
 	}
-	
+
 	protected function InsertSearchButtons()
 	{
 		if($_GET['status']=="P" || $_GET['status']=="Z")
@@ -254,15 +254,15 @@ class Purchase
 			$BtnText = 'Pedir Cotización';
 			$BtnIcon = 'cart-plus';
 		}else{
-			$BtnText = 'Nueva Orden de Compra';	
+			$BtnText = 'Nueva Orden de Compra';
 			$BtnIcon = 'ambulance';
 		}
-		$HTML =	'<!-- New Button --> 
+		$HTML =	'<!-- New Button -->
 		    	<a class="hint--bottom hint--bounce hint--success" aria-label="'.$BtnText.'" href="new.php?status='.$_GET['status'].'"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-'.$BtnIcon.'"></i></button></a>
 		    	<!-- /New Button -->';
 		return $HTML;
 	}
-	
+
 	public function ConfigureSearchRequest()
 	{
 		$this->SetTable($this->Table.' a LEFT JOIN provider_order_item b ON (b.order_id=a.order_id) LEFT JOIN product c ON (b.product_id = c.product_id) LEFT JOIN provider d ON (d.provider_id=a.provider_id) LEFT JOIN provider_agent e ON (e.agent_id = a.agent_id)');
@@ -271,12 +271,12 @@ class Purchase
 		//$this->AddWhereString(" AND c.organization_id = a.organization_id");
 		//$this->SetOrder('a.delivery_date');
 		$this->SetGroupBy("a.".$this->TableID);
-		
+
 		foreach($_POST as $Key => $Value)
 		{
 			$_POST[$Key] = $Value;
 		}
-			
+
 		if($_POST['name']) $this->SetWhereCondition("d.name","LIKE","%".$_POST['name']."%");
 		if($_POST['agent']) $this->SetWhereCondition("e.name","LIKE","%".$_POST['agent']."%");
 		if($_POST['code']) $this->SetWhereCondition("c.code","LIKE","%".$_POST['code']."%");
@@ -286,44 +286,44 @@ class Purchase
 			$_POST['delivery_date'] = implode("-",array_reverse(explode("/",$_POST['delivery_date'])));
 			$this->AddWhereString(" AND (a.delivery_date = '".$_POST['delivery_date']."' OR b.delivery_date='".$_POST['delivery_date']."')");
 		}
-		
-		
+
+
 		if($_REQUEST['status'])
 		{
 			if($_POST['status']) $this->SetWhereCondition("a.status","=", $_POST['status']);
-			if($_GET['status']) $this->SetWhereCondition("a.status","=", $_GET['status']);	
+			if($_GET['status']) $this->SetWhereCondition("a.status","=", $_GET['status']);
 		}else{
 			$this->SetWhereCondition("a.status","=","P");
 		}
-		
+
 		if(strtolower($_POST['view_order_mode']))
 			$Mode = $_POST['view_order_mode'];
 		else
 			$Mode = 'ASC';
-		
+
 		$Order = strtolower($_POST['view_order_field']);
 		switch($Order)
 		{
-			case "name": 
+			case "name":
 				$Order = 'name';
 				$Prefix = "d.";
 			break;
-			case "code": 
+			case "code":
 				$Order = 'code';
 				$Prefix = "c.";
 			break;
-			case "agent": 
+			case "agent":
 				$Order = 'name';
 				$Prefix = "e.";
 			break;
 			default:
 				$Order = 'delivery_date';
-				$Prefix = "a.";		
+				$Prefix = "a.";
 			break;
 		}
 		$this->SetOrder($Prefix.$Order." ".$Mode);
-		
-		
+
+
 		if($_POST['regsperview'])
 		{
 			$this->SetRegsPerView($_POST['regsperview']);
@@ -350,7 +350,7 @@ class Purchase
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// PROCESS METHODS ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	public function Insert()
 	{
 		// ITEMS DATA
@@ -370,7 +370,7 @@ class Purchase
 				}
 			}
 		}
-		
+
 		// Basic Data
 		$Type			= $_POST['type'];
 		$ProviderID		= $_POST['provider'];
@@ -380,11 +380,11 @@ class Purchase
 		$Total			= $_POST['total_price'];
 		$Admin			= new CoreUser($_SESSION['user_id']);
 		$Status			= $_POST['status'];
-		
+
 		$NewID			= Core::Insert($this->Table,'type,provider_id,agent_id,currency_id,extra,total,delivery_date,status,creation_date,created_by,organization_id',"'".$Type."',".$ProviderID.",".$AgentID.",".$CurrencyID.",'".$Extra."',".$Total.",'".$Date."','".$Status."',NOW(),".$_SESSION['user_id'].",".$_SESSION['organization_id']);
 		// echo $this->LastQuery();
 		$New 			= new ProviderOrder($NewID);
-		
+
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
@@ -394,9 +394,9 @@ class Purchase
 		}
 		Core::Insert('provider_order_item','order_id,provider_id,product_id,price,quantity,delivery_date,currency_id,creation_date,created_by,organization_id',$Fields);
 		// echo $this->LastQuery();
-		
+
 	}
-	
+
 	public function Update()
 	{
 		$ID 	= $_POST['id'];
@@ -430,7 +430,7 @@ class Purchase
 				}
 			}
 		}
-		
+
 		// Basic Data
 		$Type			= $_POST['type'];
 		$ProviderID		= $_POST['provider'];
@@ -438,7 +438,7 @@ class Purchase
 		$CurrencyID		= $_POST['currency'];
 		$Extra			= $_POST['extra'];
 		$Total			= $_POST['total_price'];
-		
+
 		// CREATE NEW IMAGE IF EXISTS
 		if($Image!=$Edit->Data['logo'])
 		{
@@ -452,13 +452,13 @@ class Purchase
 				copy($Temp,$Image);
 			}
 		}
-		
+
 		$Update		= Core::Update('provider_order',"type='".$Type."',provider_id=".$ProviderID.",agent_id=".$AgentID.",currency_id=".$CurrencyID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION['user_id'],"order_id=".$ID);
 		//echo $this->LastQuery();
-		
+
 		// DELETE OLD ITEMS
 		Core::Delete('provider_order_item',"order_id = ".$ID);
-		
+
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
@@ -469,7 +469,7 @@ class Purchase
 		Core::Insert('provider_order_item','order_id,provider_id,product_id,price,quantity,quantity_paid,quantity_received,delivery_date,actual_delivery_date,payment_status,delivery_status,currency_id,creation_date,created_by,organization_id',$Fields);
 		// echo $this->LastQuery();
 	}
-	
+
 	public function Activate()
 	{
 		$ID	= $_POST['id'];
@@ -477,13 +477,13 @@ class Purchase
 		$Status = $Order->Data['status'] == 'I'? 'P' : 'A';
 		Core::Update($this->Table,"status = '".$Status."'",$this->TableID."=".$ID);
 	}
-	
+
 	public function Store()
 	{
 		$ID	= $_POST['id'];
 		Core::Update($this->Table,"status = 'Z'",$this->TableID."=".$ID);
 	}
-	
+
 	// public function Generateinvoice()
 	// {
 	// 	$ID			= $_POST['id'];
@@ -497,11 +497,11 @@ class Purchase
 	// 	$Taxes		= 0;
 	// 	$AddTaxes	= Tax::TaxableType($TypeID);
 	// 	$Operation	= 2;
-		
+
 	// 	$Provider	= Core::Select("provider a INNER JOIN view_cuit_operation_tax b ON (a.cuit=b.cuit)","a.name,a.cuit,b.name as tax,b.tax_id, b.percentage, b.base_amount","b.operation_id = ".$Operation." AND a.provider_id=".$ProviderID);
 	// 	$CUIT		= $Provider[0]['cuit'];
 	// 	$Name		= $Provider[0]['name'];
-		
+
 	// 	if($AddTaxes)
 	// 	{
 	// 		foreach($Provider as $Key=>$Tax)
@@ -516,10 +516,10 @@ class Purchase
 	// 			}
 	// 		}
 	// 	}
-		
+
 	// 	$InvoiceID = Core::Insert('invoice','entity_id,type_id,operation_id,entity_name,currency_id,total,subtotal,tax,number,status,creation_date,created_by,organization_id',$ProviderID.",".$TypeID.",".$Operation.",'".$Name."',".$Currency.",".$Total.",".$SubTotal.",".$Taxes.",".$Invoice.",'P',NOW(),".$_SESSION['user_id'].",".$_SESSION['organization_id']);
 	// 	// echo $this->LastQuery()." *****/";
-		
+
 	// 	if($AddTaxes)
 	// 	{
 	// 		// INSERT TAXES
@@ -531,8 +531,8 @@ class Purchase
 	// 		Core::Insert('relation_invoice_tax','invoice_id,tax_id,amount,percentage',$InvoiceTaxes);
 	// 		// echo $this->LastQuery()." *****/";
 	// 	}
-		
-		
+
+
 	// 	// ITEMS DATA
 	// 	$Items = array();
 	// 	for($I=1;$I<=$_POST['total_items'];$I++)
@@ -549,7 +549,7 @@ class Purchase
 	// 		}
 	// 	}
 	// 	Core::Insert('invoice_detail','invoice_id,product_id,description,quantity,price,total,creation_date,created_by,organization_id',$QueryFields);
-		
+
 	// 	$OrderStatus = Core::Select($this->Table.'_item',"SUM(quantity_paid) AS quantity_paid,SUM(quantity) AS quantity",$this->TableID."=".$ID);
 	// 	$OrderStatus = $OrderStatus[0];
 	// 	$PaymentStatus = $OrderStatus['quantity']==$OrderStatus['quantity_paid']? 'F':'A';
@@ -561,11 +561,11 @@ class Purchase
 	// 			$Status = 'F';
 	// 	}
 	// 	Core::Update($this->Table,"status='".$Status."',payment_status='".$PaymentStatus."'",$this->TableID."=".$ID);
-		
+
 	// 	Core::Insert('relation_invoice_order','invoice_id,order_id,amount',$InvoiceID.",".$ID.",".$SubTotal);
 	// 	//echo $this->LastQuery()." \\n\\n";
 	// }
-	
+
 	// public function Degenerateinvoice($ID=0)
 	// {
 	// 	if(!$ID)
@@ -581,14 +581,14 @@ class Purchase
 	// 		Core::Update('provider_order_item',"quantity_paid=".$QuantityPaid.", payment_status='".$Status."'","item_id=".$Item['item_id']);
 	// 	}
 	// 	$ActiveItems = Core::Select('provider_order_item','quantity_paid',"quantity_paid>0 AND order_id=".$Order);
-		
+
 	// 	// UPDATE STATUS AND PAYMENT_STATUS FROM ORDER
 	// 	$PaymentOrderStatus = empty($ActiveItems) || !$ActiveItems[0]['quantity_paid']? 'P' : 'A';
 	// 	Core::Update($this->Table,"status='A', payment_status='".$PaymentOrderStatus."'",$this->TableID."=".$Order);
 	// 	// SET INVOICE STATUS 'I'
 	// 	Core::Update('invoice',"status='I'","invoice_id=".$ID);
 	// }
-	
+
 	public function Delete()
 	{
 		$ID	= $_POST['id'];
@@ -604,7 +604,7 @@ class Purchase
 				case 'A':
 					Core::Update($this->Table,"status = 'P'",$this->TableID."=".$ID);
 				break;
-				
+
 				default:
 					echo 'No se puede borrar una orden que no esté en estado pendiente de aprovación';
 				break;
@@ -613,13 +613,13 @@ class Purchase
 			echo 'No se puede borrar una orden que haya sido entrgada o facturada';
 		}
 	}
-	
+
 	// public function Search()
 	// {
 	// 	$this->ConfigureSearchRequest();
 	// 	echo $this->InsertSearchResults();
 	// }
-	
+
 	// public function Newimage()
 	// {
 	// 	if(count($_FILES['image'])>0)
@@ -634,7 +634,7 @@ class Purchase
 	// 			$Name	= "provider".intval(rand()*rand()/rand());
 	// 			$Img	= new CoreFileData($_FILES['image'],$TempDir,$Name);
 	// 			echo $Img	-> BuildImage(100,100);
-	// 		}else{	
+	// 		}else{
 	// 			if($_POST['newimage']!=$this->GetDefaultImg() && file_exists($_POST['newimage']))
 	// 				unlink($_POST['newimage']);
 	// 			$TempDir= $this->ImgGalDir;
@@ -644,7 +644,7 @@ class Purchase
 	// 		}
 	// 	}
 	// }
-	
+
 	// public function Validate()
 	// {
 	// 	$User 			= strtolower($_POST['name']);
@@ -656,7 +656,7 @@ class Purchase
 	// 	    $TotalRegs  = Core::NumRows($this->Table,'*',"name = '".$User."'");
 	// 	if($TotalRegs>0) echo $TotalRegs;
 	// }
-	
+
 	public function Fillagents()
 	{
 		$Company = $_POST['id'];
@@ -668,10 +668,10 @@ class Purchase
 		$HTML = Core::InsertElement('select','agent','','form-control chosenSelect','data-placeholder="Seleccione un Contacto" '.$Disabled,$Agents,' ','');
 		echo $HTML;
 	}
-	
+
 	public function Additem()
 	{
-		
+
 		$ID = $_POST['item'];
 		$HistoryButton = '<button type="button" id="HistoryItem'.$ID.'" class="btn btn-github HistoryItem hint--bottom hint--bounce Hidden" aria-label="Trazabilidad" style="margin:0px;" item="'.$ID.'"><i class="fa fa-book"></i></button>';
 		$TotalPrice = "$ 0.00";
@@ -704,7 +704,7 @@ class Purchase
                 </div>
                 <div  id="item_number_'.$ID.'" class="col-xs-1 txC item_number" total="0" item="'.$ID.'">'.$TotalPrice.'</div>
                 <div class="col-xs-2 txC">
-				  <button type="button" id="SaveItem'.$ID.'" class="btn btnGreen SaveItem" style="margin:0px;" item="'.$ID.'"><i class="fa fa-check"></i></button>
+				  <!--<button type="button" id="SaveItem'.$ID.'" class="btn btnGreen SaveItem" style="margin:0px;" item="'.$ID.'"><i class="fa fa-check"></i></button>-->
 				  <button type="button" id="EditItem'.$ID.'" class="btn btnBlue EditItem Hidden" style="margin:0px;" item="'.$ID.'"><i class="fa fa-pencil"></i></button>
 				  '.$HistoryButton.'
 				  <button type="button" id="DeleteItem'.$ID.'" class="btn btnRed DeleteItem" style="margin:0px;" item="'.$ID.'"><i class="fa fa-trash"></i></button>
@@ -713,7 +713,7 @@ class Purchase
             </div>';
             echo $HTML;
 	}
-	
+
 	public function Getitemprices()
 	{
 		$Prices = array();

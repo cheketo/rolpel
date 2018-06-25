@@ -13,7 +13,7 @@ class CompanyBranch
 
 	public static function GetBranches($Branches)
 	{
-	    $TotalBranches = array();
+	  $TotalBranches = array();
 		if(is_array($Branches))
 		{
 		    $X=0;
@@ -330,7 +330,7 @@ class CompanyBranch
                         </div>
 
                         <br>
-                        
+
                     </div>
                     <div class="modal-footer txC" style="background-color:#6f69bd!important;">
           						<button type="button" name="button" class="btn btn-success btnBlue SaveBranchEdition" id="SaveBranchEdition'.$ID.'" data-dismiss="modal" branch="'.$ID.'">Guardar</button>
@@ -344,6 +344,18 @@ class CompanyBranch
 
         echo $HTML;
     }
+
+    public function Fillbranches()
+  	{
+  		$Company = $_POST['id'];
+  		$Branches = Core::Select(self::TABLE,"branch_id,CONCAT(name,' (',address,')') AS name","company_id=".$Company);
+  		if(count($Branches)<1)
+  		{
+  			$Disabled = 'disabled="disabled"';
+  		}
+  		$HTML = Core::InsertElement('select','branch','','form-control chosenSelect','data-placeholder="Seleccione una Sucursal" '.$Disabled,$Branches);
+  		echo $HTML;
+  	}
 }
 
 ?>

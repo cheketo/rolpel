@@ -2,7 +2,7 @@
 class Category
 {
 	use CoreSearchList,CoreCrud,CoreImage;
-	
+
 	var $Products			= array();
 	const TABLE				= 'product_category';
 	const TABLE_ID			= 'category_id';
@@ -10,7 +10,7 @@ class Category
 	const DEFAULT_IMG		= '../../../../skin/images/categories/default/default.jpg';
 	const DEFAULT_IMG_DIR	= '../../../../skin/images/categories/default/';
 	const IMG_DIR			= '../../../../skin/images/categories/';
-	
+
 	public function __construct($ID=0)
 	{
 		$this->ID = $ID;
@@ -22,9 +22,9 @@ class Category
 		// 	$Parent = Core::Select($this->Table,"title","category_id=".$this->Data['parent_id']);
 		// 	$this->Data['parent'] = $Parent[0]['title'];
 		// }
-		
+
 	}
-	
+
 	public function GetProducts()
 	{
 		if(!$this->Products)
@@ -32,9 +32,9 @@ class Category
 			$this->Products = Core::Select(Product::TABLE." a INNER JOIN ".Brand::TABLE." b ON (a.".Brand::TABLE_ID."=b.".Brand::TABLE_ID.")",'a.*,b.name AS brand',self::TABLE_ID."=".$this->ID);
 		}
 		return $this->Products;
-		
+
 	}
-	
+
 	// public function GetParent()
 	// {
 	// 	if(!$this->Parent)
@@ -42,9 +42,9 @@ class Category
 	// 		$this->Parent = Core::Select(self::TABLE,'*',self::TABLE_ID."=".$this->Data['parent_id'])[0];
 	// 	}
 	// 	return $this->Parent;
-		
+
 	// }
-	
+
 	public static function GetParentsArray($Order='title')
 	{
 		$Parents = array();
@@ -57,13 +57,13 @@ class Category
 		}
 		return $Parents;
 	}
-	
+
 	public static function GetAllCategories($Order='parent_id,title')
 	{
 		return Core::Select(self::TABLE,'*',"status='A' AND ".CoreOrganization::TABLE_ID." = ".$_SESSION[CoreOrganization::TABLE_ID],$Order);
-		
+
 	}
-	
+
 	public static function CalculateCategoryLevel($CategoryID)
 	{
 		$Parent = Core::Select(self::TABLE,"parent_id",self::TABLE_ID."=".$CategoryID);
@@ -86,19 +86,19 @@ class Category
 		if($Object->Data['status']=="A")
 		{
 			$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="'.PROCESS.'" id="delete_'.$Object->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
-			$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la l&iacute;nea <b>'.$Object->Data['title'].'</b> ?');
-			$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La l&iacute;nea <b>'.$Object->Data['title'].'</b> ha sido eliminada.');
-			$HTML	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la l&iacute;nea <b>'.$Object->Data['title'].'</b>.');
-			
+			$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la categor&iacute;a <b>'.$Object->Data['title'].'</b> ?');
+			$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La categor&iacute;a <b>'.$Object->Data['title'].'</b> ha sido eliminada.');
+			$HTML	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la categor&iacute;a <b>'.$Object->Data['title'].'</b>.');
+
 		}else{
 			$HTML	.= '<a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" process="'.PROCESS.'" id="activate_'.$Object->ID.'"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
-			$HTML	.= Core::InsertElement('hidden','activate_question_'.$Object->ID,'&iquest;Desea activar la l&iacute;nea <b>'.$Object->Data['title'].'</b> ?');
-			$HTML	.= Core::InsertElement('hidden','activate_text_ok_'.$Object->ID,'La l&iacute;nea <b>'.$Object->Data['title'].'</b> ha sido activada.');
-			$HTML	.= Core::InsertElement('hidden','activate_text_error_'.$Object->ID,'Hubo un error al intentar activar la l&iacute;nea <b>'.$Object->Data['title'].'</b>.');
+			$HTML	.= Core::InsertElement('hidden','activate_question_'.$Object->ID,'&iquest;Desea activar la categor&iacute;a <b>'.$Object->Data['title'].'</b> ?');
+			$HTML	.= Core::InsertElement('hidden','activate_text_ok_'.$Object->ID,'La categor&iacute;a <b>'.$Object->Data['title'].'</b> ha sido activada.');
+			$HTML	.= Core::InsertElement('hidden','activate_text_error_'.$Object->ID,'Hubo un error al intentar activar la categor&iacute;a <b>'.$Object->Data['title'].'</b>.');
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeListHTML($Object)
 	{
 		$HTML = '<div class="col-lg-4 col-md-5 col-sm-4 col-xs-10">
@@ -122,7 +122,7 @@ class Category
 				';
 		return $HTML;
 	}
-	
+
 	protected static function MakeItemsListHTML($Object)
 	{
 		$Products = $Object->GetProducts();
@@ -131,7 +131,7 @@ class Category
 						<div class="col-xs-12">
 							<div class="listRowInner">
 								<span class="itemRowtitle">
-									<span class="listTextStrong">Nombre corto</span> 
+									<span class="listTextStrong">Nombre corto</span>
 									<span class="label label-primary">'.ucfirst($Object->Data['short_title']).'</span>
 								</span>
 							</div>
@@ -145,8 +145,8 @@ class Category
 							<div class="col-xs-6">
 								<div class="listRowInner">
 									<span class="itemRowtitle">
-										<span class="listTextStrong">Producto</span> 
-										<span class="label label-primary">'.$Item['code'].'</span>
+										<span class="listTextStrong">Producto</span>
+										<span class="label label-primary">'.$Item['title'].'</span>
 									</span>
 								</div>
 							</div>
@@ -161,7 +161,7 @@ class Category
 		if(!$HTML) $HTML='<div class="bg-gray txC" style="padding:5px;">Sin productos asociados</div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeGridHTML($Object)
 	{
 		$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
@@ -182,12 +182,12 @@ class Category
 		            </div>';
 		return $HTML;
 	}
-	
+
 	public static function MakeNoRegsHTML()
 	{
-		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron l&iacute;neas.</h4><p>Puede crear una nueva l&iacute;nea haciendo click <a href="new.php">aqui</a>.</p></div>';	
+		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron l&iacute;neas.</h4><p>Puede crear una nueva l&iacute;nea haciendo click <a href="new.php">aqui</a>.</p></div>';
 	}
-	
+
 	protected function SetSearchFields()
 	{
 		$Parents = array();
@@ -203,22 +203,22 @@ class Category
 		$this->SearchFields['brand'] = Core::InsertElement('text','brand','','form-control','placeholder="Marca"');
 		$this->SearchFields['parent_id'] = Core::InsertElement('select','parent_id','','form-control chosenSelect','',$Parents,'','Cualquier Ubicaci&oacute;n');
 	}
-	
+
 	protected function InsertSearchButtons()
 	{
 		return '<a href="new.php" class="hint--bottom hint--bounce hint--success" aria-label="Nueva L&iacute;nea"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
 	}
-	
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// PROCESS METHODS ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function Insert()
 	{
 		$Parent 	= $_POST['parent']? $_POST['parent'] : 0;
-		$Insert		= Core::Insert(self::TABLE,'title,short_title,parent_id,creation_date,'.CorOrganization::TABLE_ID.',created_by',"'".$_POST['title']."','".$_POST['short_title']."',".$Parent.",NOW(),".$_SESSION[CorOrganization::TABLE_ID].",".$_SESSION[CoreUser::TABLE_ID]);
+		$Insert		= Core::Insert(self::TABLE,'title,short_title,parent_id,creation_date,'.CoreOrganization::TABLE_ID.',created_by',"'".$_POST['title']."','".$_POST['short_title']."',".$Parent.",NOW(),".$_SESSION[CoreOrganization::TABLE_ID].",".$_SESSION[CoreUser::TABLE_ID]);
 		//echo $this->LastQuery();
-	}	
-	
+	}
+
 	public function Update()
 	{
 		$ID 		= $_POST['id'];
@@ -226,7 +226,7 @@ class Category
 		$Update		= Core::Update(self::TABLE,"title='".$_POST['title']."',short_title='".$_POST['short_title']."',parent_id=".$Parent.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
 		//echo $this->LastQuery();
 	}
-	
+
 	public function Validate()
 	{
 		echo self::ValidateValue('name',$_POST['title'],$_POST['titlename'],'parent_id',$_POST['parent']);

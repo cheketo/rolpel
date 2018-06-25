@@ -1,51 +1,69 @@
-///////////////////////// ALERTS ////////////////////////////////////
+/****************************************\
+|                  ALERTS                |
+\****************************************/
 $(document).ready(function(){
 	//$("#prueba").keydown();
 	// $("#prueba").onfocus(function(){$(this).change(); alert('entra');});
 	if(get['msg']=='insert')
 		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido creada correctamente.');
 	if(get['msg']=='update')
-		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido modificada correctamente.');
+	{
+		var popuptext = 'La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido modificada correctamente'
+		if(get['emailsent'])
+			popuptext = popuptext + ' y un email fue enviado a <b>'+get['emailsent']+'</b> con la cotizaci&oacute;n.';
+		notifySuccess(popuptext);
+	}
 	if(get['error']=="status")
 		notifyError('La cotizaci&oacute;n no puede ser editada ya que no se encuentra en estado activo.');
 	if(get['error']=="user")
 		notifyError('La cotizaci&oacute;n que desea editar no existe.');
 });
 
-///////////////////////// CREATE/EDIT ////////////////////////////////////
+/****************************************\
+|             CREATE / EDIT              |
+\****************************************/
 $(function(){
 	var role = 'Quotation'
 	var msg = $("#action").val();
 	var params = '';
 	if(get['customer'])
 		params += '&customer='+get['customer'];
-	if(get['provider'])	
+	if(get['provider'])
 		params += '&provider='+get['provider'];
-	if(get['international'])	
+	if(get['international'])
 		params += '&international='+get['international'];
 	$("#BtnCreate").click(function(){
 		var element = $('#company option:selected').html();
-		var target	= 'list.php?element='+element+'&msg='+msg+params;
+		var target	= 'list.php?msg='+msg+params+'&element='+element;
 		askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
 	});
-	$("#BtnCreateNext").click(function(){
-		var element = $('#company option:selected').html();
-		var target		= 'new.php?element='+element+'&msg='+msg+params;
-		askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
-	});
+	// $("#BtnCreateNext").click(function(){
+	// 	var element = $('#company option:selected').html();
+	// 	var target		= 'new.php?element='+element+'&msg='+msg+params;
+	// 	askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
+	// });
 	$("#BtnEdit").click(function(){
 		var element = $('#company option:selected').html();
-		var target		= 'list.php?element='+element+'&msg='+msg+params;
+		var target		= 'list.php?msg='+msg+params+'&element='+element;
 		askAndSubmit(target,role,'¿Desea modificar la cotizaci&oacute;n de <b>'+element+'</b>?','','QuotationForm');
 	});
-	// $("input").keypress(function(e){
-	// 	if(e.which==13){
-	// 		$("#BtnCreate,#BtnEdit").click();
-	// 	}
-	// });
+
+	$("#SaveAndSend").click(function(){
+		if($("#action").val()=='insert')
+			var action = 'crear';
+		else
+			var action = 'editar';
+		var element = $('#company option:selected').html();
+		var target		= 'list.php?msg='+msg+params+'&emailsent='+$('#receiver').val()+'&element='+element;
+		askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');
+	});
+
+
 });
 
-///////////////////////////// QUOTATION FUNCTIONS ///////////////////////////
+/****************************************\
+|         QUOTATION FUNCTIONS            |
+\****************************************/
 $(document).ready(function(){
 	addItem();
 	saveItem();
@@ -63,8 +81,13 @@ $(document).ready(function(){
 	showHistoryWindow();
 	showHistoryButtons();
 	checkHistoryButtons();
+	updateExpireDate();
 });
 
+
+/****************************************\
+|            SET DATEPICKER              |
+\****************************************/
 function setDatePicker()
 {
 	if($(".delivery_date").length>0)
@@ -94,40 +117,70 @@ function setADatePicker()
 	});
 }
 
+function updateExpireDate()
+{
+	$("#expire_days").change(function(){
+		if(parseInt($(this).val())>-1)
+		{
+			var creation_date = $("#creation_date").val();
+			var ExpireDate = AddDaysToDate($(this).val(),creation_date);
+			$("#expire_date").val(ExpireDate);
+		}
+	});
+}
+
+/****************************************\
+|            PRICE INPUT MASK            |
+\****************************************/
 function priceImputMask(id)
 {
-	
+
 	$("#price_"+id).change(function(){
 		var decimal = $(this).val().split(".");
 		if(decimal[1]=="__")
 		{
 			$("#price_"+id).val(decimal[0]+".00");
 		}
-	});	
+	});
 }
 
+/****************************************\
+|            HISTORY BUTTON              |
+\****************************************/
 function showHistoryButtons()
 {
 	$("#company,.itemSelect").change(function(){
 		checkHistoryButtons();
 	});
+	// $("#company").change(function(){
+
+	// });
 }
 
 function checkHistoryButtons()
 {
 	$(".itemSelect").each(function(){
 		var itemid = $(this).attr("item");
-		if($("#item_"+itemid).val()>0 && $("#company").val())
+		if($("#item_"+itemid).val()>0)
 		{
 			$("#HistoryItem"+itemid).removeClass("Hidden");
+			if(get['customer']=='Y')
+			{
+				if($("#company").val())
+					$("#QuotationsBox").removeClass("Hidden");
+				else
+					$("#QuotationsBox").addClass("Hidden");
+			}
 		}else{
 			$("#HistoryItem"+itemid).addClass("Hidden");
 		}
 	})
-	
+
 }
 
-//////////////////////////// QUOTATION ITEMS //////////////////////////////////
+/****************************************\
+|            QUOTATION ITEMS             |
+\****************************************/
 function addItem()
 {
 	$("#add_quotation_item").click(function(){
@@ -265,8 +318,8 @@ function calculateRowPrice()
 		else
 			var total = 0.00;
 		$("#item_number_"+id).attr("total",total);
-		$("#item_number_"+id).html("$ "+total.formatMoney(2));	
-		
+		$("#item_number_"+id).html("$ "+total.formatMoney(2));
+
 		calculateTotalQuotationPrice();
 		calculateTotalQuotationQuantity();
 	});
@@ -280,7 +333,7 @@ function calculateTotalQuotationQuantity()
 		if(val>0)
 			total = total + val;
 	});
-	
+
 	$("#TotalQuantity").html(total);
 }
 
@@ -302,18 +355,18 @@ function changeDates()
 		var days = $("#change_day").val();
 		alertify.confirm(utf8_decode('¿Desea establecer '+days+' d&iacute;as de entrega para todos los art&iacute;culos ?'), function(e){
 		if(e)
-		{	
+		{
 			$(".DayPicker").each(function(){
 				if(!$(this).hasClass('Restricted'))
 					$(this).val(days);
 					$(this).change();
 			});
-			
+
 			$(".OrderDay").each(function(){
 				if(!$(this).hasClass('Restricted'))
 					$(this).html(days);
 			});
-			
+
 			$(".OrderDate").each(function(){
 				if(!$(this).hasClass('Restricted'))
 				{
@@ -335,24 +388,26 @@ function showHistoryWindow()
 		$("#product").val($("#item_"+id).val());
 		$("#item").val(id);
 		FillTraceabilityWindow();
-	})	
+	})
 }
 
-/////////////////////////// LOAD AGENT SELECT ////////////////////////////////
+/****************************************\
+|          LOAD BRANCH SELECT            |
+\****************************************/
 $(function(){
 	$("#company").change(function(){
 		if($(this).val())
 		{
-			fillAgent();
+			fillBranch();
 		}
 	});
 });
 
-function fillAgent()
+function fillBranch()
 {
 	var company = $('#company').val();
 	var process = process_url;
-	var string      = 'id='+ company +'&action=fillagents&object=Purchase';
+	var string  = 'id='+ company +'&action=fillbranches&object=CompanyBranch';
     var data;
     $.ajax({
         type: "POST",
@@ -362,11 +417,10 @@ function fillAgent()
         success: function(data){
             if(data)
             {
-                $('#agent-wrapper').html(data);
-                
+              $('#branch-wrapper').html(data);
+							agentFunctions();
             }else{
-                $('#agent-wrapper').html('<select id="agents" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Contacto</option</select>');
-                
+              $('#branch-wrapper').html('<select id="branch" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Sucusales</option></select>');
             }
             chosenSelect();
         }
@@ -374,7 +428,9 @@ function fillAgent()
 }
 
 
-////////////////////////////////////////// CALCULATE ITEM PRICE BY CUSTOMER ///////////////////////////////
+/****************************************\
+|    CALCULATE ITEM PRICE BY CUSTOMER    |
+\****************************************/
 $(document).ready(function(){
 	if($(".itemSelect").length>0 && get['customer']=='Y')
 	{
@@ -388,56 +444,56 @@ $(document).ready(function(){
 function setItemChosen(id)
 {
 	SetAutoComplete('#TextAutoCompleteitem_'+id);
-	$('#TextAutoCompleteitem_'+id).on('change',function(){
-		getProductsPrices($('#item_'+id).val(),id);
-	});
+	// $('#TextAutoCompleteitem_'+id).on('change',function(){
+	// 	getProductsPrices($('#item_'+id).val(),id);
+	// });
 }
 
-function getProductsPrices(values,ids)
-{
-	var string	= 'items='+values+'&action=Getitemprices&object=Purchase';
-	if(values.length>0 && get['customer']=='Y')
-	{
-		if(ids)
-		{
-			ids = ids +'';
-			$.ajax({
-		        type: "POST",
-		        url: process_url,
-		        data: string,
-		        success: function(data){
-		            if(data)
-		            {
-		            	console.log(data);
-		            	var prices = data.split(",");
-		            	var items = ids.split(",");
-		            	var decimal;
-		            	prices.forEach(function(price,index){
-		            		decimal = price.substr(price.indexOf("."));
-			            	if(decimal.length==1)
-			            	{
-			            		price = price + ".00";
-			            	}
-			            	if(decimal.length==2)
-			            	{
-			            		price = price + "0";
-			            	}
-			            	$("#price_"+items[index]).val(price);
-			            	$("#Price"+items[index]).html("$ "+price);
-		            	});
-		            }else{
-		            	notifyError('Hubo un error al calcular el precio del producto');
-		                console.log('Sin información devuelta. Item='+id);
-		            }
-		        }
-		    });
-		}
-	}
-}
+// function getProductsPrices(values,ids)
+// {
+// 	var string	= 'items='+values+'&action=Getitemprices&object=Purchase';
+// 	if(values.length>0 && get['customer']=='Y')
+// 	{
+// 		if(ids)
+// 		{
+// 			ids = ids +'';
+// 			$.ajax({
+// 		        type: "POST",
+// 		        url: process_url,
+// 		        data: string,
+// 		        success: function(data){
+// 		            if(data)
+// 		            {
+// 		            	console.log(data);
+// 		            	var prices = data.split(",");
+// 		            	var items = ids.split(",");
+// 		            	var decimal;
+// 		            	prices.forEach(function(price,index){
+// 		            		decimal = price.substr(price.indexOf("."));
+// 			            	if(decimal.length==1)
+// 			            	{
+// 			            		price = price + ".00";
+// 			            	}
+// 			            	if(decimal.length==2)
+// 			            	{
+// 			            		price = price + "0";
+// 			            	}
+// 			            	$("#price_"+items[index]).val(price);
+// 			            	$("#Price"+items[index]).html("$ "+price);
+// 		            	});
+// 		            }else{
+// 		            	notifyError('Hubo un error al calcular el precio del producto');
+// 		                console.log('Sin información devuelta. Item='+id);
+// 		            }
+// 		        }
+// 		    });
+// 		}
+// 	}
+// }
 
-///////////////////////////////////////////// LIST FUNCTIONS //////////////////////////////////////
-
-//STORE QUOTATION
+/****************************************\
+|             LIST FUNCTIONS             |
+\****************************************/
 $(function(){
 	$(".storeElement").click(function(){
 		var ID = $(this).attr('id').split("_");
