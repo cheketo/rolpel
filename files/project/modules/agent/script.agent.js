@@ -1,11 +1,14 @@
 $(document).ready(function(){
-	// agentFunctions();
+	agentFunctions();
 	// if($("#company").val())
 	// 	FillBranches();
+	DisableAgentBtn();
+	BranchHasChanged();
 });
 
 function agentFunctions()
 {
+
 	CloseAgentWindow();
 	DisableAgentBtn();
 	BranchHasChanged();
@@ -24,7 +27,7 @@ function ShowAgentWindow()
 
 function DisableAgentBtn()
 {
-	if($("#branch").val())
+	if($("#branch").val() && $("#branch").val()>0)
 	{
 		$("#ShowAgentBtn").prop("disabled",false);
 	}else{
@@ -34,11 +37,11 @@ function DisableAgentBtn()
 
 function BranchHasChanged()
 {
-	$("#branch,#company").change(function(){
+	$("#branch").change(function(){
 		DisableAgentBtn();
 		// HideAgentWrapper();
 		UnselectAgent();
-		// FillBranches();
+		FillAgents();
 	});
 }
 
@@ -99,7 +102,7 @@ function CloseAgentWindow()
 function FillAgents()
 {
 	var branch = $('#branch').val();
-	if(branch)
+	if(branch && branch>0)
 	{
 		var process = process_url;
 		var string      = 'id='+ branch +'&action=fillagents&object=CompanyAgent';

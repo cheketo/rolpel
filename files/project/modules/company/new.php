@@ -5,6 +5,7 @@
     $Head->SetTitle($Menu->GetTitle());
     $Head->SetIcon($Menu->GetHTMLicon());
     $Head->SetStyle('../../../../skin/css/maps.css'); // Google Maps CSS
+    $Head->SetStyle('../../../../vendors/clockpicker/clockpicker.css'); // Color Picker CSS
     $Head->setHead();
     include('../../../project/resources/includes/inc.top.php');
 ?>
@@ -142,5 +143,6 @@
 $Foot->SetScript('../../../core/resources/js/script.core.map.autolocation.js');
 $Foot->SetScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCuMB_Fpcn6USQEoumEHZB_s31XSQeKQc0&libraries=places&language=es','async defer');
 $Foot->SetScript('../../../../vendors/inputmask3/jquery.inputmask.bundle.min.js');
+$Foot->SetScript('../../../../vendors/clockpicker/clockpicker.js');
 include('../../../project/resources/includes/inc.bottom.php');
 ?>

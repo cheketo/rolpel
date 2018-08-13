@@ -264,7 +264,7 @@ class Company
 		$this->ValidateInformation();
 
 		// Basic Data
-		$Type 			= $_POST['type'];
+		$Type 		= $_POST['type'];
 		$Name			= $_POST['name'];
 		$CUIT			= $_POST['cuit']? Core::FromCUITToNumber($_POST['cuit']):0;
 		$IVA			= $_POST['iva']?$_POST['iva']:0;

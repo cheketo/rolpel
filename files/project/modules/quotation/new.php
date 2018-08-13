@@ -47,9 +47,9 @@
 <?php echo Core::InsertElement("hidden","creation_date",date('Y-m-d')); ?>
 <?php echo Core::InsertElement('hidden','qfilecount',"0.00"); ?>
 
-<?php include_once('window.quotation.php'); ?>
-<?php include_once('window.product.php'); ?>
-<?php include_once('window.agent.php'); ?>
+<?php include_once('../product/window.traceability.php'); ?>
+<?php include_once('../product/window.product.php'); ?>
+<?php include_once('../agent/window.agent.php'); ?>
 <?php if($Customer=='Y') include_once('window.email.php'); ?>
 
   <div class="box animated fadeIn" style="min-width:99%">
@@ -235,9 +235,9 @@ $Foot->SetScript('../../../../vendors/autocomplete/jquery.auto-complete.min.js')
 $Foot->SetScript('../../../../vendors/datepicker/bootstrap-datepicker.js');
 $Foot->SetScript('../../../../vendors/dropzone/dropzone.min.js');
 $Foot->SetScript('script.dropzone.js');
-$Foot->SetScript('script.agent.js');
-$Foot->SetScript('script.traceability.js');
+$Foot->SetScript('../agent/script.agent.js');
+$Foot->SetScript('../product/script.traceability.js');
 $Foot->SetScript('script.email.js');
-$Foot->SetScript('script.product.js');
+$Foot->SetScript('../product/script.product.js');
 include('../../../project/resources/includes/inc.bottom.php');
 ?>

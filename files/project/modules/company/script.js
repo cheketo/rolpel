@@ -1,10 +1,11 @@
-// ///////////////////////// ALERTS ////////////////////////////////////
+/////////////////////////// ALERTS ////////////////////////////////////
 $(document).ready(function(){
 	if(get['msg']=='insert')
 		notifySuccess('La empresa <b>'+get['element']+'</b> ha sido creada correctamente.');
 	if(get['msg']=='update')
 		notifySuccess('La empresa <b>'+get['element']+'</b> ha sido modificada correctamente.');
 	showBillingType();
+	inputMask();
 });
 
 ///////////////////////// CREATE/EDIT ////////////////////////////////////
@@ -76,6 +77,7 @@ $(document).ready(function(){
 	changeBillingFields();
 	AddAgent();
 	DeleteBranch();
+	DayCheck();
 });
 function AddAgent()
 {
@@ -218,6 +220,92 @@ function ShowErrorMapDiv()
 	}
 }
 
+//////////////////////////// DAYS AND HOURS ///////////////////////////////////////
+function DayCheck()
+{
+	$('.iCheckbox').on('ifChecked', function(){
+		var id = $(this).attr('id');
+		$("#from_"+id).attr("validateEmpty","Seleccione un horario inicial.");
+		$("#from_"+id).attr("disabled",false);
+		$("#to_"+id).attr("validateEmpty","Seleccione un horario final.");
+		$("#to_"+id).attr("disabled",false);
+	});
+
+	$('.iCheckbox').on('ifUnchecked', function(){
+		var id = $(this).attr('id');
+
+		$("#from_"+id).removeAttr("validateEmpty");
+		$("#from_"+id).attr("disabled",true);
+		$("#from_"+id).val('');
+		$("#from_"+id).change();
+		$("#to_"+id).removeAttr("validateEmpty");
+		$("#to_"+id).attr("disabled",true);
+		$("#to_"+id).val('');
+		$("#to_"+id).change();
+	});
+
+	$(".clockPicker").focusout(function()
+	{
+		if($(this).val())
+		{
+			$(this).val($(this).val().replace('_','0'));
+			var time = $(this).val().split(':');
+			console.log($(this).val());
+			if(!time[1])
+			{
+				$(this).val(time[0]+':00');
+			}else{
+				if(time[1]=='__')
+				{
+					$(this).val(time[0]+':00');
+				}else{
+					$(this).val($(this).val().replace('_','0'));
+				}
+			}
+
+			if(time[0]>23 || time[1]>59)
+			{
+				$(this).val('');
+			}
+
+			var id = $(this).attr('id').split('_');
+			var from = $("#from_"+id[1]+"_"+id[2]);
+			var to = $("#to_"+id[1]+"_"+id[2]);
+
+			if(from.val() && to.val())
+			{
+				var time1 = from.val().replace(':','');
+				var time2 = to.val().replace(':','');
+
+				if(parseInt(time1)>parseInt(time2))
+				{
+					var fromval = from.val();
+					from.val(to.val());
+					to.val(fromval);
+				}
+			}
+
+			if( id[1] == 'monday' )
+			{
+
+				$(".clockPicker").each(function(){
+					// console.log($(this).attr('id'));
+					if(!$(this).val() && $(this).attr('disabled')!="disabled" )
+					{
+						var otherid = $(this).attr('id').split('_');
+						if(otherid[0]=='to')
+						{
+							$(this).val(to.val());
+						}else{
+							$(this).val(from.val());
+						}
+					}
+				});
+			}
+		}
+	});
+}
+
 //////////////////////////// ADD BRANCH ///////////////////////////////////////
 function addBranchModal()
 {
@@ -232,6 +320,10 @@ function addBranchModal()
 			SaveBranchEdition();
 			validateMap();
 			chosenSelect();
+			iCheck();
+			setClockPicker();
+			DayCheck();
+			inputMask();
 			ShowAgentForm();
 			AddAgent();
 			CancelAgent();

@@ -51,15 +51,37 @@ class CompanyBranch
 			if($_POST['branch_name_'.$I])
 			{
 				$Branches[$I]['name']			= $_POST['branch_name_'.$I];
-				$Branches[$I]['website']		= $_POST['website_'.$I];
+				$Branches[$I]['website']	= $_POST['website_'.$I];
 				$Branches[$I]['fax']			= $_POST['fax_'.$I];
-				$Branches[$I]['email']			= $_POST['email_'.$I];
-				$Branches[$I]['phone']			= $_POST['phone_'.$I];
+				$Branches[$I]['email']	  = $_POST['email_'.$I];
+				$Branches[$I]['phone']		= $_POST['phone_'.$I];
 
 				if($I==1)
 					$Branches[$I]['main_branch']			= 'Y';
 				else
 					$Branches[$I]['main_branch']			= 'N';
+
+        // DAYS & HOURS
+        $Branches[$I]['monday_from']		= $_POST['monday_'.$I]? $_POST['from_monday_'.$I]:'';
+        $Branches[$I]['monday_to']		  = $_POST['monday_'.$I]? $_POST['to_monday_'.$I]:'';
+
+        $Branches[$I]['tuesday_from']		= $_POST['tuesday_'.$I]? $_POST['from_tuesday_'.$I]:'';
+        $Branches[$I]['tuesday_to']		  = $_POST['tuesday_'.$I]? $_POST['to_tuesday_'.$I]:'';
+
+        $Branches[$I]['wensday_from']		= $_POST['wensday_'.$I]? $_POST['from_wensday_'.$I]:'';
+        $Branches[$I]['wensday_to']		  = $_POST['wensday_'.$I]? $_POST['to_wensday_'.$I]:'';
+
+        $Branches[$I]['thursday_from']		= $_POST['thursday_'.$I]? $_POST['from_thursday_'.$I]:'';
+        $Branches[$I]['thursday_to']		  = $_POST['thursday_'.$I]? $_POST['to_thursday_'.$I]:'';
+
+        $Branches[$I]['friday_from']		= $_POST['friday_'.$I]? $_POST['from_friday_'.$I]:'';
+        $Branches[$I]['friday_to']		  = $_POST['friday_'.$I]? $_POST['to_friday_'.$I]:'';
+
+        $Branches[$I]['saturday_from']		= $_POST['saturday_'.$I]? $_POST['from_saturday_'.$I]:'';
+        $Branches[$I]['saturday_to']		  = $_POST['saturday_'.$I]? $_POST['to_saturday_'.$I]:'';
+
+        $Branches[$I]['sunday_from']		= $_POST['sunday_'.$I]? $_POST['from_sunday_'.$I]:'';
+        $Branches[$I]['sunday_to']		  = $_POST['sunday_'.$I]? $_POST['to_sunday_'.$I]:'';
 
 				// LOCATION DATA
 				$Branches[$I]['lat']			= $_POST['map'.$I.'_lat'];
@@ -88,7 +110,7 @@ class CompanyBranch
 				$Branches[$I]['region_id']		= Geolocation::InsertRegion($Branches[$I]['region'],$Branches[$I]['region_short'],$Branches[$I]['country_id'],$Branches[$I]['province_id']);
 				$Branches[$I]['zone_id']		= Geolocation::InsertZone($Branches[$I]['zone'],$Branches[$I]['zone_short'],$Branches[$I]['country_id'],$Branches[$I]['province_id'],$Branches[$I]['region_id']);
 
-				$BranchID 		                = Core::Insert("company_branch",Company::TABLE_ID.",country_id,province_id,region_id,zone_id,name,address,phone,email,website,fax,postal_code,main_branch,lat,lng,creation_date,created_by,".CoreOrganization::TABLE_ID,$ID.",".$Branches[$I]['country_id'].",".$Branches[$I]['province_id'].",".$Branches[$I]['region_id'].",".$Branches[$I]['zone_id'].",'".$Branches[$I]['name']."','".$Branches[$I]['address']."','".$Branches[$I]['phone']."','".$Branches[$I]['email']."','".$Branches[$I]['website']."','".$Branches[$I]['fax']."','".$Branches[$I]['postal_code']."','".$Branches[$I]['main_branch']."',".$Branches[$I]['lat'].",".$Branches[$I]['lng'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+				$BranchID 		                = Core::Insert("company_branch",Company::TABLE_ID.",country_id,province_id,region_id,zone_id,name,address,phone,email,website,fax,postal_code,main_branch,lat,lng,monday_from,monday_to,tuesday_from,tuesday_to,wensday_from,wensday_to,thursday_from,thursday_to,friday_from,friday_to,saturday_from,saturday_to,sunday_from,sunday_to,creation_date,created_by,".CoreOrganization::TABLE_ID,$ID.",".$Branches[$I]['country_id'].",".$Branches[$I]['province_id'].",".$Branches[$I]['region_id'].",".$Branches[$I]['zone_id'].",'".$Branches[$I]['name']."','".$Branches[$I]['address']."','".$Branches[$I]['phone']."','".$Branches[$I]['email']."','".$Branches[$I]['website']."','".$Branches[$I]['fax']."','".$Branches[$I]['postal_code']."','".$Branches[$I]['main_branch']."',".$Branches[$I]['lat'].",".$Branches[$I]['lng'].",'".$Branches[$I]['monday_from']."','".$Branches[$I]['monday_to']."','".$Branches[$I]['tuesday_from']."','".$Branches[$I]['tuesday_to']."','".$Branches[$I]['wensday_from']."','".$Branches[$I]['wensday_to']."','".$Branches[$I]['thursday_from']."','".$Branches[$I]['thursday_to']."','".$Branches[$I]['friday_from']."','".$Branches[$I]['friday_to']."','".$Branches[$I]['saturday_from']."','".$Branches[$I]['saturday_to']."','".$Branches[$I]['sunday_from']."','".$Branches[$I]['sunday_to']."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
 				// echo Core::LastQuery();
 
 				// AGENTS DATA
@@ -200,6 +222,22 @@ class CompanyBranch
     		$BodyEm = 41;
     	}
 
+        $MondayChecked = $Data['monday_from']? 'checked="checked"' : '';
+        $TuesdayChecked = $Data['tuesday_from']? 'checked="checked"' : '';
+        $WensdayChecked = $Data['wensday_from']? 'checked="checked"' : '';
+        $ThursdayChecked = $Data['thursday_from']? 'checked="checked"' : '';
+        $FridayChecked = $Data['friday_from']? 'checked="checked"' : '';
+        $SaturdayChecked = $Data['saturday_from']? 'checked="checked"' : '';
+        $SundayChecked = $Data['sunrday_from']? 'checked="checked"' : '';
+
+        $MondayDisabled = $Data['monday_from']? '"' : 'disabled="disabled"';
+        $TuesdayDisabled = $Data['tuesday_from']? '"' : 'disabled="disabled"';
+        $WensdayDisabled = $Data['wensday_from']? '"' : 'disabled="disabled"';
+        $ThursdayDisabled = $Data['thursday_from']? '"' : 'disabled="disabled"';
+        $FridayDisabled = $Data['friday_from']? '"' : 'disabled="disabled"';
+        $SaturdayDisabled = $Data['saturday_from']? '"' : 'disabled="disabled"';
+        $SundayDisabled = $Data['sunday_from']? '"' : 'disabled="disabled"';
+
         $HTML .= '
         <!-- //// BEGIN BRANCH MODAL '.$ID.' //// -->
         <div id="branch_modal_'.$ID.'" class="modal fade '.$NewClass.'" role="dialog" style="opacity:1!important;">
@@ -264,8 +302,180 @@ class CompanyBranch
                                 </span>
                             </div>
                         </div>
-                        </form>
                         <br>
+
+                        <h4 class="subTitleB"><i class="fa fa-clock-o"></i> Horarios de entregas</h4>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$MondayChecked.' class="iCheckbox DayCheck" name="monday_'.$ID.'" id="monday_'.$ID.'" value="1" > <span>Lunes</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_monday_'.$ID,$Data['monday_from'],'form-control clockPicker inputMask',$MondayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_monday_'.$ID,$Data['monday_to'],'form-control clockPicker inputMask',$MondayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$TuesdayChecked.' class="iCheckbox DayCheck" name="tuesday_'.$ID.'" id="tuesday_'.$ID.'" value="1" > <span>Martes</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_tuesday_'.$ID,$Data['tuesday_from'],'form-control clockPicker inputMask',$TuesdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_tuesday_'.$ID,$Data['tuesday_to'],'form-control clockPicker inputMask',$TuesdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$WensdayChecked.' class="iCheckbox DayCheck" name="wensday_'.$ID.'" id="wensday_'.$ID.'" value="1" > <span>Mi&eacute;rcoles</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_wensday_'.$ID,$Data['wensday_from'],'form-control clockPicker inputMask',$WensdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_wensday_'.$ID,$Data['wensday_to'],'form-control clockPicker inputMask',$WensdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$ThursdayChecked.' class="iCheckbox DayCheck" name="thursday_'.$ID.'" id="thursday_'.$ID.'" value="1" > <span>Jueves</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_thursday_'.$ID,$Data['thursday_from'],'form-control clockPicker inputMask',$ThursdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_thursday_'.$ID,$Data['thursday_to'],'form-control clockPicker inputMask',$ThursdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$FridayChecked.' class="iCheckbox DayCheck" name="friday_'.$ID.'" id="friday_'.$ID.'" value="1" > <span>Viernes</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_friday_'.$ID,$Data['friday_from'],'form-control clockPicker inputMask',$FridayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_friday_'.$ID,$Data['friday_to'],'form-control clockPicker inputMask',$FridayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$SaturdayChecked.' class="iCheckbox DayCheck DayCheck" name="saturday_'.$ID.'" id="saturday_'.$ID.'" value="1" > <span>S&aacute;bado</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_saturday_'.$ID,$Data['saturday_from'],'form-control clockPicker inputMask',$SaturdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_saturday_'.$ID,$Data['saturday_to'],'form-control clockPicker inputMask',$SaturdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group inline-form-custom">
+                            <div class="col-sm-4 col-xs-12">
+                              <div class="checkbox icheck">
+                                <label>
+                                  <input type="checkbox" '.$SundayChecked.' class="iCheckbox DayCheck" name="sunday_'.$ID.'" id="sunday_'.$ID.'" value="1" > <span>Domingo</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','from_sunday_'.$ID,$Data['sunday_from'],'form-control clockPicker inputMask',$SundayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"').'
+                                </span>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12 margin-top1em">
+                                <span class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                    '.Core::InsertElement('text','to_sunday_'.$ID,$Data['sunday_to'],'form-control clockPicker inputMask',$SundayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"').'
+                                </span>
+                            </div>
+                        </div>
+                      </form>
+                        <br>
+
                         <div class="row">
                             <div class="col-md-12 info-card">
                                 <h4 class="subTitleB"><i class="fa fa-male"></i> Representantes</h4>

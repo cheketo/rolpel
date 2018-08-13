@@ -1,9 +1,9 @@
 <?php
 
-class CoreMenu 
+class CoreMenu
 {
 	use CoreSearchList,CoreCrud;
-	
+
 	var $IDs 				= array();
 	var $MenuData 			= array();
 	var $Parents 			= array();
@@ -13,7 +13,7 @@ class CoreMenu
 	var $Groups 			= array();
 	var $Profiles 			= array();
 	var $OrgCondition;
-	
+
 	const PROFILE			= 333;
 	const SWITCHER_URL		= '../../../core/modules/menu/switcher.php';
 	const SEARCH_TABLE		= 'core_view_menu_list';
@@ -26,12 +26,12 @@ class CoreMenu
 		$this->OrgCondition	= $_SESSION[CoreOrganization::TABLE_ID]? " AND (".CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID]." OR ".CoreOrganization::TABLE_ID."=0)":"";
 		$this->GetData();
 	}
-	
+
 	public function OrgCondition()
 	{
 		return $this->OrgCondition;
 	}
-	
+
 	public function GetData()
     {
 		if(!$this->Data)
@@ -48,7 +48,7 @@ class CoreMenu
 	public function GetLinkData()
 	{
 		if(!$this->Data)
-		{	
+		{
 			$this->Data = self::ChosenMenu(Core::Select(self::SEARCH_TABLE,'*',"link LIKE '%".Core::GetLink()."%'".$this->OrgCondition));
 			$this->ID	= $this->Data[self::TABLE_ID];
 		}
@@ -59,7 +59,7 @@ class CoreMenu
 	{
 		return $this->Data['title'];
 	}
-	
+
 	public function GetHTMLicon()
 	{
 		return '<i class="icon fa '.$this->Data['icon'].'"></i>';
@@ -69,7 +69,7 @@ class CoreMenu
 	{
 		return count(Core::Select(self::TABLE,self::TABLE_ID,"parent_id = ".$MenuID." AND status = 'A' AND view_status = 'A' AND ".self::TABLE_ID." IN (".implode(",",$this->IDs).")"))>0;
 	}
-	
+
 	public function ChosenMenu($Menues)
 	{
 		if(count($Menues)>1)
@@ -105,7 +105,7 @@ class CoreMenu
 			return $Menues[0];
 		}
 	}
-	
+
 	public function GetActiveMenus($ID=0)
 	{
 		if($ID==0)
@@ -131,13 +131,13 @@ class CoreMenu
 	{
 		$this->GetMenues($PorfileID,$AdminID);
 		$Rows	= Core::Select(self::TABLE,'*',"parent_id = 0 AND status = 'A' AND view_status = 'A' AND ".self::TABLE_ID." IN (".implode(",",$this->IDs).")".$this->OrgCondition,"position");
-		
+
 		//ACTIVE MENUS FOR NAVBAR
 		$ActiveMenus = explode(',',$this->GetActiveMenus());
 		$this->ActiveMenus = $ActiveMenus;
 		foreach($Rows as $Row)
 		{
-			
+
 			if($this->HasChild($Row[self::TABLE_ID]))
 			{
 					$DropDown 		= '<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>';
@@ -169,7 +169,7 @@ class CoreMenu
 			echo '<ul class="treeview-menu">';
 			foreach($Rows as $Row)
 			{
-				
+
 				if($this->HasChild($Row[self::TABLE_ID]))
 				{
 						$DropDown 		= '<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>';
@@ -210,7 +210,7 @@ class CoreMenu
 		$Parent = $Menu[0]['parent_id'];
 		$Link = !$Menu[0]['link'] || $Menu[0]['link']=="#"? self::SWITCHER_URL."?id=".$ID:$Menu[0]['link'];
 		if($Parent!=0) $this->InsertBreadCrumbs($Parent);
-		
+
 		if($ID==0)
 		{
 			$Title = '<i class="fa '.$Menu[0]['icon'].'"></i> '.$Menu[0]['title'];
@@ -242,7 +242,7 @@ class CoreMenu
 	{
 		$QueryMenues 	= array(0 => 0);
 		$Menues 		= array(0 => 0);
-		
+
 		if($PorfileID==self::PROFILE)
 		{
 			$AllowedMenues 	= Core::Select(self::TABLE,self::TABLE_ID,"status = 'A'");
@@ -295,10 +295,10 @@ class CoreMenu
 		$HTML		= '<ul>';
 		$Menues 	= Core::Select(self::TABLE,'*',"parent_id = ".$Parent." AND status <> 'I'","position");
 		$Parents	= $this->GetParents();
-		
+
 		foreach($Menues as $Menu)
 		{
-			
+
 			$HTML .= '<li data-value="'.$Menu[self::TABLE_ID].'"> <i class="fa '.$Menu['icon'].'"></i> '.$Menu['title'];
 			if(in_array($Menu[self::TABLE_ID],$Parents))
 			{
@@ -322,7 +322,7 @@ class CoreMenu
 		}
 		return $this->Parents;
 	}
-	
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// SEARCHLIST FUNCTIONS ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,7 +335,7 @@ class CoreMenu
 			return $this->Groups;
 		}
 	}
-	
+
 	public function GetProfiles()
 	{
 		if(!$this->Profiles)
@@ -345,7 +345,7 @@ class CoreMenu
 			return $this->Profiles;
 		}
 	}
-	
+
 	protected static function MakeActionButtonsHTML($Object,$Mode='list')
 	{
 		if($Mode!='grid') $HTML .=	'<a class="hint--bottom hint--bounce" aria-label="M&aacute;s informaci&oacute;n"><button type="button" class="btn bg-navy ExpandButton" id="expand_'.$Object->ID.'"><i class="fa fa-plus"></i></button></a> ';;
@@ -364,7 +364,7 @@ class CoreMenu
 		}
 		return $HTML;
 	}
-	
+
 	protected static function MakeListHTML($Object)
 	{
 		$HTML = '
@@ -389,14 +389,14 @@ class CoreMenu
 		<div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeItemsListHTML($Object)
 	{
 		$MenuGroups = $Object->GetGroups();
 		$Groups = '';
 		foreach($MenuGroups as $Group)
 		{
-			
+
 			$Groups .= '<span class="label label-warning">'.$Group['title'].'</span> ';
 		}
 		if(!$Groups) $Groups = 'Ninguno';
@@ -404,11 +404,11 @@ class CoreMenu
 		$Profiles = '';
 		foreach($MenuProfiles as $Profile)
 		{
-			
+
 			$Profiles .= '<span class="label label-primary">'.$Profile['title'].'</span> ';
 		}
 		if(!$Profiles) $Profiles = 'Ninguno';
-		
+
 		$RowClass = $RowClass != 'bg-gray'? 'bg-gray':'bg-gray-active';
 		$HTML = '
 				<div class="row '.$RowClass.'" style="padding:5px;">
@@ -439,7 +439,7 @@ class CoreMenu
 				</div>';
 		return $HTML;
 	}
-	
+
 	protected static function MakeGridHTML($Object)
 	{
 		$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
@@ -460,18 +460,18 @@ class CoreMenu
 		            </div>';
 		return $HTML;
 	}
-	
+
 	public static function MakeNoRegsHTML()
 	{
-		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron menues.</h4><p>Puede crear un nuevo men&uacute; haciendo click <a href="new.php">aqui</a>.</p></div>';	
+		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron menues.</h4><p>Puede crear un nuevo men&uacute; haciendo click <a href="new.php">aqui</a>.</p></div>';
 	}
-	
+
 	protected function SetSearchFields()
 	{
 		$Parents = $this->GetParents();
 		$Parents = Core::Select(self::TABLE,self::TABLE_ID.',title',"status<>'I' AND ".self::TABLE_ID." IN (".implode(",",$Parents).")");
 		$Parents[] = array(self::TABLE_ID=>"0","title"=>"Men&uacute; Principal");
-		
+
 		$this->SearchFields['title'] = Core::InsertElement('text','title','','form-control','placeholder="T&iacute;tulo"');
 		$this->SearchFields['link'] = Core::InsertElement('text','link','','form-control','placeholder="Link"');
 		$this->SearchFields['parent_id'] = Core::InsertElement('select','parent','','form-control chosenSelect','',$Parents,' ', 'Ubicaci&oacute;n');
@@ -480,14 +480,14 @@ class CoreMenu
 		$this->SearchFields['profile'] = Core::InsertElement('multiple',CoreProfile::TABLE_ID,'','form-control chosenSelect','data-placeholder="Perfil"',Core::Select(CoreProfile::TABLE,CoreProfile::TABLE_ID.',title',CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID]." AND status='A'"),' ', '');
 		$this->SearchFields['group_title'] = Core::InsertElement('multiple',CoreGroup::TABLE_ID,'','form-control chosenSelect','data-placeholder="Grupo"',Core::Select(CoreGroup::TABLE,CoreGroup::TABLE_ID.',title',CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID]." AND status='A'","title"),' ', '');
 	}
-	
+
 	protected function InsertSearchButtons()
 	{
 		return '<!-- New User Button -->
 		    	<a href="new.php" class="hint--bottom hint--bounce hint--success" aria-label="Nuevo Men&uacute;"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>
 		    	<!-- /New User Button -->';
 	}
-	
+
 	public function ConfigureSearchRequest()
 	{
 		$_POST[CoreProfile::TABLE_ID.'_condition'] = 'IN';
@@ -501,21 +501,22 @@ class CoreMenu
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// PROCESS METHODS ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	public function Insert()
 	{
 		$Title		= $_POST['title'];
 		$Position	= $_POST['position']? intval($_POST['position']) : 0;
 		$Parent		= $_POST['parent'];
-		$Icon		= $_POST['icon'];
+		$Icon			= $_POST['icon'];
 		$Status		= $_POST['status']=='on'? 'A':'O';
 		$Public		= $_POST['public']=='on'? 'N':'Y';
-		$Link		= !$_POST['link']? "#":'../../../'.$_POST['link'];
+		$Link			= self::AdaptLink($_POST['link']);
+		// $Link		= !$_POST['link']? "#":'../../../'.$_POST['link'];
 		$ID 		= Core::Insert(self::TABLE,'title,link,position,icon,parent_id,view_status,public,'.CoreOrganization::TABLE_ID,"'".$Title."','".$Link."',".$Position.",'".$Icon."',".$Parent.",'".$Status."','".$Public."',".$_SESSION[CoreOrganization::TABLE_ID]);
 		if($_POST['groups']>0) Core::Insert('core_relation_menu_group',self::TABLE_ID.','.CoreGroup::TABLE_ID,Core::AssocArrayToID($ID,$_POST['groups']));
 		if($_POST['profiles']>0) Core::Insert('core_relation_menu_profile',self::TABLE_ID.','.CoreProfile::TABLE_ID,Core::AssocArrayToID($ID,$_POST['profiles']));
 	}
-	
+
 	public function Update()
 	{
 		$ID	= $_POST['id'];
@@ -526,12 +527,39 @@ class CoreMenu
 		$Icon		= $_POST['icon'];
 		$Status		= $_POST['status']? 'A':'O';
 		$Public		= $_POST['public']? 'N':'Y';
-		$Link		= !$_POST['link']? "#":'../../../'.$_POST['link'];
+		$Link			= self::AdaptLink($_POST['link']);
+		// $Link		= !$_POST['link']? "#":'../../../'.$_POST['link'];
 		Core::Update(self::TABLE,"title='".$Title."',link='".$Link."',position='".$Position."',icon='".$Icon."',view_status='".$Status."',parent_id=".$ParentID.",public='".$Public."'",self::TABLE_ID."=".$ID);
 		$Edit->FastDelete('core_relation_menu_group');
 		$Edit->FastDelete('core_relation_menu_profile');
 		if($_POST['groups']>0) Core::Insert('core_relation_menu_group',self::TABLE_ID.','.CoreGroup::TABLE_ID,Core::AssocArrayToID($ID,$_POST['groups']));
 		if($_POST['profiles']>0) Core::Insert('core_relation_menu_profile',self::TABLE_ID.','.CoreProfile::TABLE_ID,Core::AssocArrayToID($ID,$_POST['profiles']));
+	}
+
+	public static function AdaptLink($Link='#')
+	{
+		if(!$Link) $Link = "#";
+
+		if(substr($Link,0,1)=='/') $Link = substr($Link,1);
+
+		$Link = str_replace('../','',$Link);
+
+		if($Link!="#")
+		{
+			if( substr($Link,0,strlen('project/modules')) == 'project/modules' || substr($Link,0,strlen('core/modules')) == 'core/modules' )
+			{
+				return '../../../' . $Link;
+			}else{
+				if( substr($Link,0,strlen('modules')) == 'modules' || substr($Link,0,strlen('/modules')) == '/modules' )
+				{
+					return '../../../project/' . $Link;
+				}else{
+					return '../../../project/modules/' . $Link;
+				}
+			}
+		}else{
+			return '#';
+		}
 	}
 }
 ?>

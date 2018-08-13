@@ -1,44 +1,97 @@
+/****************************************\
+|                  ALERTS                |
+\****************************************/
 $(document).ready(function(){
-	
-	if(get['msg']=='addok')
+	//$("#prueba").keydown();
+	// $("#prueba").onfocus(function(){$(this).change(); alert('entra');});
+	if(get['msg']=='insert')
+		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido creada correctamente.');
+	if(get['msg']=='update')
 	{
-		notifySuccess('Stock ingresado correctamente');
+		var popuptext = 'La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido modificada correctamente'
+		if(get['emailsent'])
+			popuptext = popuptext + ' y un email fue enviado a <b>'+get['emailsent']+'</b> con la cotizaci&oacute;n.';
+		notifySuccess(popuptext);
 	}
-	
 	if(get['error']=="status")
-	{
-		notifyError('La orden no puede ser editada ya que no se encuentra en estado pendiente.');
-	}
-	
+		notifyError('La cotizaci&oacute;n no puede ser editada ya que no se encuentra en estado activo.');
 	if(get['error']=="user")
-	{
-		notifyError('La orden que desea editar no existe.');
-	}
-	
-	
-	////// INVOICE FUNCTIONS////////
-	updateTotalPrice();
-	removeInvoice();
-	
-	////// ORDER FUNCTIONS ////////
-	addOrderItem();
+		notifyError('La cotizaci&oacute;n que desea editar no existe.');
+});
+
+/****************************************\
+|             CREATE / EDIT              |
+\****************************************/
+$(function(){
+	var role = 'Purchase'
+	var msg = $("#action").val();
+	var params = '';
+	if(get['customer'])
+		params += '&customer='+get['customer'];
+	if(get['provider'])
+		params += '&provider='+get['provider'];
+	if(get['international'])
+		params += '&international='+get['international'];
+	$("#BtnCreate").click(function(){
+		var element = $('#company option:selected').html();
+		var target	= 'list.php?msg='+msg+params+'&element='+element;
+		askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','PurchaseForm');
+	});
+	// $("#BtnCreateNext").click(function(){
+	// 	var element = $('#company option:selected').html();
+	// 	var target		= 'new.php?element='+element+'&msg='+msg+params;
+	// 	askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','PurchaseForm');
+	// });
+	$("#BtnEdit").click(function(){
+		var element = $('#company option:selected').html();
+		var target		= 'list.php?msg='+msg+params+'&element='+element;
+		askAndSubmit(target,role,'¿Desea modificar la cotizaci&oacute;n de <b>'+element+'</b>?','','PurchaseForm');
+	});
+
+	$("#SaveAndSend").click(function(){
+		if($("#action").val()=='insert')
+			var action = 'crear';
+		else
+			var action = 'editar';
+		var element = $('#company option:selected').html();
+		var target		= 'list.php?msg='+msg+params+'&emailsent='+$('#receiver').val()+'&element='+element;
+		askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');
+	});
+
+
+});
+
+/****************************************\
+|         QUOTATION FUNCTIONS            |
+\****************************************/
+$(document).ready(function(){
+	addItem();
 	saveItem();
 	calculateRowPrice();
 	editItem();
 	changeDates();
 	countItems();
-	calculateTotalOrderPrice();
-	calculateTotalOrderQuantity();
+	calculateTotalPurchasePrice();
+	calculateTotalPurchaseQuantity();
 	deleteItem();
 	setDatePicker();
 	priceImputMask(1);
+	updateDeliveryDateFromDays();
+	updateAllDeliveryDates();
+	showHistoryWindow();
+	showHistoryButtons();
+	checkHistoryButtons();
+	updateExpireDate();
 });
 
+
+/****************************************\
+|            SET DATEPICKER              |
+\****************************************/
 function setDatePicker()
 {
 	if($(".delivery_date").length>0)
 	{
-		
 		$.fn.datepicker.dates['es'] = {
 		    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Juves", "Viernes", "Sábado"],
 		    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
@@ -51,26 +104,12 @@ function setDatePicker()
 		    titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
 		    weekStart: 1
 		};
-		
-		// $(".delivery_date").datepicker({
-		// 	autoclose:true,
-		// 	todayHighlight: true,
-		// 	language: 'es'
-		// });
-		
 		setADatePicker();
 	}
 }
 
-// function setADatePicker(element)
 function setADatePicker()
 {
-	// $(element).datepicker({
-	// 	autoclose:true,
-	// 	todayHighlight: true,
-	// 	language: 'es'
-	// });
-	
 	$(".delivery_date").datepicker({
 		autoclose:true,
 		todayHighlight: true,
@@ -78,87 +117,106 @@ function setADatePicker()
 	});
 }
 
+function updateExpireDate()
+{
+	$("#expire_days").change(function(){
+		if(parseInt($(this).val())>-1)
+		{
+			var creation_date = $("#creation_date").val();
+			var ExpireDate = AddDaysToDate($(this).val(),creation_date);
+			$("#expire_date").val(ExpireDate);
+		}
+	});
+}
+
+/****************************************\
+|            PRICE INPUT MASK            |
+\****************************************/
 function priceImputMask(id)
 {
-	
+
 	$("#price_"+id).change(function(){
 		var decimal = $(this).val().split(".");
 		if(decimal[1]=="__")
 		{
 			$("#price_"+id).val(decimal[0]+".00");
 		}
-	});	
-}
-//////////////////////////// REMOVE INVOICE //////////////////////////////////
-function removeInvoice()
-{
-	$(".RemoveInvoice").on('click',function(){
-		var id=$(this).attr('invoice');
-		var invoice = $("#invoice_text_"+id).html();
-		alertify.confirm(utf8_decode('Está a punto de anula la factura N°'+invoice+' ¿Desea continuar?'), function(e)
-		{
-			if(e)
-			{
-				var order=$("#id").val();
-				var process = process_url+'';
-				var string	= 'order='+order+'&id='+ id +'&action=degenerateinvoice&object=ProviderOrder';
-				$.ajax({
-					type: "POST",
-					url: process,
-					data: string,
-					cache: false,
-					success: function(data)
-					{
-						if(!data)
-						{
-							// $("#row_invoice_"+id).remove();
-							$("#invoice_span_"+id).html('<span class="label label-danger">Anulada</span>');
-							$("#actions_span_"+id).html('');
-						}else{
-							console.log(data);
-						}
-					}
-				});
-			}
-		});
 	});
 }
 
-//////////////////////////// ORDER ITEMS //////////////////////////////////
-function addOrderItem()
+/****************************************\
+|            HISTORY BUTTON              |
+\****************************************/
+function showHistoryButtons()
 {
-	$("#add_order_item").click(function(){
+	$("#company,.itemSelect").change(function(){
+		checkHistoryButtons();
+	});
+	// $("#company").change(function(){
+
+	// });
+}
+
+function checkHistoryButtons()
+{
+	$(".itemSelect").each(function(){
+		var itemid = $(this).attr("item");
+		if($("#item_"+itemid).val()>0)
+		{
+			$("#HistoryItem"+itemid).removeClass("Hidden");
+			if(get['customer']=='Y')
+			{
+				if($("#company").val())
+					$("#PurchasesBox").removeClass("Hidden");
+				else
+					$("#PurchasesBox").addClass("Hidden");
+			}
+		}else{
+			$("#HistoryItem"+itemid).addClass("Hidden");
+		}
+	})
+
+}
+
+/****************************************\
+|            QUOTATION ITEMS             |
+\****************************************/
+function addItem()
+{
+	$("#add_purchase_item").click(function(){
 		var id		= parseInt($("#items").val())+1;
-		var process = process_url+'';
-		var string	= 'item='+ id +'&action=addorderitem&object=ProviderOrder';
+		var string	= 'item='+ id +'&action=additem&object=Purchase';
 		$.ajax({
 	        type: "POST",
-	        url: process,
+	        url: process_url,
 	        data: string,
 	        cache: false,
 	        success: function(data){
 	            if(data)
 	            {
-	                //$("#ItemWrapper").append(data);
-	                //$("#item_row_"+$("#items").val()).after(data);
 	                $(".ItemRow:last-child").after(data);
 	                $("#items").val(id);
+	                setItemChosen(id);
 	                saveItem();
 	                editItem();
 	                deleteItem();
-	                // setADatePicker("#date_"+id);
 	                setADatePicker();
 	                validateDivChange();
 	                countItems();
 	                calculateRowPrice();
 	                priceImputMask(id);
 	                updateRowBackground();
+	                // recalculateItemPrice();
+	                updateDeliveryDateFromDays();
+	                showHistoryWindow();
+	                showHistoryButtons();
+	                checkHistoryButtons();
+	                $("#day_"+id).change();
 	            }else{
 	                console.log('Sin información devuelta. Item='+id);
 	            }
 	        }
 	    });
-		
 	});
 }
 
@@ -168,15 +226,18 @@ function saveItem()
 		var id = $(this).attr("item");
 		if(validate.validateFields('item_form_'+id))
 		{
-			var item_id = $("#item_"+id).val();
-			var item = $("#item_"+id).children('option[value="'+item_id+'"]').html();
+			// var item_id = $("#item_"+id).val();
+			var item = $("#TextAutoCompleteitem_"+id).val();
 			var price = $("#price_"+id).val();
 			var quantity = $("#quantity_"+id).val();
 			var delivery = $("#date_"+id).val();
-			$("#Item"+id).html(item);
+			var days = $("#day_"+id).val();
+			if(!days) days="0";
+			$("#Item"+id).html('<i class="fa fa-cube"></i> '+item);
 			$("#Price"+id).html("$ "+price);
 			$("#Quantity"+id).html(quantity);
 			$("#Date"+id).html(delivery);
+			$("#Day"+id).html(days);
 			$("#SaveItem"+id+",.ItemField"+id).addClass('Hidden');
 			$("#EditItem"+id+",.ItemText"+id).removeClass('Hidden');
 			$("#item_"+id).next().addClass('Hidden');
@@ -200,11 +261,30 @@ function deleteItem()
 		var id = $(this).attr("item");
 		$("#item_row_"+id).remove();
 		countItems();
-		calculateTotalOrderPrice();
-		calculateTotalOrderQuantity();
+		calculateTotalPurchasePrice();
+		calculateTotalPurchaseQuantity();
 		updateRowBackground();
 	});
-	
+}
+
+function updateDeliveryDateFromDays()
+{
+	$(".DayPicker").change(function(){
+		var id = $(this).attr("id").split("_");
+		if(parseInt($(this).val())>-1)
+		{
+			var creation_date = $("#creation_date").val();
+			var DeliveryDate = AddDaysToDate($(this).val(),creation_date);
+			$("#date_"+id[1]).val(DeliveryDate);
+		}
+	});
+}
+
+function updateAllDeliveryDates()
+{
+	$(".DayPicker").each(function(){
+		$(this).change();
+	});
 }
 
 function updateRowBackground()
@@ -231,7 +311,6 @@ function calculateRowPrice()
 	$(".calcable").change(function(){
 		var element = $(this).attr("id").split("_");
 		var id = element[1];
-		
 		var price = parseFloat($("#price_"+id).val());
 		var quantity = parseInt($("#quantity_"+id).val())
 		if(price>0 && quantity>0)
@@ -239,14 +318,14 @@ function calculateRowPrice()
 		else
 			var total = 0.00;
 		$("#item_number_"+id).attr("total",total);
-		$("#item_number_"+id).html("$ "+total.formatMoney(2));	
-		
-		calculateTotalOrderPrice();
-		calculateTotalOrderQuantity();
+		$("#item_number_"+id).html("$ "+total.formatMoney(2));
+
+		calculateTotalPurchasePrice();
+		calculateTotalPurchaseQuantity();
 	});
 }
 
-function calculateTotalOrderQuantity()
+function calculateTotalPurchaseQuantity()
 {
 	var total = 0;
 	$(".QuantityItem").each(function(){
@@ -254,11 +333,11 @@ function calculateTotalOrderQuantity()
 		if(val>0)
 			total = total + val;
 	});
-	
+
 	$("#TotalQuantity").html(total);
 }
 
-function calculateTotalOrderPrice()
+function calculateTotalPurchasePrice()
 {
 	var total = 0.00;
 	$(".item_number").each(function(){
@@ -272,19 +351,28 @@ function calculateTotalOrderPrice()
 
 function changeDates()
 {
-	$("#ChangeDates").click(function(){
-		var date = $("#change_date").val();
-		alertify.confirm(utf8_decode('¿Desea aplicar la fecha '+date+' a todos los art&iacute;culos ?'), function(e){
+	$("#ChangeDays").click(function(){
+		var days = $("#change_day").val();
+		alertify.confirm(utf8_decode('¿Desea establecer '+days+' d&iacute;as de entrega para todos los art&iacute;culos ?'), function(e){
 		if(e)
-		{	
-			$(".delivery_date").each(function(){
+		{
+			$(".DayPicker").each(function(){
 				if(!$(this).hasClass('Restricted'))
-					$(this).val(date);
+					$(this).val(days);
+					$(this).change();
 			});
-			
+
+			$(".OrderDay").each(function(){
+				if(!$(this).hasClass('Restricted'))
+					$(this).html(days);
+			});
+
 			$(".OrderDate").each(function(){
 				if(!$(this).hasClass('Restricted'))
-					$(this).html(date);
+				{
+					var id = $(this).attr("id").split("Date");
+					$(this).html($("#date_"+id[1]).val());
+				}
 			});
 		}
 		});
@@ -292,84 +380,34 @@ function changeDates()
 }
 
 
-///////////////////////// CREATE/EDIT ////////////////////////////////////
-$(function(){
-	$("#BtnCreate,#BtnCreateNext").on("click",function(e){
-		e.preventDefault();
-		if(validate.validateFields('*'))
-		{
-			var BtnID = $(this).attr("id")
-			if(get['id']>0)
-			{
-				confirmText = "modificar";
-				procText = "modificaci&oacute;n"
-			}else{
-				confirmText = "crear";
-				procText = "creaci&oacute;n"
-			}
-			
-			if(get['status']=="P")
-			{
-				confirmText += " la cotizaci&oacute;n";
-			}else{
-				confirmText += " la orden de compra";	
-			}
-			
+function showHistoryWindow()
+{
+	$(".HistoryItem").click(function(){
+		var id = $(this).attr("item");
+		$("#window_traceability").removeClass("Hidden");
+		$("#product").val($("#item_"+id).val());
+		$("#item").val(id);
+		FillTraceabilityWindow();
+	})
+}
 
-			alertify.confirm(utf8_decode('¿Desea '+confirmText+' ?'), function(e){
-				if(e)
-				{
-					var process		= process_url+'?object=ProviderOrder';
-					if(BtnID=="BtnCreate")
-					{
-						var target		= 'list.php?status='+get['status']+'&msg='+ $("#action").val();
-					}else{
-						var target		= 'new.php?status='+get['status']+'&msg='+ $("#action").val();
-					}
-					var haveData	= function(returningData)
-					{
-						$("input,select").blur();
-						if(returningData=="403")
-						{
-							notifyError("No es posible editar esta orden. No se encuentra en el estado correcto.");
-						}else{
-							notifyError("Ha ocurrido un error durante el proceso de "+procText+".");
-						}
-						console.log(returningData);
-					}
-					var noData		= function()
-					{
-						document.location = target;
-					}
-					sumbitFields(process,haveData,noData);
-				}
-			});
+/****************************************\
+|          LOAD BRANCH SELECT            |
+\****************************************/
+$(function(){
+	$("#company").change(function(){
+		if($(this).val())
+		{
+			fillBranch();
 		}
 	});
-
-	// $("input").keypress(function(e){
-	// 	if(e.which==13){
-	// 		if($("#BtnCreate").is(":disabled"))
-	// 		{
-	// 			$("#agent_new").click();
-	// 		}else{
-	// 			$("#BtnCreate").click();
-	// 		}
-	// 	}
-	// });
 });
 
-
-
-
-// ///////////////////////// LOAD AGENT SELECT ////////////////////////////////
-function fillAgentSelect()
+function fillBranch()
 {
-	var provider = $('#provider').val();
-	var process = process_url+'';
-
-	var string      = 'provider='+ provider +'&action=fillagents&object=ProviderOrder';
-
+	var company = $('#company').val();
+	var process = process_url;
+	var string  = 'id='+ company +'&action=fillbranches&object=CompanyBranch';
     var data;
     $.ajax({
         type: "POST",
@@ -379,11 +417,10 @@ function fillAgentSelect()
         success: function(data){
             if(data)
             {
-                $('#agent-wrapper').html(data);
-                
+              $('#branch-wrapper').html(data);
+							agentFunctions();
             }else{
-                $('#agent-wrapper').html('<select id="agents" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Contacto</option</select>');
-                
+              $('#branch-wrapper').html('<select id="branch" class="form-control chosenSelect" disabled="disabled" ><option value="0">Sin Sucusales</option></select>');
             }
             chosenSelect();
         }
@@ -391,17 +428,78 @@ function fillAgentSelect()
 }
 
 
+/****************************************\
+|    CALCULATE ITEM PRICE BY CUSTOMER    |
+\****************************************/
+$(document).ready(function(){
+	if($(".itemSelect").length>0 && get['customer']=='Y')
+	{
+		$(".itemSelect").each(function(){
+			var item = $(this).attr('item');
+			setItemChosen(item);
+		});
+	}
+});
 
-///////////////////////////////////////////// LIST FUNCTIONS //////////////////////////////////////
+function setItemChosen(id)
+{
+	SetAutoComplete('#TextAutoCompleteitem_'+id);
+	// $('#TextAutoCompleteitem_'+id).on('change',function(){
+	// 	getProductsPrices($('#item_'+id).val(),id);
+	// });
+}
 
-//STORE ORDER
+// function getProductsPrices(values,ids)
+// {
+// 	var string	= 'items='+values+'&action=Getitemprices&object=Purchase';
+// 	if(values.length>0 && get['customer']=='Y')
+// 	{
+// 		if(ids)
+// 		{
+// 			ids = ids +'';
+// 			$.ajax({
+// 		        type: "POST",
+// 		        url: process_url,
+// 		        data: string,
+// 		        success: function(data){
+// 		            if(data)
+// 		            {
+// 		            	console.log(data);
+// 		            	var prices = data.split(",");
+// 		            	var items = ids.split(",");
+// 		            	var decimal;
+// 		            	prices.forEach(function(price,index){
+// 		            		decimal = price.substr(price.indexOf("."));
+// 			            	if(decimal.length==1)
+// 			            	{
+// 			            		price = price + ".00";
+// 			            	}
+// 			            	if(decimal.length==2)
+// 			            	{
+// 			            		price = price + "0";
+// 			            	}
+// 			            	$("#price_"+items[index]).val(price);
+// 			            	$("#Price"+items[index]).html("$ "+price);
+// 		            	});
+// 		            }else{
+// 		            	notifyError('Hubo un error al calcular el precio del producto');
+// 		                console.log('Sin información devuelta. Item='+id);
+// 		            }
+// 		        }
+// 		    });
+// 		}
+// 	}
+// }
+
+/****************************************\
+|             LIST FUNCTIONS             |
+\****************************************/
 $(function(){
 	$(".storeElement").click(function(){
 		var ID = $(this).attr('id').split("_");
 		ID = ID[1];
-		// var status = $(this).attr('status');	
 		var process = process_url+'';
-		var string	= 'id='+ ID +'&action=store&object=ProviderOrder';//&status='+status;
+		var string	= 'id='+ ID +'&action=store&object=Purchase';//&status='+status;
 		$.ajax({
 	        type: "POST",
 	        url: process,
@@ -419,80 +517,4 @@ $(function(){
 	        }
 	    });
 	});
-	
-	
-// 	////////////////////////////////// Checkbox ////////////////////////////////
-	$(".iCheckbox").on('ifChecked', function(){
-		var id = $(this).attr("id");
-		var item = $(this).attr("item");
-		$("#id"+item).val(id);
-		updateTotalAmount();
-	});
-	
-	$(".iCheckbox").on('ifUnchecked',function(){
-		var item = $(this).attr("item");
-		$("#id"+item).val('');
-		updateTotalAmount();
-	});
-	
-////////////////////// BILLING PROCESS ///////////
-// GENERATE INVOICE
-	$("#BtnAdd").on("click",function(e){
-		e.preventDefault();
-		if(validate.validateFields('*'))
-		{
-			//$(".QuantityField").change();
-			var TotalAmount = $('#total_currency').html()+$('#total_payment').html();
-
-			alertify.confirm(utf8_decode('Est&aacute; a punto de generar una factura por <strong>'+TotalAmount+'</strong> ¿Desea countinuar?'), function(e){
-				if(e)
-				{
-					var process		= process_url+'?object=ProviderOrder';
-					var target		= 'list.php?status=A&msg='+ $("#action").val();
-					
-					var haveData	= function(returningData)
-					{
-						$("input,select").blur();
-						if(returningData=="403")
-						{
-							notifyError("No es posible pagar esta orden. No se encuentra en el estado correcto.");
-						}else{
-							notifyError("Ha ocurrido un error durante el proceso de pago.");
-						}
-						console.log(returningData);
-					}
-					var noData		= function()
-					{
-						document.location = target;
-					}
-					sumbitFields(process,haveData,noData);
-				}
-			});
-		}
-	});
 });
-
-function updateTotalAmount()
-{
-	var total = 0;
-	$('.ItemsToPay').each(function(){
-		var ID = $(this).attr('item');
-		if($("#id"+ID).val()!='')
-			total += parseFloat($('#TotalPrice'+ID).html());
-	});
-	$('#total_payment').html(total.toFixed(2));
-	$('#total').val(total.toFixed(2));
-}
-
-function updateTotalPrice()
-{
-	$(".QuantityField").keyup(function(){
-		var ID		= $(this).attr('item');
-		var total	= (parseFloat($("#Price"+ID).html()) * parseFloat($(this).val())).toFixed(2);
-		if(isNaN(total))
-			total=0;
-		$("#TotalPrice"+ID).html(total);
-		$("#total"+ID).val(total);
-		updateTotalAmount();
-	});
-}

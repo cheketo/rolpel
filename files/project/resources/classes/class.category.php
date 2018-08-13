@@ -185,7 +185,7 @@ class Category
 
 	public static function MakeNoRegsHTML()
 	{
-		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron l&iacute;neas.</h4><p>Puede crear una nueva l&iacute;nea haciendo click <a href="new.php">aqui</a>.</p></div>';
+		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron categor&iacute;as.</h4><p>Puede crear una nueva categor&iacute;a haciendo click <a href="new.php">aqui</a>.</p></div>';
 	}
 
 	protected function SetSearchFields()
@@ -206,7 +206,7 @@ class Category
 
 	protected function InsertSearchButtons()
 	{
-		return '<a href="new.php" class="hint--bottom hint--bounce hint--success" aria-label="Nueva L&iacute;nea"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
+		return '<a href="new.php" class="hint--bottom hint--bounce hint--success" aria-label="Nueva Categor&iacute;a"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
 	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -4,347 +4,208 @@ class Purchase
 {
 	use CoreSearchList,CoreCrud,CoreImage;
 
-	const TABLE				= 'purchase';
-	const TABLE_ID			= 'purchase_id';
-	const SEARCH_TABLE		= 'view_purchase_list';
-	const DEFAULT_IMG		= '../../../../skin/images/purchases/default/default.png';
-	const DEFAULT_IMG_DIR	= '../../../../skin/images/purchases/default/';
-	const IMG_DIR			= '../../../../skin/images/purchases/';
-	// const DEFAULTIMG	= "../../../skin/images/providers/default/order.png";
+	const TABLE							= 'purchase';
+	const TABLE_ID					= 'purchase_id';
+	const SEARCH_TABLE			= 'view_purchase_list';
+	const DEFAULT_FILE_DIR	= '../../../../skin/files/purchase/';
+	const DEFAULT_IMG				= '../../../../skin/images/purchases/default/default.png';
+	const DEFAULT_IMG_DIR		= '../../../../skin/images/purchases/default/';
+	const IMG_DIR						= '../../../../skin/images/purchases/';
 
 	public function __construct($ID=0)
 	{
-
 		$this->ID = $ID;
 		if($this->ID!=0)
 		{
-			$Data = Core::Select(self::SEARCH_TABLE,'*',self::TABLE_ID."=".$this->ID,'order_id');
+			$Data = Core::Select(self::SEARCH_TABLE,'*',self::TABLE_ID."=".$this->ID,self::TABLE_ID);
 			$this->Data = $Data[0];
-			$this->Data['itmes'] = PurchaseItem::GetItems($Data);
+			$this->Data['items'] = $Data;
 		}
 	}
 
+	public function GetSentEmails()
+	{
+		$this->Data['emails'] = Core::Select("purchase_email","*","purchase_id=".$this->ID);
+		return $this->Data['emails'];
+	}
+
+	public static function GetParams()
+	{
+		if($_GET['provider'] && $_GET['provider']!="undefined" )
+			$Params .= '&provider='.$_GET['provider'];
+		else
+			$Params .= '&provider=N';
+		if($_GET['customer'] && $_GET['customer']!="undefined" )
+			$Params .= '&customer='.$_GET['customer'];
+		else
+			$Params .= '&customer=N';
+		if($_GET['international'] && $_GET['international']!="undefined")
+			$Params .= '&international='.$_GET['international'];
+		else
+			$Params .= '&international=N';
+		return $Params;
+	}
+
+	public static function SaveAndMoveFiles($PurchaseID,$FilesCount,$PrefixID="qfileid",$ProductID=0)
+	{
+		$IDs = "0";
+		for($I=1;$I<=$FilesCount;$I++)
+		{
+
+			$FileID = $_POST[$PrefixID.'_'.$I];
+			if($FileID)
+			{
+				$IDs .= ",".$FileID;
+			}
+		}
+		$Files = Core::Select("purchase_file_new","*","status='A' AND file_id IN (".$IDs.")");
+		$FilePath = '../../../../skin/files/purchase/'.$PurchaseID.'/';
+		foreach($Files as $File)
+		{
+			$FileObj = new CoreFileData($File['url']);
+			$FileObj->MoveFileTo($FilePath);
+			$NewUrl = $FileObj->GetFile();
+
+			$Field = $File['file_id'].",".$PurchaseID.",".$ProductID.",'".$File['name']."','".$NewUrl."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $Fields? "),(".$Field:$Field;
+		}
+		if($Fields)
+			Core::Insert("purchase_file","new_id,purchase_id,product_id,name,url,creation_date,created_by,organization_id",$Fields);
+		Core::Delete("purchase_file_new","status='A' AND DATEDIFF(CURDATE(),creation_date)>0");
+
+	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////// SEARCHLIST FUNCTIONS ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public function MakeRegs($Mode="List")
+	protected static function MakeActionButtonsHTML($Object,$Mode='list')
 	{
-		$Rows	= $this->GetRegs();
-		//echo $this->LastQuery();
-		for($i=0;$i<count($Rows);$i++)
+		if($Mode!='grid') $HTML .=	'<a class="hint--bottom hint--bounce" aria-label="M&aacute;s informaci&oacute;n"><button type="button" class="btn bg-navy ExpandButton" id="expand_'.$Object->ID.'"><i class="fa fa-plus"></i></button></a> ';;
+		if($Object->Data['status']!="I")
 		{
-			$Row	=	new ProviderOrder($Rows[$i][$this->TableID]);
-			$Actions	= 	'<span class="roundItemActionsGroup"><a class="hint--bottom hint--bounce " aria-label="Ver M&aacute;s"><button type="button" class="btn bg-navy ExpandButton" id="expand_'.$Row->ID.'"><i class="fa fa-plus"></i></button></a> ';
-
-			if($Row->Data['status']=="P")
+			$HTML	.= '<a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="view.php?id='.$Object->ID.'" id="payment_'.$Object->ID.'"><button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button></a> ';
+			if($Object->Data['status']!="F")
 			{
-				$Actions	.= '<a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" process="'.PROCESS.'" id="store_'.$Row->ID.'"><button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button></a>';
+				$HTML	.= '<a class="hint--bottom hint--bounce hint--success" aria-label="Crear Orden" process="'.PROCESS.'" id="purchase_'.$Object->ID.'" status="'.$Row->Data['status'].'"><button type="button" class="btn bg-olive"><i class="fa fa-truck"></i></button></a> ';
+				$HTML	.= '<a class="hint--bottom hint--bounce hint--info storeElement" aria-label="Archivar" process="'.PROCESS.'" id="store_'.$Object->ID.'"><button type="button" class="btn btn-primary"><i class="fa fa-archive"></i></button></a>';
+				$HTML	.= '<a href="edit.php?id='.$Object->ID.self::GetParams().'" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
+				$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="'.PROCESS.'" id="delete_'.$Object->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
+				$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>?');
+				$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La orden de compra de <b>'.$Object->Data['company'].'</b> ha sido eliminada.');
+				$HTML	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>.');
 			}
-
-			if($Row->Data['status']=="P" || $Row->Data['status']=="I")
-			{
-				$Actions	.= '<a class="hint--bottom hint--bounce hint--success activateElement" aria-label="Activar" process="'.PROCESS.'" id="activate_'.$Row->ID.'"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
-			}
-
-			if($Row->Data['status']=="A" && $Row->Data['payment_status']!="F")
-			{
-				$Actions	.= '<a class="hint--bottom hint--bounce hint--success Invoice" aria-label="Controlar Factura" href="invoice.php?id='.$Row->ID.'" status="'.$Row->Data['status'].'" id="payment_'.$Row->ID.'"><button type="button" class="btn bg-olive"><i class="fa fa-file-text"></i></button></a> ';
-			}
-
-			if($Row->Data['status']!="P" && $Row->Data['status']!="Z"){
-				$Actions	.= '<a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="view.php?id='.$Row->ID.'" id="payment_'.$Row->ID.'"><button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button></a> ';
-			}
-
-			// if($Row->Data['status']=="A" || $Row->Data['status']=="C")
-			// {
-			// 	$Actions	.= '<a class="completeElement" href="../stock/stock_entrance.php?id='.$Row->ID.'" title="Ingresar stock" id="complete_'.$Row->ID.'"><button type="button" class="btn btn-dropbox"><i class="fa fa-sign-in"></i></button></a>';
-			// }
-
-			if($Row->Data['status']!="F" && $Row->Data['status']!="Z")
-			{
-				$Actions	.= '<a class="hint--bottom hint--bounce hint--info" aria-label="Editar" href="edit.php?status='.$Row->Data['status'].'&id='.$Row->ID.'"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
-			}
-
-			if($Row->Data['payment_status']=="P" && $Row->Data['delivery_status']=="P" && $Row->Data['status']!="Z")
-			{
-				$Actions	.= '<a aria-label="Eliminar" class="hint--bottom hint--bounce hint--error deleteElement" process="'.PROCESS.'" id="delete_'.$Row->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
-
-			}
-			$Actions	.= '</span>';
-			// echo '<pre>';
-			// print_r($Row->Data['items']);
-			// echo '</pre>';
-			$Date = explode(" ",$Row->Data['delivery_date']);
-			$OrderDate = implode("/",array_reverse(explode("-",$Date[0])));
-
-			$Items = '<div style="margin-top:10px;">';
-			$I=0;
-			$ItemsReceived = 0;
-			$ItemsTotal = 0;
-			foreach($Row->Data['items'] as $Item)
-			{
-				$I++;
-				$RowClass = $I % 2 != 0? 'bg-gray':'bg-gray-active';
-
-				$Date = explode(" ",$Item['delivery_date']);
-				$DeliveryDate = implode("/",array_reverse(explode("-",$Date[0])));
-				$ItemTotal = $Item['currency']." ".$Item['total'];
-				$ItemPrice = $Item['currency']." ".$Item['price'];
-
-				$ItemsReceived	+= $Item['quantity_received'];
-				$ItemsTotal		+= $Item['quantity'];
-
-				$ItemQuantity = $Row->Data['status']!="P" && $Row->Data['status']!="Z"? $Item['quantity_received'].'/'.$Item['quantity'] : $Item['quantity'];
-
-				$Stock = '<div class="col-md-3 hideMobile990">
-									<div class="listRowInner">
-										<span class="listTextStrong">Cantidad</span>
-										<span class="listTextStrong"><span class="label label-primary">'.$ItemQuantity.'</span></span>
-									</div>
-								</div>';
-
-				$Items .= '
-							<div class="row '.$RowClass.'" style="padding:5px;">
-								<div class="col-md-3 col-sm-5">
-									<div class="listRowInner">
-										<span class="listTextStrong">'.$Item['code'].'</span>
-										<span class="listTextStrong"><span class="label label-warning"><i class="fa fa-calendar"></i> '.$DeliveryDate.'</span></span>
-									</div>
-								</div>
-								<div class="col-md-2 hideMobile990">
-									<div class="listRowInner">
-										<span class="listTextStrong">Precio</span>
-										<span class="listTextStrong"><span class="label label-info">'.$ItemPrice.'</span></span>
-									</div>
-								</div>
-
-								<div class="col-md-2 col-sm-6">
-									<div class="listRowInner">
-										<span class="listTextStrong">Total Art.</span>
-										<span class="listTextStrong"><span class="label label-success">'.$ItemTotal.'</span></span>
-									</div>
-								</div>
-								'.$Stock.'
-
-
-							</div>';
-			}
-			$Items .='</div>';
-
-			switch($Row->Data['delivery_status'])
-			{
-				case 'A': $DeliveryStatus = '<span class="label label-warning">En Proceso('.$ItemsReceived.'/'.$ItemsTotal.')<span>'; break;
-				case 'F': $DeliveryStatus = '<span class="label label-success">Si('.$ItemsReceived.'/'.$ItemsTotal.')<span>'; break;
-				default: $DeliveryStatus = '<span class="label label-danger">No('.$ItemsReceived.'/'.$ItemsTotal.')<span>'; break;
-			}
-
-			$Restrict	= $Row->Data['delivery_status']=='P' && $Row->Data['payment_status']=='P'? '':' undeleteable ';
-			switch(strtolower($Mode))
-			{
-				case "list":
-						$Extra = !$Row->Data['extra']? '': '<div class="col-lg-2 col-md-3 col-sm-2 hideMobile990">
-										<div class="listRowInner">
-											<span class="emailTextResp">'.$Row->Data['extra'].'</span>
-										</div>
-									</div>';
-
-					$RowBackground = $i % 2 == 0? '':' listRow2 ';
-
-					$Stock = $Row->Data['status']!="P" && $Row->Data['status']!="Z"? '<div class="col-lg-3 col-md-3 col-sm-2 hideMobile990">
-									<div class="listRowInner">
-										<span class="listTextStrong">Stock Recibido</span>
-										<span class="listTextStrong">'.$DeliveryStatus.'</span>
-									</div>
-								</div>' : '';
-
-					$Regs	.= '<div class="row listRow'.$RowBackground.$Restrict.'" id="row_'.$Row->ID.'">
-									<div class="col-lg-3 col-md-5 col-sm-8 col-xs-10">
-										<div class="listRowInner">
-											<img class="img-circle" style="border-radius:0%!important;" src="'.$Row->GetImg().'" alt="'.$Row->Data['name'].'">
-											<span class="listTextStrong">'.$Row->Data['provider'].'</span>
-											<span class="smallDetails"><i class="fa fa-calendar"></i> '.$OrderDate.'</span>
-										</div>
-									</div>
-
-									<div class="col-lg-2 col-md-3 col-sm-2 hideMobile990">
-										<div class="listRowInner">
-											<span class="listTextStrong">Total</span>
-											<span class="emailTextResp"><span class="label label-success">'.$Row->Data['items'][0]['currency'].' '.$Row->Data['total'].'</span></span>
-										</div>
-									</div>
-									'.$Stock.'
-									'.$Extra.'
-									<div class="animated DetailedInformation Hidden col-md-12">
-										'.$Items.'
-									</div>
-									<div class="listActions flex-justify-center Hidden">
-										<div>'.$Actions.'</div>
-									</div>
-
-								</div>';
-				break;
-				case "grid":
-				$Regs	.= '<li id="grid_'.$Row->ID.'" class="RoundItemSelect roundItemBig'.$Restrict.'" title="'.$Row->Data['name'].'">
-						            <div class="flex-allCenter imgSelector">
-						              <div class="imgSelectorInner">
-						                <img src="'.$Row->GetImg().'" alt="'.$Row->Data['name'].'" class="img-responsive">
-						                <div class="imgSelectorContent">
-						                  <div class="roundItemBigActions">
-						                    '.$Actions.'
-						                    <span class="roundItemCheckDiv"><a href="#"><button type="button" class="btn roundBtnIconGreen Hidden" name="button"><i class="fa fa-check"></i></button></a></span>
-						                  </div>
-						                </div>
-						              </div>
-						              <div class="roundItemText">
-						                <p><b>'.$Row->Data['name'].'</b></p>
-						                <p>'.ucfirst($Row->Data['iibb']).'</p>
-						                <p>('.$Row->Data['cuit'].')</p>
-						              </div>
-						            </div>
-						          </li>';
-				break;
-			}
-        }
-        if(!$Regs)
-        {
-			switch ($_REQUEST['status']) {
-				case 'A': $Regs.= '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron ordenes de compra a proveedores en camino.</h4></div>'; break;
-				case 'Z': $Regs.= '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron cotizaciones archivadas.</h4></div>'; break;
-				case 'F': $Regs.= '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron ordenes de compra a proveedores finalizadas.</h4></div>'; break;
-				default: $Regs.= '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron cotizaciones de proveedores.</h4><p>Puede crear una cotizaci&oacute;n haciendo click <a href="new.php">aqui</a>.</p></div>'; break;
-        	}
-        }
-		return $Regs;
+		}else{
+			$HTML	.= '<a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" process="'.PROCESS.'" id="activate_'.$Object->ID.'"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
+			$HTML	.= Core::InsertElement('hidden','activate_question_'.$Object->ID,'&iquest;Desea activar la orden de compra de <b>'.$Object->Data['company'].'</b>?');
+			$HTML	.= Core::InsertElement('hidden','activate_text_ok_'.$Object->ID,'La orden de compra de <b>'.$Object->Data['company'].'</b> ha sido activada.');
+			$HTML	.= Core::InsertElement('hidden','activate_text_error_'.$Object->ID,'Hubo un error al intentar activar la orden de compra de <b>'.$Object->Data['company'].'</b>.');
+		}
+		return $HTML;
 	}
 
-	protected function InsertSearchField()
+	protected static function MakeListHTML($Object)
 	{
-		return '<!-- Provider -->
-          <div class="input-group">
-            <span class="input-group-addon order-arrows" order="name" mode="asc"><i class="fa fa-sort-alpha-asc"></i></span>
-            '.Core::InsertElement('text','name','','form-control','placeholder="Proveedor"').'
-          </div>
-          <!-- Code -->
-          <div class="input-group">
-            <span class="input-group-addon order-arrows" order="code" mode="asc"><i class="fa fa-sort-alpha-asc"></i></span>
-            '.Core::InsertElement('text','code','','form-control','placeholder="Art&iacute;culo"').'
-          </div>
-          <!-- Agent -->
-          <div class="input-group">
-            <span class="input-group-addon order-arrows" order="agent" mode="asc"><i class="fa fa-sort-alpha-asc"></i></span>
-            '.Core::InsertElement('text','agent','','form-control','placeholder="Contacto"').'
-          </div>
-          <!-- Delivery Date -->
-          <div class="input-group">
-            <span class="input-group-addon order-arrows sort-activated" order="delivery_date" mode="asc"><i class="fa fa-sort-alpha-asc"></i></span>
-            '.Core::InsertElement('text','delivery_date','','form-control delivery_date','placeholder="Entrega"').'
-          </div>
-          <!-- Extra -->
-          <div class="input-group">
-            <span class="input-group-addon order-arrows" order="extra" mode="asc"><i class="fa fa-sort-alpha-asc"></i></span>
-            '.Core::InsertElement('text','extra','','form-control','placeholder="Info Extra"').'
-          </div>
-          ';
+		$HTML = '<div class="col-lg-4 col-md-5 col-sm-5 col-xs-3">
+					<div class="listRowInner">
+						<img class="img-circle hideMobile990" src="'.Purchase::DEFAULT_IMG.'" alt="'.$Object->Data['company'].'">
+						<span class="listTextStrong">'.$Object->Data['company'].'</span>
+						<span class="smallTitle"><b>(ID: '.$Object->Data['purchase_id'].')</b></span>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-2 col-sm-2 col-xs-3">
+					<div class="listRowInner">
+						<span class="smallTitle">Total</span>
+						<span class="listTextStrong">
+							<span class="label label-brown">$ '.$Object->Data['total_purchase'].'</span>
+						</span>
+					</div>
+				</div>
+				<div class="col-lg-1 col-md-2 col-sm-3 col-xs-3">
+					<div class="listRowInner">
+						<span class="smallTitle">Entrega</span>
+						<span class="listTextStrong"><span class="label label-info">
+							'.Core::FromDBToDate($Object->Data['creation_date']).'
+						</span></span>
+					</div>
+				</div>
+				<div class="col-lg-1 col-md-1 col-sm-1 hideMobile990"></div>';
+		return $HTML;
+	}
+
+	protected static function MakeItemsListHTML($Object)
+	{
+		foreach($Object->Data['items'] as $Item)
+		{
+			$RowClass = $RowClass != 'bg-gray'? 'bg-gray':'bg-gray-active';
+			$HTML .= '
+						<div class="row '.$RowClass.'" style="padding:5px;">
+							<div class="col-lg-4 col-sm-5 col-xs-12">
+								<div class="listRowInner">
+									<img class=" hideMobile990" src="'.Product::DEFAULT_IMG.'" alt="'.$Item['title'].'">
+									<span class="listTextStrong">'.$Item['title'].'</span>
+									<span class="smallTitle hideMobile990"><b>'.$Item['category'].' ('.$Item['brand'].')</b></span>
+								</div>
+							</div>
+							<div class="col-sm-2 col-xs-12">
+								<div class="listRowInner">
+									<span class="smallTitle">Precio</span>
+									<span class="emailTextResp"><span class="label label-brown">$ '.$Item['price'].'</span></span>
+								</div>
+							</div>
+							<div class="col-sm-3 col-xs-12">
+								<div class="listRowInner">
+									<span class="smallTitle">Cantidad</span>
+									<span class="listTextStrong"><span class="label bg-navy">'.$Item['total_quantity'].'</span></span>
+								</div>
+							</div>
+						</div>';
+		}
+		return $HTML;
+	}
+
+	protected static function MakeGridHTML($Object)
+	{
+		$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
+		$HTML = '<div class="flex-allCenter imgSelector">
+		              <div class="imgSelectorInner">
+		                <img src="'.$Object->Img.'" alt="'.$Object->Data['company'].'" class="img-responsive">
+		                <div class="imgSelectorContent">
+		                  <div class="roundItemBigActions">
+		                    '.$ButtonsHTML.'
+		                    <span class="roundItemCheckDiv"><a href="#"><button type="button" class="btn roundBtnIconGreen Hidden" name="button"><i class="fa fa-check"></i></button></a></span>
+		                  </div>
+		                </div>
+		              </div>
+		              <div class="roundItemText">
+		                <p><b>'.$Object->Data['company'].'</b></p>
+		                <p>('.$Object->Data['purchase_id'].')</p>
+		              </div>
+		            </div>';
+		return $HTML;
+	}
+
+	public static function MakeNoRegsHTML()
+	{
+		return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron cotizaciones.</h4><p>Puede crear una nueva haciendo click <a href="new.php?'.self::GetParams().'">aqui</a>.</p></div>';
+	}
+
+	protected function SetSearchFields()
+	{
+		$this->SearchFields['purchase_id'] = Core::InsertElement('text','purchase_id','','form-control','placeholder="C&oacute;digo Cotiz."');
+		$this->SearchFields['title'] = Core::InsertElement('text','title','','form-control','placeholder="Producto"');
+		$this->SearchFields['quantity'] = Core::InsertElement('text','quantity','','form-control','placeholder="Cantidad"');
 	}
 
 	protected function InsertSearchButtons()
 	{
-		if($_GET['status']=="P" || $_GET['status']=="Z")
-		{
-			$BtnText = 'Pedir Cotización';
-			$BtnIcon = 'cart-plus';
-		}else{
-			$BtnText = 'Nueva Orden de Compra';
-			$BtnIcon = 'ambulance';
-		}
-		$HTML =	'<!-- New Button -->
-		    	<a class="hint--bottom hint--bounce hint--success" aria-label="'.$BtnText.'" href="new.php?status='.$_GET['status'].'"><button type="button" class="NewElementButton btn btnGreen animated fadeIn"><i class="fa fa-'.$BtnIcon.'"></i></button></a>
-		    	<!-- /New Button -->';
-		return $HTML;
+		return '<a href="new.php?provider=Y" class="hint--bottom hint--bounce" aria-label="Nueva Orden de Compra a Proveedor"><button type="button" class="NewElementButton btn bg-brown animated fadeIn"><i class="fa fa-plus-square"></i></button></a> '
+						.'<a href="new.php?customer=Y" class="hint--bottom hint--bounce hint--info" aria-label="Nueva Orden de Compra de Cliente"><button type="button" class="NewElementButton btn btn-primary animated fadeIn"><i class="fa fa-plus-square"></i></button></a>';
 	}
 
 	public function ConfigureSearchRequest()
 	{
-		$this->SetTable($this->Table.' a LEFT JOIN provider_order_item b ON (b.order_id=a.order_id) LEFT JOIN product c ON (b.product_id = c.product_id) LEFT JOIN provider d ON (d.provider_id=a.provider_id) LEFT JOIN provider_agent e ON (e.agent_id = a.agent_id)');
-		$this->SetFields('a.order_id,a.type,a.total,a.extra,a.status,a.payment_status,a.delivery_status,d.name as provider,SUM(b.quantity) as quantity');
-		$this->SetWhere("a.provider_id > 0 AND c.organization_id=".$_SESSION['organization_id']);
-		//$this->AddWhereString(" AND c.organization_id = a.organization_id");
-		//$this->SetOrder('a.delivery_date');
-		$this->SetGroupBy("a.".$this->TableID);
-
-		foreach($_POST as $Key => $Value)
-		{
-			$_POST[$Key] = $Value;
-		}
-
-		if($_POST['name']) $this->SetWhereCondition("d.name","LIKE","%".$_POST['name']."%");
-		if($_POST['agent']) $this->SetWhereCondition("e.name","LIKE","%".$_POST['agent']."%");
-		if($_POST['code']) $this->SetWhereCondition("c.code","LIKE","%".$_POST['code']."%");
-		if($_POST['extra']) $this->SetWhereCondition("a.extra","LIKE","%".$_POST['extra']."%");
-		if($_POST['delivery_date'])
-		{
-			$_POST['delivery_date'] = implode("-",array_reverse(explode("/",$_POST['delivery_date'])));
-			$this->AddWhereString(" AND (a.delivery_date = '".$_POST['delivery_date']."' OR b.delivery_date='".$_POST['delivery_date']."')");
-		}
-
-
-		if($_REQUEST['status'])
-		{
-			if($_POST['status']) $this->SetWhereCondition("a.status","=", $_POST['status']);
-			if($_GET['status']) $this->SetWhereCondition("a.status","=", $_GET['status']);
-		}else{
-			$this->SetWhereCondition("a.status","=","P");
-		}
-
-		if(strtolower($_POST['view_order_mode']))
-			$Mode = $_POST['view_order_mode'];
-		else
-			$Mode = 'ASC';
-
-		$Order = strtolower($_POST['view_order_field']);
-		switch($Order)
-		{
-			case "name":
-				$Order = 'name';
-				$Prefix = "d.";
-			break;
-			case "code":
-				$Order = 'code';
-				$Prefix = "c.";
-			break;
-			case "agent":
-				$Order = 'name';
-				$Prefix = "e.";
-			break;
-			default:
-				$Order = 'delivery_date';
-				$Prefix = "a.";
-			break;
-		}
-		$this->SetOrder($Prefix.$Order." ".$Mode);
-
-
-		if($_POST['regsperview'])
-		{
-			$this->SetRegsPerView($_POST['regsperview']);
-		}
-		if(intval($_POST['view_page'])>0)
-			$this->SetPage($_POST['view_page']);
-	}
-
-	public function MakeList()
-	{
-		return $this->MakeRegs("List");
-	}
-
-	public function MakeGrid()
-	{
-		return $this->MakeRegs("Grid");
-	}
-
-	public function GetData()
-	{
-		return $this->Data;
+		$_POST['view_order_mode'] = $_POST['view_order_mode']? $_POST['view_order_mode']:'DESC';
+		$_POST['view_order_field'] = $_POST['view_order_field']? $_POST['view_order_field']:'purchase_id';
+		$this->SetSearchRequest();
 	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,13 +215,15 @@ class Purchase
 	public function Insert()
 	{
 		// ITEMS DATA
+		$Total = 0;
 		$Items = array();
 		for($I=1;$I<=$_POST['items'];$I++)
 		{
 			if($_POST['item_'.$I])
 			{
-				$ItemDate = implode("-",array_reverse(explode("/",$_POST['date_'.$I])));
-				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate );
+				$Total += ($_POST['price_'.$I]*$_POST['quantity_'.$I]);
+				$ItemDate = Core::FromDateToDB($_POST['date_'.$I]);
+				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate, 'days'=>$_POST['day_'.$I]);
 				if(!$Date)
 				{
 					$Date = $ItemDate;
@@ -372,55 +235,78 @@ class Purchase
 		}
 
 		// Basic Data
-		$Type			= $_POST['type'];
-		$ProviderID		= $_POST['provider'];
+		$CompanyID	= $_POST['company'];
+		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
-		$CurrencyID		= $_POST['currency'];
 		$Extra			= $_POST['extra'];
-		$Total			= $_POST['total_price'];
-		$Admin			= new CoreUser($_SESSION['user_id']);
-		$Status			= $_POST['status'];
-
-		$NewID			= Core::Insert($this->Table,'type,provider_id,agent_id,currency_id,extra,total,delivery_date,status,creation_date,created_by,organization_id',"'".$Type."',".$ProviderID.",".$AgentID.",".$CurrencyID.",'".$Extra."',".$Total.",'".$Date."','".$Status."',NOW(),".$_SESSION['user_id'].",".$_SESSION['organization_id']);
-		// echo $this->LastQuery();
-		$New 			= new ProviderOrder($NewID);
+		$Field			= $_POST['company_type'].'_id';
+		$NewID			= Core::Insert(self::TABLE,Company::TABLE_ID.','.$Field.','.CompanyBranch::TABLE_ID.',agent_id,total,extra,delivery_date,status,creation_date,created_by,'.CoreOrganization::TABLE_ID,$CompanyID.",".$CompanyID.",".$BranchID.",".$AgentID.",".$Total.",'".$Extra."','".$Date."','A',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION['organization_id']);
 
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
+			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $NewID.",".$ProviderID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",'".$Item['delivery_date']."',".$CurrencyID.",NOW(),".$_SESSION['user_id'].",".$_SESSION['organization_id'];
+			$Fields .= $NewID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert('provider_order_item','order_id,provider_id,product_id,price,quantity,delivery_date,currency_id,creation_date,created_by,organization_id',$Fields);
-		// echo $this->LastQuery();
+		Core::Insert(PurchaseItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
 
+		// INSERT FILES
+		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
+
+		// SEND EMAIL
+		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
+	}
+
+	public static function Sendemail($PID,$Receiver,$ShowBrands,$ShowExtra)
+	{
+		if($Receiver)
+		{
+			//Create PDF file
+			$PDF = new Pdf();
+			$PDF->SetOutputType("F");
+			$Purchase = new Purchase($PID);
+			$File = $PDF->Purchase($PID,$ShowBrands,$ShowExtra);
+
+			//Create and send email
+			$Mail = new Mailer();
+			$Sender = 'ventas@rollerservice.com.ar';
+			//Add BCC
+			$BCC = "ventas@rollerservice.com.ar";
+			$Mail->AddBCC($BCC, "Ventas Roller Service");
+			$Subject = 'Orden de Compra N°'.$PID;
+			//Set Batch TRUE to send emails through remote server
+			//$Mail->SetBatch(true);
+			$Sent = $Mail->PurchaseEmail($PID,$Receiver,$Purchase->Data['company'],$Subject,$File,$Sender);
+
+			//Check for errors
+			if(!$Sent)
+			{
+			    echo "Mailer Error: " . $Mail->ErrorInfo;
+			}else{
+			    //Insert Sent Email
+			    Core::Insert("purchase_email",self::TABLE_ID.",email_from,email_to,subject,message,file,status,cc,bcc,creation_date,created_by,organization_id",$PID.",'".$Sender."','".$Receiver."','".$Subject."','".$Message."','".$File."','P','".$CC."','".$BCC."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+			}
+		}
 	}
 
 	public function Update()
 	{
 		$ID 	= $_POST['id'];
-		$Edit	= new ProviderOrder($ID);
-		$Status = $Edit->Data['status'];
-		if($Status!='P' && $Status!='A')
-		{
-			echo "403";
-			die();
-		}
+		$Edit	= new Purchase($ID);
+
 		// ITEMS DATA
+		$Total = 0;
 		$Items = array();
 		for($I=1;$I<=$_POST['items'];$I++)
 		{
 			if($_POST['item_'.$I])
 			{
-				$ItemDate = implode("-",array_reverse(explode("/",$_POST['date_'.$I])));
-				$PaymentStatus = $_POST['payment_status_'.$I]? strtoupper($_POST['payment_status_'.$I]):'P';
-				$DeliveryStatus = $_POST['delivery_status_'.$I]? strtoupper($_POST['delivery_status_'.$I]):'P';
-				$CreationDate = $_POST['creation_date_'.$I]? "'".$_POST['creation_date_'.$I]."'" : "NOW()";
-				$ActualDate = $_POST['actual_delivery_date_'.$I]?$_POST['actual_delivery_date_'.$I]:"0000-00-00";
-				$QuantityPaid = $_POST['quantity_paid_'.$I]? strtoupper($_POST['quantity_paid_'.$I]):"'0'";
-				$QuantityReceived = $_POST['quantity_received_'.$I]? strtoupper($_POST['quantity_received_'.$I]):"'0'";
-				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate, 'payment_status'=>$PaymentStatus, 'delivery_status'=>$DeliveryStatus,'actual_delivery_date'=>$ActualDate,'creation_date'=>$CreationDate, 'quantity_received'=>$QuantityReceived,'quantity_paid'=>$QuantityPaid );
+				$Total += ($_POST['price_'.$I]*$_POST['quantity_'.$I]);
+				$ItemDate = Core::FromDateToDB($_POST['date_'.$I]);
+				$CreationDate = $_POST['creation_date_'.$I]? "'".$_POST['creation_date_'.$I]."'":'NOW()';
+				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate,'creation_date'=>$CreationDate,'days'=>$_POST['day_'.$I]);
 				if(!$Date)
 				{
 					$Date = $ItemDate;
@@ -432,240 +318,164 @@ class Purchase
 		}
 
 		// Basic Data
-		$Type			= $_POST['type'];
-		$ProviderID		= $_POST['provider'];
+		$CompanyID	= $_POST['company'];
+		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
-		$CurrencyID		= $_POST['currency'];
 		$Extra			= $_POST['extra'];
-		$Total			= $_POST['total_price'];
-
-		// CREATE NEW IMAGE IF EXISTS
-		if($Image!=$Edit->Data['logo'])
-		{
-			if($Image!=$Edit->GetDefaultImg())
-			{
-				if(file_exists($Edit->GetImg()))
-					unlink($Edit->GetImg());
-				$Dir 	= array_reverse(explode("/",$Image));
-				$Temp 	= $Image;
-				$Image 	= $Edit->ImgGalDir().$Dir[0];
-				copy($Temp,$Image);
-			}
-		}
-
-		$Update		= Core::Update('provider_order',"type='".$Type."',provider_id=".$ProviderID.",agent_id=".$AgentID.",currency_id=".$CurrencyID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION['user_id'],"order_id=".$ID);
-		//echo $this->LastQuery();
+		$Field			= $_POST['company_type'].'_id';
+		$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",'.$Field.'='.$CompanyID.',".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
 
 		// DELETE OLD ITEMS
-		Core::Delete('provider_order_item',"order_id = ".$ID);
+		PurchaseItem::DeleteItems($ID);
 
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
+			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $ID.",".$ProviderID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".$Item['quantity_paid'].",".$Item['quantity_received'].",'".$Item['delivery_date']."','".$Item['actual_delivery_date']."','".$Item['payment_status']."','".$Item['delivery_status']."',".$CurrencyID.",".$Item['creation_date'].",".$_SESSION['user_id'].",".$_SESSION['organization_id'];
+			$Fields .= $ID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",".$Item['creation_date'].",".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert('provider_order_item','order_id,provider_id,product_id,price,quantity,quantity_paid,quantity_received,delivery_date,actual_delivery_date,payment_status,delivery_status,currency_id,creation_date,created_by,organization_id',$Fields);
-		// echo $this->LastQuery();
-	}
+		Core::Insert(PurchaseItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
 
-	public function Activate()
-	{
-		$ID	= $_POST['id'];
-		$Order = new ProviderOrder($ID);
-		$Status = $Order->Data['status'] == 'I'? 'P' : 'A';
-		Core::Update($this->Table,"status = '".$Status."'",$this->TableID."=".$ID);
+		// INSERT FILES
+		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
+
+		// SEND EMAIL
+		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
 	}
 
 	public function Store()
 	{
 		$ID	= $_POST['id'];
-		Core::Update($this->Table,"status = 'Z'",$this->TableID."=".$ID);
+		Core::Update(self::TABLE,"status = 'F'",self::TABLE_ID."=".$ID);
 	}
 
-	// public function Generateinvoice()
-	// {
-	// 	$ID			= $_POST['id'];
-	// 	$ProviderID = $_POST['provider'];
-	// 	$Currency	= $_POST['currency'];
-	// 	$Invoice	= $_POST['invoice_number'];
-	// 	$TypeID		= $_POST['invoice_type'];
-	// 	$SubTotal	= $_POST['total'];
-	// 	$Total		= $SubTotal;
-	// 	$InvoiceTax = array();
-	// 	$Taxes		= 0;
-	// 	$AddTaxes	= Tax::TaxableType($TypeID);
-	// 	$Operation	= 2;
-
-	// 	$Provider	= Core::Select("provider a INNER JOIN view_cuit_operation_tax b ON (a.cuit=b.cuit)","a.name,a.cuit,b.name as tax,b.tax_id, b.percentage, b.base_amount","b.operation_id = ".$Operation." AND a.provider_id=".$ProviderID);
-	// 	$CUIT		= $Provider[0]['cuit'];
-	// 	$Name		= $Provider[0]['name'];
-
-	// 	if($AddTaxes)
-	// 	{
-	// 		foreach($Provider as $Key=>$Tax)
-	// 		{
-	// 			if($SubTotal>=$Tax['base_amount'])
-	// 			{
-	// 				$TaxAmount = round(($SubTotal*$Tax['percentage'])/100,2);
-	// 				$Total += $TaxAmount;
-	// 				$Taxes += $TaxAmount;
-	// 				$Provider[$Key]['amount'] = $TaxAmount;
-	// 				$InvoiceTax[] = $Provider[$Key];
-	// 			}
-	// 		}
-	// 	}
-
-	// 	$InvoiceID = Core::Insert('invoice','entity_id,type_id,operation_id,entity_name,currency_id,total,subtotal,tax,number,status,creation_date,created_by,organization_id',$ProviderID.",".$TypeID.",".$Operation.",'".$Name."',".$Currency.",".$Total.",".$SubTotal.",".$Taxes.",".$Invoice.",'P',NOW(),".$_SESSION['user_id'].",".$_SESSION['organization_id']);
-	// 	// echo $this->LastQuery()." *****/";
-
-	// 	if($AddTaxes)
-	// 	{
-	// 		// INSERT TAXES
-	// 		foreach($InvoiceTax as $Key=>$Tax)
-	// 		{
-	// 			$InvoiceTax[$Key] = $InvoiceID.",".$Tax['tax_id'].",".$Tax['amount'].",".$Tax['percentage'];
-	// 		}
-	// 		$InvoiceTaxes = implode("),(",$InvoiceTax);
-	// 		Core::Insert('relation_invoice_tax','invoice_id,tax_id,amount,percentage',$InvoiceTaxes);
-	// 		// echo $this->LastQuery()." *****/";
-	// 	}
-
-
-	// 	// ITEMS DATA
-	// 	$Items = array();
-	// 	for($I=1;$I<=$_POST['total_items'];$I++)
-	// 	{
-	// 		if($_POST['id'.$I])
-	// 		{
-	// 			$Separator = $I>1? "),(":"";
-	// 			$QueryFields .= $Separator.$InvoiceID.",".$_POST['product'.$I].",'".$_POST['description'.$I]."',".$_POST['quantity_'.$I].",".$_POST['price'.$I].",".$_POST['total'.$I].",NOW(),".$_SESSION['user_id'].",".$_SESSION['organization_id'];
-	// 			//$Items[] = array('id'=>$_POST['product'.$I],'description'=>$_POST['description'.$I],'price'=>$_POST['price'.$I],'quantity'=>$_POST['quantity_'.$I], 'total'=>$_POST['total'.$I]);
-	// 			$QuantityPaid = $_POST['quantity_'.$I] + $_POST['quantity_paid'.$I];
-	// 			$ItemPaymentStatus = $_POST['total_quantity'.$I]==$QuantityPaid? 'F':'A';
-	// 			Core::Update("provider_order_item","payment_status='".$ItemPaymentStatus."', quantity_paid=".$QuantityPaid,"item_id=".$_POST['item'.$I]);
-	// 			//echo "----".$this->LastQuery()."----";
-	// 		}
-	// 	}
-	// 	Core::Insert('invoice_detail','invoice_id,product_id,description,quantity,price,total,creation_date,created_by,organization_id',$QueryFields);
-
-	// 	$OrderStatus = Core::Select($this->Table.'_item',"SUM(quantity_paid) AS quantity_paid,SUM(quantity) AS quantity",$this->TableID."=".$ID);
-	// 	$OrderStatus = $OrderStatus[0];
-	// 	$PaymentStatus = $OrderStatus['quantity']==$OrderStatus['quantity_paid']? 'F':'A';
-	// 	$Status = 'A';
-	// 	if($PaymentStatus=='F')
-	// 	{
-	// 		$Order = Core::Select($this->Table,"delivery_status",$this->TableID."=".$ID);
-	// 		if($Order[0]['delivery_status']=='F')
-	// 			$Status = 'F';
-	// 	}
-	// 	Core::Update($this->Table,"status='".$Status."',payment_status='".$PaymentStatus."'",$this->TableID."=".$ID);
-
-	// 	Core::Insert('relation_invoice_order','invoice_id,order_id,amount',$InvoiceID.",".$ID.",".$SubTotal);
-	// 	//echo $this->LastQuery()." \\n\\n";
-	// }
-
-	// public function Degenerateinvoice($ID=0)
-	// {
-	// 	if(!$ID)
-	// 		$ID	= $_POST['id'];
-	// 	$Items = Core::Select('invoice a INNER JOIN relation_invoice_order b ON (a.invoice_id=b.invoice_id) INNER JOIN provider_order_item c ON (b.order_id=c.order_id) INNER JOIN invoice_detail d ON (d.invoice_id=a.invoice_id)',"a.invoice_id,b.order_id,c.product_id,c.item_id,d.detail_id,d.price,c.quantity_paid,d.quantity","c.product_id = d.product_id  AND c.price=d.price AND c.quantity_paid>=d.quantity AND a.invoice_id=".$ID);
-	// 	$Order = $Items[0]['order_id'];
-	// 	// ROLLBACK ITEM STATUS AND QUANTITIES
-	// 	foreach($Items as $Item)
-	// 	{
-	// 		$QuantityPaid = $Item['quantity_paid']-$Item['quantity'];
-	// 		$Status = $QuantityPaid>0? 'A':'P';
-	// 		// UPDATE QUANTITIES AND STATUS FROM ORDER_ITEM
-	// 		Core::Update('provider_order_item',"quantity_paid=".$QuantityPaid.", payment_status='".$Status."'","item_id=".$Item['item_id']);
-	// 	}
-	// 	$ActiveItems = Core::Select('provider_order_item','quantity_paid',"quantity_paid>0 AND order_id=".$Order);
-
-	// 	// UPDATE STATUS AND PAYMENT_STATUS FROM ORDER
-	// 	$PaymentOrderStatus = empty($ActiveItems) || !$ActiveItems[0]['quantity_paid']? 'P' : 'A';
-	// 	Core::Update($this->Table,"status='A', payment_status='".$PaymentOrderStatus."'",$this->TableID."=".$Order);
-	// 	// SET INVOICE STATUS 'I'
-	// 	Core::Update('invoice',"status='I'","invoice_id=".$ID);
-	// }
-
-	public function Delete()
+	public function Addnewfile()
 	{
-		$ID	= $_POST['id'];
-		$Order = Core::Select($this->Table.' a LEFT JOIN relation_invoice_order b ON (b.order_id=a.order_id)','a.*,b.invoice_id','a.'.$this->TableID."=".$ID);
-		if($Order[0]['payment_status']=='P' && $Order[0]['delivery_status']=='P')
+
+		if(count($_FILES['file'])>0)
 		{
-			$Status = $Order[0]['status'];
-			switch ($Status)
+			$ProductID = $_REQUEST['product']?$_REQUEST['product']:0;
+			$FileDir = self::DEFAULT_FILE_DIR."new/";
+			$FileName = explode(".",preg_replace('#[^A-Za-z0-9\. -]+#', '',str_replace(' ', '-',$_FILES['file']['name'])));
+			$Ext = $FileName[count($FileName)-1];
+			unset($FileName[count($FileName)-1]);
+			$FileName = implode(".",$FileName);
+			$File = new CoreFileData($_FILES['file'],$FileDir,$FileName);
+			if($Ext!="jpg" || $Ext!="jpeg" || $Ext!="png" || $Ext!="bmp")
 			{
-				case 'P':
-					Core::Update($this->Table,"status = 'I'",$this->TableID."=".$ID);
-				break;
-				case 'A':
-					Core::Update($this->Table,"status = 'P'",$this->TableID."=".$ID);
-				break;
-
-				default:
-					echo 'No se puede borrar una orden que no esté en estado pendiente de aprovación';
-				break;
+				$File->SaveFile();
+				$FileURL = $FileDir.$FileName.".".$File->GetExtension();
+			}else{
+				$FileURL = $File	-> BuildImage(200,200);
 			}
-		}else{
-			echo 'No se puede borrar una orden que haya sido entrgada o facturada';
+
+			$FID = Core::Insert('purchase_file_new',"product_id,name,url,creation_date,created_by,organization_id",$ProductID.",'".$FileName."','".$FileURL."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+			$File = array("id"=>$FID,"name"=>$FileName,"url"=>$FileURL,"ext"=>$Ext);
+			echo json_encode($File,JSON_HEX_QUOT);
 		}
 	}
 
-	// public function Search()
-	// {
-	// 	$this->ConfigureSearchRequest();
-	// 	echo $this->InsertSearchResults();
-	// }
-
-	// public function Newimage()
-	// {
-	// 	if(count($_FILES['image'])>0)
-	// 	{
-	// 		$ID	= $_POST['id'];
-	// 		if($ID)
-	// 		{
-	// 			$New = new ProviderOrder($ID);
-	// 			if($_POST['newimage']!=$New->GetImg() && file_exists($_POST['newimage']))
-	// 				unlink($_POST['newimage']);
-	// 			$TempDir= $this->ImgGalDir;
-	// 			$Name	= "provider".intval(rand()*rand()/rand());
-	// 			$Img	= new CoreFileData($_FILES['image'],$TempDir,$Name);
-	// 			echo $Img	-> BuildImage(100,100);
-	// 		}else{
-	// 			if($_POST['newimage']!=$this->GetDefaultImg() && file_exists($_POST['newimage']))
-	// 				unlink($_POST['newimage']);
-	// 			$TempDir= $this->ImgGalDir;
-	// 			$Name	= "provider".intval(rand()*rand()/rand());
-	// 			$Img	= new CoreFileData($_FILES['image'],$TempDir,$Name);
-	// 			echo $Img	-> BuildImage(100,100);
-	// 		}
-	// 	}
-	// }
-
-	// public function Validate()
-	// {
-	// 	$User 			= strtolower($_POST['name']);
-	// 	$ActualUser 	= strtolower($_POST['actualname']);
-
-	//     if($ActualUser)
-	//     	$TotalRegs  = Core::NumRows($this->Table,'*',"name = '".$User."' AND name <> '".$ActualUser."'");
- //   	else
-	// 	    $TotalRegs  = Core::NumRows($this->Table,'*',"name = '".$User."'");
-	// 	if($TotalRegs>0) echo $TotalRegs;
-	// }
-
-	public function Fillagents()
+	public function Removenewfile()
 	{
-		$Company = $_POST['id'];
-		$Agents = Core::Select('company_agent','agent_id,name',"company_id=".$Company,'name');
-		if(count($Agents)<1)
+		$FileID = $_GET['fid'];
+		Core::Update('purchase_file_new',"status='I',updated_by=".$_SESSION[CoreUser::TABLE_ID],"file_id=".$FileID);
+	}
+
+	public function Newpurchase()
+	{
+		$ProductID = $_POST['product'];
+		$Days = $_POST['tday'];
+		$Date = Core::FromDateToDB($_POST['tdate']);
+		$Price = $_POST['tprice'];
+		$Quantity = $_POST['tquantity'];
+		$CompanyID = $_POST['tprovider'];
+
+		$Extra = $_POST['textra'];
+		$FilesCount = $_POST['filecount'];
+		$IDs = "0";
+		$Total = $Price*$Quantity;
+
+		// $International = Core::Select(Company::TABLE,'international',Company::TABLE_ID."=".$CompanyID)[0]['international'];
+
+		$PurchaseID = Core::Insert(self::TABLE,"company_id,sender_id,total,status,purchase_date,extra,creation_date,created_by,organization_id",$CompanyID.",".$CompanyID.",".$Total.",'A','".$Date."','".$Extra."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+		$Field = $PurchaseID.",".$CompanyID.",".$ProductID.",".$Price.",".$Quantity.",".$Total.",".$Days.",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+		Core::Insert(PurchaseItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Field);
+		for($I=1;$I<=$FilesCount;$I++)
 		{
-			$Disabled = 'disabled="disabled"';
+
+			$FileID = $_POST['fileid_'.$I];
+			if($FileID)
+			{
+				$IDs .= ",".$FileID;
+			}
 		}
-		$HTML = Core::InsertElement('select','agent','','form-control chosenSelect','data-placeholder="Seleccione un Contacto" '.$Disabled,$Agents,' ','');
+		$Files = Core::Select("purchase_file_new","*","status='A' AND file_id IN (".$IDs.")");
+		$FilePath = '../../../../skin/files/purchase/'.$PurchaseID.'/';
+		foreach($Files as $File)
+		{
+			$FileObj = new CoreFileData($File['url']);
+			$FileObj->MoveFileTo($FilePath);
+			$NewUrl = $FileObj->GetFile();
+
+			$Field = $File['file_id'].",".$PurchaseID.",".$ProductID.",'".$File['name']."','".$NewUrl."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $Fields? "),(".$Field:$Field;
+		}
+		if($Fields)
+			Core::Insert("purchase_file","new_id,purchase_id,product_id,name,url,creation_date,created_by,organization_id",$Fields);
+		Core::Delete("purchase_file_new","status='A' AND DATEDIFF(CURDATE(),creation_date)>0");
+		echo json_encode(array("id"=>$PurchaseID,"filepath"=>$FilePath),JSON_HEX_QUOT);
+	}
+
+	public function Fillproviderpurchases()
+	{
+		$ProductID = $_POST['product'];
+		$Purchases = Core::Select(self::SEARCH_TABLE,"*","receiver_id=0 AND ".Product::TABLE_ID."=".$ProductID,'purchase_date DESC,creation_date DESC,purchase_id DESC');
+		foreach($Purchases as $Purchase)
+		{
+			$FilesHTML = "";
+			$Files = Core::Select('purchase_file',"*",self::TABLE_ID."=".$Purchase[self::TABLE_ID]);
+			if(count($Files)>0)
+			{
+				foreach($Files as $File)
+				{
+					$IconURL = Core::GetFileIcon($File['url']);
+					$FilesHTML .= '<div><a href="'.$File['url'].'" target="_blank"><img src="'.$IconURL.'" width="32" height="32"> '.$File['name'].'</a></div>';
+				}
+			}
+			$HTML .= '<tr class="ClearWindow">
+		                <td>'.Core::FromDBToDate($Purchase['purchase_date']).'</td>
+		                <td>'.$Purchase['company'].'</td>
+		                <td><span class="label label-success">$ '.$Purchase['price'].'</span></td>
+		                <td>'.$Purchase['quantity'].'</td>
+		                <td>$ '.$Purchase['total_item'].'</td>
+		                <td>'.$Purchase['days'].' D&iacute;as</td>
+		                <td>'.$Purchase['extra'].'</td>
+		                <td>'.$FilesHTML.'</td>
+		              </tr>';
+		}
+		echo $HTML;
+	}
+
+	public function Fillcustomerpurchases()
+	{
+		$ProductID = $_POST['product'];
+		$CompanyID = $_POST['company'];
+		$Purchases = Core::Select(self::SEARCH_TABLE,"*","sender_id=0 AND ".Company::TABLE_ID."=".$CompanyID." AND ".Product::TABLE_ID."=".$ProductID,'purchase_date DESC,creation_date DESC,purchase_id DESC');
+		foreach($Purchases as $Purchase)
+		{
+			$HTML .= '<tr class="ClearWindow">
+						<td><span class="label label-default">'.Core::FromDBToDate($Purchase['purchase_date']).'</span></td>
+		                <td><span class="label label-success">$ '.$Purchase['price'].'</span></td>
+		                <td>'.$Purchase['quantity'].'</td>
+		                <td><span class="label label-success">$ '.$Purchase['total_item'].'</span></td>
+		                <td><span class="label label-warning">'.$Purchase['days'].' D&iacute;as</span></td>
+		                <td>
+		                  <button type="button" class="btn btn-github SeePurchase hint--bottom hint--bounce" aria-label="Ver Orden de Compra" style="margin:0px;" item="'.$Purchase[self::TABLE_ID].'"><i class="fa fa-eye"></i></button>
+		                </td>
+		              </tr>';
+		}
 		echo $HTML;
 	}
 
@@ -728,5 +538,6 @@ class Purchase
 		}
 		echo implode(",",$Prices);
 	}
+
 }
 ?>
