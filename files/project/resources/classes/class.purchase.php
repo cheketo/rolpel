@@ -214,49 +214,189 @@ class Purchase
 
 	public function Insert()
 	{
-		// ITEMS DATA
-		$Total = 0;
-		$Items = array();
-		for($I=1;$I<=$_POST['items'];$I++)
-		{
-			if($_POST['item_'.$I])
+
+			// Items Data
+
+			$Total = 0;
+
+			$Items = array();
+
+			for( $I = 1; $I <= $_POST[ 'items' ]; $I++ )
 			{
-				$Total += ($_POST['price_'.$I]*$_POST['quantity_'.$I]);
-				$ItemDate = Core::FromDateToDB($_POST['date_'.$I]);
-				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate, 'days'=>$_POST['day_'.$I]);
-				if(!$Date)
-				{
-					$Date = $ItemDate;
-				}
-				if(strtotime($ItemDate." 00:00:00") > strtotime($Date." 00:00:00")){
-					$Date = $ItemDate;
-				}
+
+					if( $_POST[ 'item_' . $I ] )
+					{
+
+							$Total += ( substr( $_POST[ 'price_' . $I ], 1 ) * $_POST[ 'quantity_' . $I ] );
+
+							$ItemDate = Core::FromDateToDB( $_POST[ 'date_' . $I ] );
+
+							$Items[] = array(
+																	'id' => $_POST[ 'item_' . $I ],
+																	'price' => substr( $_POST[ 'price_' . $I ], 1 ),
+																	'width' => $_POST[ 'sizex_' . $I ],
+																	'height' => $_POST[ 'sizey_' . $I ],
+																	'depth' => $_POST[ 'sizez_' . $I ],
+																	'quantity' => $_POST[ 'quantity_' . $I ],
+																	'delivery_date' => $ItemDate,
+																	'days' => $_POST[ 'day_' . $I ]
+															);
+
+							if( !$Date )
+							{
+
+									$Date = $ItemDate;
+
+							}
+
+							if( strtotime( $ItemDate . " 00:00:00" ) > strtotime( $Date . " 00:00:00" ) )
+							{
+
+								$Date = $ItemDate;
+
+							}
+
+					}
+
 			}
-		}
 
-		// Basic Data
-		$CompanyID	= $_POST['company'];
-		$BranchID		= $_POST['branch'];
-		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
-		$Extra			= $_POST['extra'];
-		$Field			= $_POST['company_type'].'_id';
-		$NewID			= Core::Insert(self::TABLE,Company::TABLE_ID.','.$Field.','.CompanyBranch::TABLE_ID.',agent_id,total,extra,delivery_date,status,creation_date,created_by,'.CoreOrganization::TABLE_ID,$CompanyID.",".$CompanyID.",".$BranchID.",".$AgentID.",".$Total.",'".$Extra."','".$Date."','A',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION['organization_id']);
+			// Basic Data
+			$CompanyID		= $_POST[ 'company' ];
 
-		// INSERT ITEMS
-		foreach($Items as $Item)
-		{
-			$Item['days'] = $Item['days']?intval($Item['days']):"0";
-			if($Fields)
-				$Fields .= "),(";
-			$Fields .= $NewID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
-		}
-		Core::Insert(PurchaseItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+			$BranchID			= $_POST[ 'branch' ];
 
-		// INSERT FILES
-		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
+			$AgentID 			= $_POST[ 'agent' ]? $_POST[ 'agent' ] : 0;
 
-		// SEND EMAIL
-		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
+			$Extra				= $_POST[ 'extra' ];
+
+			$Additional		= $_POST[ 'additional_information' ];
+
+			// Delivery Days Data
+
+			$MondayFrom		= $_POST[ 'from_monday' ];
+
+			$MondayTo			= $_POST[ 'to_monday' ];
+
+			$TuesdayFrom	= $_POST[ 'from_tuesday' ];
+
+			$TuesdayTo		= $_POST[ 'to_tuesday' ];
+
+			$WensdayFrom	= $_POST[ 'from_wensday' ];
+
+			$WensdayTo		= $_POST[ 'to_wensday' ];
+
+			$ThursdayFrom	= $_POST[ 'from_thursday' ];
+
+			$ThursdayTo		= $_POST[ 'to_thursday' ];
+
+			$FridayFrom	= $_POST[ 'from_friday' ];
+
+			$FridayTo		= $_POST[ 'to_friday' ];
+
+			$SaturdayFrom	= $_POST[ 'from_saturday' ];
+
+			$SaturdayTo		= $_POST[ 'to_saturday' ];
+
+			$SundayFrom	= $_POST[ 'from_sunday' ];
+
+			$SundayTo		= $_POST[ 'to_sunday' ];
+
+			// Saving Data
+
+			$Field				= $_POST[ 'company_type' ] . '_id';
+
+			$NewID				= Core::Insert(
+
+																		self::TABLE,
+
+																		Company::TABLE_ID .',' .
+																		$Field . ',' .
+																		CompanyBranch::TABLE_ID . ',' .
+																		'agent_id,total,extra,expire_date,' .
+																		'monday_from,monday_to,tuesday_from,tuesday_to,wensday_from,wensday_to,thursday_from,thursday_to,friday_from,friday_to,saturday_from,saturday_to,sunday_from,sunday_to,' .
+																		'status,creation_date,created_by,' .
+																		CoreOrganization::TABLE_ID,
+
+																		$CompanyID . "," .
+																		$CompanyID . "," .
+																		$BranchID . "," .
+																		$AgentID . "," .
+																		$Total . ",'" .
+																		$Extra . "','" .
+																		$Date . "','" .
+																		$MondayFrom . "','" .
+																		$MondayTo . "','" .
+																		$TuesdayFrom . "','" .
+																		$TuesdayTo . "','" .
+																		$WensdayFrom . "','" .
+																		$WensdayTo . "','" .
+																		$ThursdayFrom . "','" .
+																		$ThursdayTo . "','" .
+																		$FridayFrom . "','" .
+																		$FridayTo . "','" .
+																		$SaturdayFrom . "','" .
+																		$SaturdayTo . "','" .
+																		$SundayFrom . "','" .
+																		$SundayTo . "'," .
+																		"'A',NOW()," .
+																		$_SESSION[ CoreUser::TABLE_ID ] . "," .
+																		$_SESSION[ 'organization_id' ]
+
+																	);
+
+			// Saving Items
+
+			foreach( $Items as $Item )
+			{
+
+					$Item[ 'days' ] = $Item[ 'days' ] ? intval( $Item[ 'days' ] ) : "0";
+
+					if( $Fields )
+					{
+
+							$Fields .= "),(";
+
+					}
+
+					$Fields .= 	$NewID . "," .
+											$CompanyID."," .
+											$BranchID . "," .
+											$Item[ 'id' ] . "," .
+											$Item[ 'price' ] . "," .
+											$Item[ 'width' ] . "," .
+											$Item[ 'height' ] . "," .
+											$Item[ 'depth' ] . "," .
+											$Item[ 'quantity' ] . "," .
+											( $Item[ 'price' ] * $Item[ 'quantity' ] ) . ",'" .
+											$Item[ 'delivery_date' ] . "'," .
+											$Item[ 'days' ] .
+											",NOW()," .
+											$_SESSION[ CoreUser::TABLE_ID ] . "," . $_SESSION[ CoreOrganization::TABLE_ID ];
+
+			}
+
+			Core::Insert(
+										PurchaseItem::TABLE,
+
+										self::TABLE_ID . ',' .
+										Company::TABLE_ID . ',' .
+										CompanyBranch::TABLE_ID . ',' .
+										Product::TABLE_ID .
+										',price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,' .
+										CoreOrganization::TABLE_ID,
+
+										$Fields
+
+									);
+
+			// Saving Files
+
+			self::SaveAndMoveFiles( $ID, $_POST[ 'qfilecount' ] );
+
+			// Send Email
+
+			self::Sendemail( $ID, $_POST[ 'receiver' ], $_POST[ 'show_brands' ], $_POST[ 'show_extra' ] );
+
 	}
 
 	public static function Sendemail($PID,$Receiver,$ShowBrands,$ShowExtra)
@@ -271,10 +411,10 @@ class Purchase
 
 			//Create and send email
 			$Mail = new Mailer();
-			$Sender = 'ventas@rollerservice.com.ar';
+			$Sender = 'ventas@rolpel.com.ar';
 			//Add BCC
-			$BCC = "ventas@rollerservice.com.ar";
-			$Mail->AddBCC($BCC, "Ventas Roller Service");
+			$BCC = "ventas@rolpel.com.ar";
+			$Mail->AddBCC($BCC, "Ventas RolPel S.R.L.");
 			$Subject = 'Orden de Compra N°'.$PID;
 			//Set Batch TRUE to send emails through remote server
 			//$Mail->SetBatch(true);
@@ -495,14 +635,35 @@ class Purchase
                 <div class="col-xs-4 txC">
                 	<span id="Item'.$ID.'" class="Hidden ItemText'.$ID.'"></span>
                   '.Core::InsertElement("autocomplete","item_".$ID,'','ItemField'.$ID.' itemSelect txC form-control','item="'.$ID.'" validateEmpty="Seleccione un Art&iacute;culo" placeholder="Ingrese un c&oacute;digo" placeholderauto="C&oacute;digo no encontrado" iconauto="cube"','Product','SearchCodes').'
+									<div class="row">
+
+											<div class="col-xs-12 col-sm-4">
+
+													'.Core::InsertElement('text','sizex_'.$ID,'','ItemField'.$ID.' form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Ancho" disabled="disabled"').'
+
+											</div>
+
+											<div class="col-xs-12 col-sm-4">
+
+													'.Core::InsertElement('text','sizey_'.$ID,'','ItemField'.$ID.' form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Alto"  disabled="disabled"').'
+
+											</div>
+
+											<div class="col-xs-12 col-sm-4">
+
+												'.Core::InsertElement('text','sizez_'.$ID,'','ItemField'.$ID.' form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Profundidad" disabled="disabled"').'
+
+											</div>
+
+									</div>
                 </div>
                 <div class="col-xs-1 txC">
                 	<span id="Price'.$ID.'" class="Hidden ItemText'.$ID.'"></span>
-                  '.Core::InsertElement('text','price_'.$ID,'','ItemField'.$ID.' form-control txC calcable inputMask','data-inputmask="\'mask\': \'9{+}.99\'" placeholder="Precio" validateEmpty="Ingrese un precio"').'
+                  '.Core::InsertElement('text','price_'.$ID,'','ItemField'.$ID.' form-control txC calcable inputMask DecimalMask smallFont','disabled="disabled" data-inputmask="\'mask\': \'$9{+}[.9{+}]\'" placeholder="Precio" validateEmpty="Ingrese un precio"').'
                 </div>
                 <div class="col-xs-1 txC">
                 	<span id="Quantity'.$ID.'" class="Hidden ItemText'.$ID.'"></span>
-                  '.Core::InsertElement('text','quantity_'.$ID,'','ItemField'.$ID.' form-control txC calcable QuantityItem inputMask','data-inputmask="\'mask\': \'9{+}\'" placeholder="Cantidad" validateEmpty="Ingrese una cantidad"').'
+                  '.Core::InsertElement('text','quantity_'.$ID,'','ItemField'.$ID.' form-control txC calcable QuantityItem inputMask smallFont','disabled="disabled" data-inputmask="\'mask\': \'9{+}\'" placeholder="Cantidad" validateEmpty="Ingrese una cantidad"').'
                 </div>
                 <div class="col-xs-2 txC">
                   <span id="Date'.$ID.'" class="Hidden ItemText'.$ID.' OrderDate"></span>
@@ -510,7 +671,7 @@ class Purchase
                 </div>
                  <div class="col-xs-1 txC">
                   <span id="Day'.$ID.'" class="Hidden ItemText'.$ID.' OrderDay"></span>
-                  '.str_replace("00","0",Core::InsertElement('text','day_'.$ID,'00','ItemField'.$ID.' form-control txC DayPicker','placeholder="D&iacute;as de Entrega" validateEmpty="Ingrese una cantidad de d&iacute;as"')).'
+                  '.str_replace("00","0",Core::InsertElement('text','day_'.$ID,'00','ItemField'.$ID.' form-control txC DayPicker','disabled="disabled" placeholder="D&iacute;as de Entrega" validateEmpty="Ingrese una cantidad de d&iacute;as"')).'
                 </div>
                 <div  id="item_number_'.$ID.'" class="col-xs-1 txC item_number" total="0" item="'.$ID.'">'.$TotalPrice.'</div>
                 <div class="col-xs-2 txC">

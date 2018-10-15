@@ -11,6 +11,7 @@ $(document).ready(function(){
   setDatePicker();
   setClockPicker();
   inputMask();
+  DecimalInputMask();
 	chosenSelect();
 	SetAutoComplete();
 	closeWindow();
@@ -226,8 +227,41 @@ function inputMask()
 	    {
 	      $(this).inputmask();  //static mask
 	    }
-	  })
+	  });
 	}
+}
+
+/****************************************\
+|          DECIMAL INPUT MASK            |
+\****************************************/
+function DecimalInputMask()
+{
+
+		$( ".DecimalMask" ).focusout( function()
+		{
+
+				var value = $( this ).val();
+
+				var decimal = value.split( "." );
+
+				if( value.indexOf( "." ) != -1 && isNaN(decimal[ 1 ]) )
+				{
+
+						if( value.indexOf( "." ) == ( value.length - 2 ) )
+						{
+
+								$( this ).val( value.substr( 0, ( value.length - 2 ) ) );
+
+						}else{
+
+								$( this ).val( decimal[ 0 ] + ".00" );
+
+						}
+
+				}
+
+		});
+
 }
 
 //////////////////////////////////////////////////// Notify //////////////////////////////////////////////////////

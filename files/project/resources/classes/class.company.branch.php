@@ -566,6 +566,17 @@ class CompanyBranch
   		$HTML = Core::InsertElement('select','branch','','form-control chosenSelect','data-placeholder="Seleccione una Sucursal" '.$Disabled,$Branches);
   		echo $HTML;
   	}
+
+    public function Getbranchinfo()
+    {
+
+        $ID = $_POST[ 'branch' ];
+
+        $BranchInfo = Core::Select( self::TABLE, '*', self::TABLE_ID . "=" . $ID )[ 0 ];
+
+        echo json_encode($BranchInfo);
+
+    }
 }
 
 ?>

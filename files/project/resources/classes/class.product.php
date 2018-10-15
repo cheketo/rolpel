@@ -170,6 +170,7 @@ class Product
 		$Title				= $_POST['title'];
 		$Category			= $_POST['category'];
 		$Brand				= $_POST['brand'];
+		$Price				= $_POST['price']? str_replace( '$', '', $_POST['price'] ):"0.00";
 		$Width				= $_POST['width']? $_POST['width']:"0.00";
 		$Height				= $_POST['height']? $_POST['height']:"0.00";
 		$Depth				= $_POST['depth']? $_POST['depth']:"0.00";
@@ -185,6 +186,7 @@ class Product
 		$Title				= $_POST['title'];
 		$Category			= $_POST['category'];
 		$Brand				= $_POST['brand'];
+		$Price				= $_POST['price']? str_replace( '$', '', $_POST['price'] ):"0.00";
 		$Width				= $_POST['width']? $_POST['width']:"0.00";
 		$Height				= $_POST['height']? $_POST['height']:"0.00";
 		$Depth				= $_POST['depth']? $_POST['depth']:"0.00";
@@ -198,12 +200,12 @@ class Product
 		$Title				=	trim($_POST['title']);
 		$Category			= $_POST['category'];
 		$Brand				= $_POST['brand'];
-		$Description	= $_POST['brand'];
+		$Price				= $_POST['price']? str_replace( '$', '', $_POST['price'] ):"0.00";
 		$Width				= $_POST['width']? $_POST['width']:"0.00";
 		$Height				= $_POST['height']? $_POST['height']:"0.00";
 		$Depth				= $_POST['depth']? $_POST['depth']:"0.00";
 		if($Title && $Category && $Brand)
-			$_POST['id'] = Core::Insert(self::TABLE,'title,'.Category::TABLE_ID.','.Brand::TABLE_ID.',,creation_date,organization_id,created_by',"'".$Title."',".$Category.",".$Brand.",NOW(),".$_SESSION[CoreOrganization::TABLE_ID].",".$_SESSION[CoreUser::TABLE_ID]);
+			$_POST['id'] = Core::Insert(self::TABLE,'title,'.Category::TABLE_ID.','.Brand::TABLE_ID.',price,width,height,depth,creation_date,organization_id,created_by',"'".$Title."',".$Category.",".$Brand.",".$Price.",".$Width.",".$Height.",".$Depth.",NOW(),".$_SESSION[CoreOrganization::TABLE_ID].",".$_SESSION[CoreUser::TABLE_ID]);
 		else
 			echo 402;
 	}
@@ -212,5 +214,17 @@ class Product
 	{
 		echo self::ValidateValue("title",$_POST['title'],$_POST['actualtitle']);
 	}
+
+	public function Getproductdata()
+	{
+
+			$ID = $_POST[ 'product' ];
+
+			$Product = Core::Select( self::TABLE, "*", self::TABLE_ID . "=" . $ID )[ 0 ];
+
+			echo json_encode( $Product, JSON_FORCE_OBJECT );
+
+	}
+
 }
 ?>

@@ -27,6 +27,10 @@ function CreateProduct()
                     var string	=   'object=Product&action=Quickinsert&title='+$("#new_product_title").val()
                                     +'&brand='+$("#new_product_brand").val()
                                     +'&category='+$("#new_product_category").val()
+																		+'&price='+$("#new_product_price").val()
+																		+'&width='+$("#new_product_width").val()
+																		+'&height='+$("#new_product_height").val()
+																		+'&depth='+$("#new_product_depth").val()
                                     ;
                     $.ajax(
                     {
