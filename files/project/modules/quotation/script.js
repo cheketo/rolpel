@@ -66,9 +66,9 @@ $(function(){
 \****************************************/
 $(document).ready(function(){
 	addItem();
-	saveItem();
+
 	calculateRowPrice();
-	editItem();
+
 	changeDates();
 	countItems();
 	calculateTotalQuotationPrice();
@@ -82,6 +82,11 @@ $(document).ready(function(){
 	showHistoryButtons();
 	checkHistoryButtons();
 	updateExpireDate();
+	updateItemExpireDate();
+	getProductInfo();
+	toggleItemFields();
+
+	$( '#real_date' ).change();
 });
 
 
@@ -122,7 +127,7 @@ function updateExpireDate()
 	$("#expire_days").change(function(){
 		if(parseInt($(this).val())>-1)
 		{
-			var creation_date = $("#creation_date").val();
+			var creation_date = $("#real_date").val().split( '/' ).reverse().join( '-' );
 			var ExpireDate = AddDaysToDate($(this).val(),creation_date);
 			$("#expire_date").val(ExpireDate);
 		}
@@ -179,6 +184,37 @@ function checkHistoryButtons()
 }
 
 /****************************************\
+|          UPDATE EXPIRE DATE		         |
+\****************************************/
+
+function updateItemExpireDate()
+{
+
+		$( '#real_date' ).change( function( event )
+		{
+
+				event.stopPropagation();
+
+				var realDate = $( this ).val();
+
+				$( '.ItemRow' ).each( function()
+				{
+
+						var item = $( this ).attr( 'item' );
+
+						$( '#date_' + item ).val( realDate );
+
+						$( '#day_' + item ).change();
+
+						$( '#expire_days' ).change();
+
+				});
+
+		});
+
+}
+
+/****************************************\
 |            QUOTATION ITEMS             |
 \****************************************/
 function addItem()
@@ -197,21 +233,20 @@ function addItem()
 	                $(".ItemRow:last-child").after(data);
 	                $("#items").val(id);
 	                setItemChosen(id);
-	                saveItem();
-	                editItem();
 	                deleteItem();
 	                setADatePicker();
 	                validateDivChange();
 	                countItems();
 	                calculateRowPrice();
-	                priceImputMask(id);
+	                DecimalInputMask();
 	                updateRowBackground();
 	                // recalculateItemPrice();
 	                updateDeliveryDateFromDays();
 	                showHistoryWindow();
 	                showHistoryButtons();
 	                checkHistoryButtons();
-	                $("#day_"+id).change();
+									toggleItemFields();
+									$( '#real_date' ).change();
 	            }else{
 	                console.log('Sin información devuelta. Item='+id);
 	            }
@@ -220,30 +255,44 @@ function addItem()
 	});
 }
 
-function saveItem()
+function toggleItemFields()
 {
-	$(".SaveItem").on("click",function(){
-		var id = $(this).attr("item");
-		if(validate.validateFields('item_form_'+id))
+
+		$( ".itemSelect" ).change(function()
 		{
-			// var item_id = $("#item_"+id).val();
-			var item = $("#TextAutoCompleteitem_"+id).val();
-			var price = $("#price_"+id).val();
-			var quantity = $("#quantity_"+id).val();
-			var delivery = $("#date_"+id).val();
-			var days = $("#day_"+id).val();
-			if(!days) days="0";
-			$("#Item"+id).html('<i class="fa fa-cube"></i> '+item);
-			$("#Price"+id).html("$ "+price);
-			$("#Quantity"+id).html(quantity);
-			$("#Date"+id).html(delivery);
-			$("#Day"+id).html(days);
-			$("#SaveItem"+id+",.ItemField"+id).addClass('Hidden');
-			$("#EditItem"+id+",.ItemText"+id).removeClass('Hidden');
-			$("#item_"+id).next().addClass('Hidden');
-		}
-	});
+
+				var id = $( this ).attr( "id" ).split( "_" )[1];
+
+				var value = $( this ).val();
+
+				$( ".ItemField" + id ).each( function()
+				{
+
+						var field = $( this );
+
+						if( field.attr( "id" ) != "date_" + id && field.attr( "id" ) != "TextAutoCompleteitem_" + id )
+						{
+
+								if( value )
+								{
+
+										field.attr( "disabled", false );
+
+								}else{
+
+										field.attr( "disabled", true );
+
+								}
+
+						}
+
+				});
+
+		});
+
 }
+
+
 
 function editItem()
 {
@@ -271,9 +320,9 @@ function updateDeliveryDateFromDays()
 {
 	$(".DayPicker").change(function(){
 		var id = $(this).attr("id").split("_");
-		if(parseInt($(this).val())>-1)
+		if(parseInt($(this).val())>-1 && $("#real_date").val())
 		{
-			var creation_date = $("#creation_date").val();
+			var creation_date = $("#real_date").val().split( '/' ).reverse().join( '-' );
 			var DeliveryDate = AddDaysToDate($(this).val(),creation_date);
 			$("#date_"+id[1]).val(DeliveryDate);
 		}
@@ -443,53 +492,129 @@ $(document).ready(function(){
 
 function setItemChosen(id)
 {
-	SetAutoComplete('#TextAutoCompleteitem_'+id);
-	// $('#TextAutoCompleteitem_'+id).on('change',function(){
-	// 	getProductsPrices($('#item_'+id).val(),id);
-	// });
+
+		SetAutoComplete( '#TextAutoCompleteitem_' + id );
+
+		$( '#TextAutoCompleteitem_' + id ).on( 'change', function()
+		{
+
+				$( '#sizex_' + id ).val( '' );
+
+				$( '#sizey_' + id ).val( '' );
+
+				$( '#sizez_' + id ).val( '' );
+
+				$( '#price_' + id ).val( '' );
+
+				var product = $( '#item_' + id ).val();
+
+				if( $( '#TextAutoCompleteitem_' + id ).val() )
+				{
+
+						getProductInfo( product, id );
+
+				}else{
+
+						$( '#item_' + id ).val( '' );
+
+				}
+
+		});
+
+		$( '#TextAutoCompleteitem_' + id ).on( 'keydown', function(e)
+		{
+
+				var keyCode = e.keyCode || e.which;
+
+				if( keyCode == 9 )
+				{
+
+						e.preventDefault();
+
+						$( '#TextAutoCompleteitem_' + id ).change();
+
+						$( '#sizex_' + id ).focus();
+
+				}
+
+		});
+
 }
 
-// function getProductsPrices(values,ids)
-// {
-// 	var string	= 'items='+values+'&action=Getitemprices&object=Purchase';
-// 	if(values.length>0 && get['customer']=='Y')
-// 	{
-// 		if(ids)
-// 		{
-// 			ids = ids +'';
-// 			$.ajax({
-// 		        type: "POST",
-// 		        url: process_url,
-// 		        data: string,
-// 		        success: function(data){
-// 		            if(data)
-// 		            {
-// 		            	console.log(data);
-// 		            	var prices = data.split(",");
-// 		            	var items = ids.split(",");
-// 		            	var decimal;
-// 		            	prices.forEach(function(price,index){
-// 		            		decimal = price.substr(price.indexOf("."));
-// 			            	if(decimal.length==1)
-// 			            	{
-// 			            		price = price + ".00";
-// 			            	}
-// 			            	if(decimal.length==2)
-// 			            	{
-// 			            		price = price + "0";
-// 			            	}
-// 			            	$("#price_"+items[index]).val(price);
-// 			            	$("#Price"+items[index]).html("$ "+price);
-// 		            	});
-// 		            }else{
-// 		            	notifyError('Hubo un error al calcular el precio del producto');
-// 		                console.log('Sin información devuelta. Item='+id);
-// 		            }
-// 		        }
-// 		    });
-// 		}
-// 	}
-// }
+function getProductInfo( product, id )
+{
+
+		if( !isNaN( product ) && product > 0 )
+		{
+
+				// console.log( product );
+
+				var string = "product=" + product + "&action=Getproductdata&object=Product";
+
+				$.ajax(
+				{
+
+						type: "POST",
+
+						url: process_url,
+
+						data: string,
+
+						success: function( response )
+						{
+
+								var data = JSON.parse( response );
+
+								if( data.width > 0 )
+								{
+
+										$( '#sizex_' + id ).val( data.width );
+
+								}
+
+								if( data.height > 0 )
+								{
+
+										$( '#sizey_' + id ).val( data.height );
+
+								}
+
+								if( data.depth > 0 )
+								{
+
+										$( '#sizez_' + id ).val( data.depth );
+
+								}
+
+								if( data.price > 0 )
+								{
+
+										$( '#price_' + id ).val( data.price );
+
+										$( '#price_' + id ).change();
+
+								}
+
+						},
+
+						error: function ( response )
+						{
+
+								notifyWarning( 'Se ha producido un error al intentar obtener información del producto.' );
+
+								console.log( response );
+
+						}
+
+				});
+
+		}else{
+
+				console.log( product );
+
+		}
+
+}
 
 /****************************************\
 |             LIST FUNCTIONS             |

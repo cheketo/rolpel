@@ -231,12 +231,16 @@ class Purchase
 
 							$ItemDate = Core::FromDateToDB( $_POST[ 'date_' . $I ] );
 
+							$Width = $_POST[ 'sizex_' . $I ] ? $_POST[ 'sizex_' . $I ] : '0.00';
+							$Height = $_POST[ 'sizey_' . $I ] ? $_POST[ 'sizey_' . $I ] : '0.00';
+							$Depth = $_POST[ 'sizez_' . $I ] ? $_POST[ 'sizez_' . $I ] : '0.00';
+
 							$Items[] = array(
 																	'id' => $_POST[ 'item_' . $I ],
 																	'price' => substr( $_POST[ 'price_' . $I ], 1 ),
-																	'width' => $_POST[ 'sizex_' . $I ],
-																	'height' => $_POST[ 'sizey_' . $I ],
-																	'depth' => $_POST[ 'sizez_' . $I ],
+																	'width' => $Width,
+																	'height' => $Height,
+																	'depth' => $Depth,
 																	'quantity' => $_POST[ 'quantity_' . $I ],
 																	'delivery_date' => $ItemDate,
 																	'days' => $_POST[ 'day_' . $I ]
@@ -395,40 +399,64 @@ class Purchase
 
 			// Send Email
 
-			self::Sendemail( $ID, $_POST[ 'receiver' ], $_POST[ 'show_brands' ], $_POST[ 'show_extra' ] );
+			self::Sendemail( $ID, $_POST[ 'receiver' ] );
 
 	}
 
-	public static function Sendemail($PID,$Receiver,$ShowBrands,$ShowExtra)
+	public static function Sendemail( $PID, $Receiver )
 	{
-		if($Receiver)
-		{
-			//Create PDF file
-			$PDF = new Pdf();
-			$PDF->SetOutputType("F");
-			$Purchase = new Purchase($PID);
-			$File = $PDF->Purchase($PID,$ShowBrands,$ShowExtra);
-
-			//Create and send email
-			$Mail = new Mailer();
-			$Sender = 'ventas@rolpel.com.ar';
-			//Add BCC
-			$BCC = "ventas@rolpel.com.ar";
-			$Mail->AddBCC($BCC, "Ventas RolPel S.R.L.");
-			$Subject = 'Orden de Compra N°'.$PID;
-			//Set Batch TRUE to send emails through remote server
-			//$Mail->SetBatch(true);
-			$Sent = $Mail->PurchaseEmail($PID,$Receiver,$Purchase->Data['company'],$Subject,$File,$Sender);
-
-			//Check for errors
-			if(!$Sent)
+			if( $Receiver )
 			{
-			    echo "Mailer Error: " . $Mail->ErrorInfo;
-			}else{
-			    //Insert Sent Email
-			    Core::Insert("purchase_email",self::TABLE_ID.",email_from,email_to,subject,message,file,status,cc,bcc,creation_date,created_by,organization_id",$PID.",'".$Sender."','".$Receiver."','".$Subject."','".$Message."','".$File."','P','".$CC."','".$BCC."',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID]);
+
+					//Create PDF file
+					$PDF = new Pdf();
+
+					$PDF->SetOutputType( 'F' );
+
+					$Purchase = new Purchase( $PID );
+
+					$File = $PDF->Purchase( $PID );
+
+					//Create and send email
+					$Mail = new Mailer();
+
+					$Sender = 'ventas@rolpel.com.ar';
+
+					//Add BCC
+					$BCC = 'ventas@rolpel.com.ar';
+
+					$Mail->AddBCC( $BCC, 'Ventas RolPel S.R.L.' );
+
+					$Subject = 'Orden de Compra N°' . $PID;
+
+					//Set Batch TRUE to send emails through remote server
+
+					//$Mail->SetBatch(true);
+
+					$Sent = $Mail->PurchaseEmail( $PID, $Receiver, $Purchase->Data[ 'company' ], $Subject, $File, $Sender );
+
+					//Check for errors
+					if( !$Sent )
+					{
+
+					    echo 'Mailer Error: ' . $Mail->ErrorInfo;
+
+					}else{
+
+					    //Insert Sent Email
+					    Core::Insert(
+
+									'purchase_email',
+
+									self::TABLE_ID . ",email_from,email_to,subject,message,file,status,cc,bcc,creation_date,created_by,organization_id",
+
+									$PID . ",'" . $Sender . "','" . $Receiver . "','" . $Subject . "','" . $Message . "','" . $File . "','P','" . $CC."','" . $BCC . "',NOW()," . $_SESSION[ CoreUser::TABLE_ID ] . "," . $_SESSION[ CoreOrganization::TABLE_ID ]
+
+							);
+					}
+
 			}
-		}
+
 	}
 
 	public function Update()
@@ -443,10 +471,28 @@ class Purchase
 		{
 			if($_POST['item_'.$I])
 			{
-				$Total += ($_POST['price_'.$I]*$_POST['quantity_'.$I]);
+				$Price = substr( $_POST[ 'price_' . $I ], 1 );
+				$Total += ($Price*$_POST['quantity_'.$I]);
 				$ItemDate = Core::FromDateToDB($_POST['date_'.$I]);
 				$CreationDate = $_POST['creation_date_'.$I]? "'".$_POST['creation_date_'.$I]."'":'NOW()';
-				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate,'creation_date'=>$CreationDate,'days'=>$_POST['day_'.$I]);
+
+				// $Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate,'creation_date'=>$CreationDate,'days'=>$_POST['day_'.$I]);
+
+				$Width = $_POST[ 'sizex_' . $I ] ? $_POST[ 'sizex_' . $I ] : '0.00';
+				$Height = $_POST[ 'sizey_' . $I ] ? $_POST[ 'sizey_' . $I ] : '0.00';
+				$Depth = $_POST[ 'sizez_' . $I ] ? $_POST[ 'sizez_' . $I ] : '0.00';
+
+				$Items[] = array(
+														'id' => $_POST[ 'item_' . $I ],
+														'price' => $Price,
+														'width' => $Width,
+														'height' => $Height,
+														'depth' => $Depth,
+														'quantity' => $_POST[ 'quantity_' . $I ],
+														'delivery_date' => $ItemDate,
+														'days' => $_POST[ 'day_' . $I ]
+												);
+
 				if(!$Date)
 				{
 					$Date = $ItemDate;
@@ -462,8 +508,40 @@ class Purchase
 		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
 		$Extra			= $_POST['extra'];
+		$Additional		= $_POST[ 'additional_information' ];
+
+		// Delivery Days Data
+
+		$MondayFrom		= $_POST[ 'from_monday' ];
+
+		$MondayTo			= $_POST[ 'to_monday' ];
+
+		$TuesdayFrom	= $_POST[ 'from_tuesday' ];
+
+		$TuesdayTo		= $_POST[ 'to_tuesday' ];
+
+		$WensdayFrom	= $_POST[ 'from_wensday' ];
+
+		$WensdayTo		= $_POST[ 'to_wensday' ];
+
+		$ThursdayFrom	= $_POST[ 'from_thursday' ];
+
+		$ThursdayTo		= $_POST[ 'to_thursday' ];
+
+		$FridayFrom	= $_POST[ 'from_friday' ];
+
+		$FridayTo		= $_POST[ 'to_friday' ];
+
+		$SaturdayFrom	= $_POST[ 'from_saturday' ];
+
+		$SaturdayTo		= $_POST[ 'to_saturday' ];
+
+		$SundayFrom	= $_POST[ 'from_sunday' ];
+
+		$SundayTo		= $_POST[ 'to_sunday' ];
+
 		$Field			= $_POST['company_type'].'_id';
-		$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",'.$Field.'='.$CompanyID.',".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
+		$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",'.$Field.'='.$CompanyID.',".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",delivery_date='".$Date."',extra='".$Extra."',additional_information='".$Additional."',total=".$Total.",monday_from='".$MondayFrom."',monday_to='".$MondayTo."',tuesday_from='".$TuesdayFrom."',tuesday_to='".$TuesdayTo."',wensday_from='".$WensdayFrom."',wensday_to='".$WensdayTo."',thursday_from='".$ThursdayFrom."',thursday_to='".$ThursdayTo."',friday_from='".$FridayFrom."'friday_to='".$FridayTo."',saturday_from='".$SaturdayFrom."',saturday_to='".$SaturdayTo."',sunday_from='".$SundayFrom."',sunday_to='".$SundayTo."',updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
 
 		// DELETE OLD ITEMS
 		PurchaseItem::DeleteItems($ID);
@@ -474,15 +552,17 @@ class Purchase
 			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $ID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",".$Item['creation_date'].",".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $ID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item[ 'width' ] . "," .
+			$Item[ 'height' ] . "," .
+			$Item[ 'depth' ] . "," .$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert(PurchaseItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+		Core::Insert(PurchaseItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
 
 		// INSERT FILES
 		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
 
 		// SEND EMAIL
-		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
+		self::Sendemail($ID,$_POST['receiver']);
 	}
 
 	public function Store()

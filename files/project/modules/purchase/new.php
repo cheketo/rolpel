@@ -137,173 +137,352 @@
             ?>
             <div id="DeliveryDateTime" class="">
               <h4 class="subTitleB"><i class="fa fa-clock-o"></i> Horarios de recepción <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Días y horarios de recepción del <?php echo $Role; ?>. Se carga por defecto con la información de la sucursal seleccionada."><i class="fa fa-question-circle "></i></span></h4>
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $MondayChecked; ?> class="iCheckbox DayCheck" name="monday" id="monday" value="1" > <span>Lunes</span>
-                      </label>
+
+                <div class="row">
+
+                    <!-- Monday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+                        <div class="row form-group inline-form-custom">
+
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+                                        <input type="checkbox" <?php echo $MondayChecked; ?> class="iCheckbox DayCheck" name="monday" id="monday" value="1" > <span>Lunes</span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_monday',$Data['monday_from'],'form-control clockPicker inputMask',$MondayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_monday',$Data['monday_to'],'form-control clockPicker inputMask',$MondayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_monday',$Data['monday_from'],'form-control clockPicker inputMask',$MondayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"'); ?>
-                      </span>
-                  </div>
+                    <!-- Tuesday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_monday',$Data['monday_to'],'form-control clockPicker inputMask',$MondayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"'); ?>
-                      </span>
-                  </div>
-              </div>
+                        <div class="row form-group inline-form-custom">
 
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $TuesdayChecked; ?> class="iCheckbox DayCheck" name="tuesday" id="tuesday" value="1" > <span>Martes</span>
-                      </label>
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+
+                                        <input type="checkbox" <?php echo $TuesdayChecked; ?> class="iCheckbox DayCheck" name="tuesday" id="tuesday" value="1" > <span>Martes</span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_tuesday',$Data['tuesday_from'],'form-control clockPicker inputMask',$TuesdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_tuesday',$Data['tuesday_to'],'form-control clockPicker inputMask',$TuesdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_tuesday',$Data['tuesday_from'],'form-control clockPicker inputMask',$TuesdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"'); ?>
-                      </span>
-                  </div>
+                    <!-- Wensday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_tuesday',$Data['tuesday_to'],'form-control clockPicker inputMask',$TuesdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"'); ?>
-                      </span>
-                  </div>
-              </div>
+                        <div class="row form-group inline-form-custom">
 
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $WensdayChecked; ?> class="iCheckbox DayCheck" name="wensday" id="wensday" value="1" > <span>Mi&eacute;rcoles</span>
-                      </label>
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+
+                                        <input type="checkbox" <?php echo $WensdayChecked; ?> class="iCheckbox DayCheck" name="wensday" id="wensday" value="1" > <span>Mi&eacute;rcoles</span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_wensday',$Data['wensday_from'],'form-control clockPicker inputMask',$WensdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"');?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_wensday',$Data['wensday_to'],'form-control clockPicker inputMask',$WensdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"');?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_wensday',$Data['wensday_from'],'form-control clockPicker inputMask',$WensdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"');?>
-                      </span>
-                  </div>
+                    <!-- Thursday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_wensday',$Data['wensday_to'],'form-control clockPicker inputMask',$WensdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"');?>
-                      </span>
-                  </div>
-              </div>
+                        <div class="row form-group inline-form-custom">
 
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $ThursdayChecked; ?> class="iCheckbox DayCheck" name="thursday" id="thursday" value="1" > <span>Jueves</span>
-                      </label>
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+
+                                        <input type="checkbox" <?php echo $ThursdayChecked; ?> class="iCheckbox DayCheck" name="thursday" id="thursday" value="1" > <span>Jueves</span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_thursday',$Data['thursday_from'],'form-control clockPicker inputMask',$ThursdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_thursday',$Data['thursday_to'],'form-control clockPicker inputMask',$ThursdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_thursday',$Data['thursday_from'],'form-control clockPicker inputMask',$ThursdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"'); ?>
-                      </span>
-                  </div>
+                    <!-- Friday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_thursday',$Data['thursday_to'],'form-control clockPicker inputMask',$ThursdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"'); ?>
-                      </span>
-                  </div>
-              </div>
+                        <div class="row form-group inline-form-custom">
 
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $FridayChecked ?> class="iCheckbox DayCheck" name="friday" id="friday" value="1" > <span>Viernes</span>
-                      </label>
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+
+                                        <input type="checkbox" <?php echo $FridayChecked ?> class="iCheckbox DayCheck" name="friday" id="friday" value="1" > <span>Viernes</span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_friday',$Data['friday_from'],'form-control clockPicker inputMask',$FridayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_friday',$Data['friday_to'],'form-control clockPicker inputMask',$FridayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_friday',$Data['friday_from'],'form-control clockPicker inputMask',$FridayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"'); ?>
-                      </span>
-                  </div>
+                    <!-- Saturday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_friday',$Data['friday_to'],'form-control clockPicker inputMask',$FridayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"'); ?>
-                      </span>
-                  </div>
-              </div>
+                        <div class="row form-group inline-form-custom">
 
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $SaturdayChecked; ?> class="iCheckbox DayCheck DayCheck" name="saturday" id="saturday" value="1" > <span>S&aacute;bado</span>
-                      </label>
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+
+                                        <input type="checkbox" <?php echo $SaturdayChecked; ?> class="iCheckbox DayCheck DayCheck" name="saturday" id="saturday" value="1" > <span>S&aacute;bado</span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_saturday',$Data['saturday_from'],'form-control clockPicker inputMask',$SaturdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_saturday',$Data['saturday_to'],'form-control clockPicker inputMask',$SaturdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_saturday',$Data['saturday_from'],'form-control clockPicker inputMask',$SaturdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"'); ?>
-                      </span>
-                  </div>
+                    <!-- Sunday -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_saturday',$Data['saturday_to'],'form-control clockPicker inputMask',$SaturdayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"'); ?>
-                      </span>
-                  </div>
-              </div>
+                        <div class="row form-group inline-form-custom">
 
-              <div class="row form-group inline-form-custom">
-                  <div class="col-sm-4 col-xs-12">
-                    <div class="checkbox icheck">
-                      <label>
-                        <input type="checkbox" <?php echo $SundayChecked; ?> class="iCheckbox DayCheck" name="sunday" id="sunday" value="1" > <span>Domingo</span>
-                      </label>
+                            <div class="col-xs-12 col-sm-12 col-md-4">
+
+                                <div class="checkbox icheck">
+
+                                    <label>
+
+                                        <input type="checkbox" <?php echo $SundayChecked; ?> class="iCheckbox DayCheck" name="sunday" id="sunday" value="1" > <span>Domingo</span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario inicial"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','from_sunday',$Data['sunday_from'],'form-control clockPicker inputMask',$SundayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-4 margin-top1em">
+
+                                <span class="input-group">
+
+                                    <span class="input-group-addon"><span class="hint--bottom hint--bounce" aria-label="Horario final"><i class="fa fa-clock-o"></i></span></span>
+
+                                    <?php echo Core::InsertElement('text','to_sunday',$Data['sunday_to'],'form-control clockPicker inputMask',$SundayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="00:00"'); ?>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
-                  </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','from_sunday',$Data['sunday_from'],'form-control clockPicker inputMask',$SundayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario inicial"'); ?>
-                      </span>
-                  </div>
+                </div>
 
-                  <div class="col-sm-4 col-xs-12 margin-top1em">
-                      <span class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                          <?php echo Core::InsertElement('text','to_sunday',$Data['sunday_to'],'form-control clockPicker inputMask',$SundayDisabled.' data-inputmask="\'mask\': \'99[:99]\'" placeholder="Horario final"'); ?>
-                      </span>
-                  </div>
-              </div>
+                <!-- Monday -->
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
             <?php } ?>
 

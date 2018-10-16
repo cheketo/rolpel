@@ -221,9 +221,17 @@ class Quotation
 		{
 			if($_POST['item_'.$I])
 			{
-				$Total += ($_POST['price_'.$I]*$_POST['quantity_'.$I]);
+				$Price = substr( $_POST[ 'price_' . $I ], 1 );
+				$Total += ($Price*$_POST['quantity_'.$I]);
 				$ItemDate = Core::FromDateToDB($_POST['date_'.$I]);
-				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate, 'days'=>$_POST['day_'.$I]);
+
+				$Width = $_POST[ 'sizex_' . $I ] ? $_POST[ 'sizex_' . $I ] : '0.00';
+				$Height = $_POST[ 'sizey_' . $I ] ? $_POST[ 'sizey_' . $I ] : '0.00';
+				$Depth = $_POST[ 'sizez_' . $I ] ? $_POST[ 'sizez_' . $I ] : '0.00';
+
+				$Items[] = array('id'=>$_POST['item_'.$I],'price' => $Price,'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate,'width' => $Width,
+				'height' => $Height,
+				'depth' => $Depth, 'days'=>$_POST['day_'.$I]);
 				if(!$Date)
 				{
 					$Date = $ItemDate;
@@ -239,26 +247,29 @@ class Quotation
 		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
 		$Extra			= $_POST['extra'];
+		$Additional	= $_POST[ 'additional_information' ];
 		$Field			= $_POST['company_type'].'_id';
-		$NewID			= Core::Insert(self::TABLE,Company::TABLE_ID.','.$Field.','.CompanyBranch::TABLE_ID.',agent_id,total,extra,delivery_date,status,creation_date,created_by,'.CoreOrganization::TABLE_ID,$CompanyID.",".$CompanyID.",".$BranchID.",".$AgentID.",".$Total.",'".$Extra."','".$Date."','A',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION['organization_id']);
+		$NewID			= Core::Insert(self::TABLE,Company::TABLE_ID.','.$Field.','.CompanyBranch::TABLE_ID.',agent_id,total,extra,additional_information,delivery_date,status,creation_date,created_by,'.CoreOrganization::TABLE_ID,$CompanyID.",".$CompanyID.",".$BranchID.",".$AgentID.",".$Total.",'".$Extra."','".$Additional."','".$Date."','A',NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION['organization_id']);
 		// INSERT ITEMS
 		foreach($Items as $Item)
 		{
 			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $NewID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $NewID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item[ 'width' ] . "," .
+			$Item[ 'height' ] . "," .
+			$Item[ 'depth' ] . "," .$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
 
 		// INSERT FILES
 		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
 
 		// SEND EMAIL
-		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
+		self::Sendemail($ID,$_POST['receiver']);
 	}
 
-	public static function Sendemail($QID,$Receiver,$ShowBrands,$ShowExtra)
+	public static function Sendemail($QID,$Receiver)
 	{
 		if($Receiver)
 		{
@@ -266,7 +277,7 @@ class Quotation
 			$PDF = new Pdf();
 			$PDF->SetOutputType("F");
 			$Quotation = new Quotation($QID);
-			$File = $PDF->Quotation($QID,$ShowBrands,$ShowExtra);
+			$File = $PDF->Quotation($QID);
 
 			//Create and send email
 			$Mail = new Mailer();
@@ -277,6 +288,7 @@ class Quotation
 			$Subject = 'Cotización N°'.$QID;
 			//Set Batch TRUE to send emails through remote server
 			//$Mail->SetBatch(true);
+
 			$Sent = $Mail->QuotationEmail($QID,$Receiver,$Quotation->Data['company'],$Subject,$File,$Sender);
 
 			//Check for errors
@@ -302,10 +314,26 @@ class Quotation
 		{
 			if($_POST['item_'.$I])
 			{
-				$Total += ($_POST['price_'.$I]*$_POST['quantity_'.$I]);
+				$Price = substr( $_POST[ 'price_' . $I ], 1 );
+				$Total += ($Price*$_POST['quantity_'.$I]);
 				$ItemDate = Core::FromDateToDB($_POST['date_'.$I]);
 				$CreationDate = $_POST['creation_date_'.$I]? "'".$_POST['creation_date_'.$I]."'":'NOW()';
-				$Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate,'creation_date'=>$CreationDate,'days'=>$_POST['day_'.$I]);
+				// $Items[] = array('id'=>$_POST['item_'.$I],'price'=>$_POST['price_'.$I],'quantity'=>$_POST['quantity_'.$I], 'delivery_date'=>$ItemDate,'creation_date'=>$CreationDate,'days'=>$_POST['day_'.$I]);
+				$Width = $_POST[ 'sizex_' . $I ] ? $_POST[ 'sizex_' . $I ] : '0.00';
+				$Height = $_POST[ 'sizey_' . $I ] ? $_POST[ 'sizey_' . $I ] : '0.00';
+				$Depth = $_POST[ 'sizez_' . $I ] ? $_POST[ 'sizez_' . $I ] : '0.00';
+
+				$Items[] = array(
+														'id' => $_POST[ 'item_' . $I ],
+														'price' => $Price,
+														'width' => $Width,
+														'height' => $Height,
+														'depth' => $Depth,
+														'quantity' => $_POST[ 'quantity_' . $I ],
+														'delivery_date' => $ItemDate,
+														'days' => $_POST[ 'day_' . $I ]
+												);
+
 				if(!$Date)
 				{
 					$Date = $ItemDate;
@@ -321,8 +349,9 @@ class Quotation
 		$BranchID		= $_POST['branch'];
 		$AgentID 		= $_POST['agent']? $_POST['agent']: 0;
 		$Extra			= $_POST['extra'];
+		$Additional	= $_POST[ 'additional_information' ];
 		$Field			= $_POST['company_type'].'_id';
-		$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",'.$Field.'='.$CompanyID.',".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",delivery_date='".$Date."',extra='".$Extra."',total=".$Total.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
+		$Update			= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",".$Field.'='.$CompanyID.",".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",delivery_date='".$Date."',extra='".$Extra."',additional_information='".$Additional."',total=".$Total.",updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
 
 		// DELETE OLD ITEMS
 		QuotationItem::DeleteItems($ID);
@@ -333,15 +362,17 @@ class Quotation
 			$Item['days'] = $Item['days']?intval($Item['days']):"0";
 			if($Fields)
 				$Fields .= "),(";
-			$Fields .= $ID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",".$Item['creation_date'].",".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
+			$Fields .= $ID.",".$CompanyID.",".$BranchID.",".$Item['id'].",".$Item['price'].",".$Item[ 'width' ] . "," .
+			$Item[ 'height' ] . "," .
+			$Item[ 'depth' ] . "," .$Item['quantity'].",".($Item['price']*$Item['quantity']).",'".$Item['delivery_date']."',".$Item['days'].",NOW(),".$_SESSION[CoreUser::TABLE_ID].",".$_SESSION[CoreOrganization::TABLE_ID];
 		}
-		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
+		Core::Insert(QuotationItem::TABLE,self::TABLE_ID.','.Company::TABLE_ID.','.CompanyBranch::TABLE_ID.','.Product::TABLE_ID.',price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,'.CoreOrganization::TABLE_ID,$Fields);
 
 		// INSERT FILES
 		self::SaveAndMoveFiles($ID,$_POST['qfilecount']);
 
 		// SEND EMAIL
-		self::Sendemail($ID,$_POST['receiver'],$_POST['show_brands'],$_POST['show_extra']);
+		self::Sendemail( $ID, $_POST[ 'receiver' ] );
 	}
 
 	public function Store()

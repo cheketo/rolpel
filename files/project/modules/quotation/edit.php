@@ -88,9 +88,9 @@
 <?php echo Core::InsertElement('hidden','qfilecount',"0.00"); ?>
 <?php echo Core::InsertElement('hidden','efilecount',"0.00"); ?>
 
-<?php include_once('window.quotation.php'); ?>
-<?php include_once('window.product.php'); ?>
-<?php include_once('window.agent.php'); ?>
+<?php include_once('../product/window.traceability.php'); ?>
+<?php include_once('../product/window.product.php'); ?>
+<?php include_once('../agent/window.agent.php'); ?>
 <?php if($Customer=='Y') include_once('window.email.php'); ?>
 
   <div class="box animated fadeIn" style="min-width:99%">
@@ -238,7 +238,28 @@
                   <div class="col-xs-4 txC">
                     <span id="Item<?php echo $I ?>" class="Hidden ItemText<?php echo $I ?>"></span>
                     <?php //echo Core::InsertElement('select','item_'.$I,$Item['product_id'],'ItemField'.$I.' form-control chosenSelect itemSelect','validateEmpty="Seleccione un Art&iacute;culo" data-placeholder="Seleccione un Art&iacute;culo" item="'.$I.'"',$ProductCodes,' ',''); ?>
-                    <?php echo Core::InsertElement("autocomplete","item_".$I,$Item['product_id'].','.$Item['code'].' - '.$Item['brand'],'ItemField'.$I.' txC form-control itemSelect','validateEmpty="Seleccione un Producto" placeholder="Ingrese un producto" placeholderauto="Producto no encontrado" item="'.$I.'" iconauto="cube"','Product','SearchCodes');?>
+                    <?php echo Core::InsertElement("autocomplete","item_".$I,$Item['product_id'].','.$Item['title'].' - '.$Item['brand'].' - '.$Item['category'],'ItemField'.$I.' txC form-control itemSelect','validateEmpty="Seleccione un Producto" placeholder="Ingrese un producto" placeholderauto="Producto no encontrado" item="'.$I.'" iconauto="cube"','Product','SearchCodes');?>
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4">
+
+                            <?php echo Core::InsertElement('text','sizex_' . $I,$Item['width'],'ItemField' . $I . ' form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Ancho"'); ?>
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                            <?php echo Core::InsertElement('text','sizey_' . $I,$Item['height'],'ItemField' . $I . ' form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Alto" '); ?>
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                          <?php echo Core::InsertElement('text','sizez_' . $I,$Item['depth'],'ItemField' . $I . ' form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Profundidad"'); ?>
+
+                        </div>
+
+                    </div>
                     <?php //echo Core::InsertElement("text","item_1",'','Hidden',''); ?>
                   </div>
                   <div class="col-xs-1 txC">
@@ -305,6 +326,13 @@
               </div>
             </div>
 
+            <h4 class="subTitleB"><i class="fa fa-info-circle"></i> Informaci&oacute;n Extra para Uso Interno <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Aquí se puede cargar la información que se requiera."><i class="fa fa-question-circle "></i></span></h4>
+            <div class="row form-group inline-form-custom">
+              <div class="col-xs-12">
+                  <?php echo Core::InsertElement('textarea','additional_information',$Data['additional_information'],'form-control',' placeholder="Datos adicionales para uso interno"'); ?>
+              </div>
+            </div>
+
             <h4 class="subTitleB"><i class="fa fa-info-circle"></i> Informaci&oacute;n Extra para el Cliente</h4><div class="row form-group inline-form-custom">
               <div class="col-xs-12">
                   <?php echo Core::InsertElement('textarea','extra',$Data['extra'],'form-control',' placeholder="Datos adicionales"'); ?>
@@ -325,10 +353,11 @@ $Foot->SetScript('../../../../vendors/inputmask3/jquery.inputmask.bundle.min.js'
 $Foot->SetScript('../../../../vendors/autocomplete/jquery.auto-complete.min.js');
 $Foot->SetScript('../../../../vendors/datepicker/bootstrap-datepicker.js');
 $Foot->SetScript('../../../../vendors/dropzone/dropzone.min.js');
-$Foot->SetScript('script.traceability.js');
+$Foot->SetScript('../../../../vendors/clockpicker/clockpicker.js');
 $Foot->SetScript('script.dropzone.js');
-$Foot->SetScript('script.agent.js');
+$Foot->SetScript('../agent/script.agent.js');
+$Foot->SetScript('../product/script.traceability.js');
 $Foot->SetScript('script.email.js');
-$Foot->SetScript('script.product.js');
+$Foot->SetScript('../product/script.product.js');
 include('../../../project/resources/includes/inc.bottom.php');
 ?>

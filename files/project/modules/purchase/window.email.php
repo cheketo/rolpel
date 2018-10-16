@@ -9,12 +9,12 @@
                 </div>
             </div>
 
-            <h4 class="subTitleB"><i class="fa fa-info"></i> Mostrar Informaci&oacute;n Extra</h4>
+            <!-- <h4 class="subTitleB"><i class="fa fa-info"></i> Mostrar Informaci&oacute;n Extra</h4>
             <div class="row form-group inline-form-custom">
                 <div class="col-xs-12">
-                    <?php echo Core::InsertElement('select','show_extra','','form-control chosenSelect','validateEmpty="Seleccione una Opci&oacute;n"',array('Y'=>'Si','N'=>'No')); ?>
+                    <?php //echo Core::InsertElement('select','show_extra','','form-control chosenSelect','validateEmpty="Seleccione una Opci&oacute;n"',array('Y'=>'Si','N'=>'No')); ?>
                 </div>
-            </div>
+            </div> -->
         </form>
 
     </div>

@@ -150,6 +150,27 @@
                     <span id="Item1" class="Hidden ItemText1"></span>
                     <?php //echo Core::InsertElement('select','item_1','','ItemField1 form-control chosenSelect itemSelect','validateEmpty="Seleccione un Art&iacute;culo" data-placeholder="Seleccione un Art&iacute;culo" item="1"',$ProductCodes,' ',''); ?>
                     <?php echo Core::InsertElement("autocomplete","item_1",'','ItemField1 txC form-control itemSelect','validateEmpty="Seleccione un Producto" placeholder="Ingrese un producto" placeholderauto="Producto no encontrado" item="1" iconauto="cube"','Product','SearchCodes');?>
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4">
+
+                            <?php echo Core::InsertElement('text','sizex_1','','ItemField1 form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Ancho" disabled="disabled"'); ?>
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                            <?php echo Core::InsertElement('text','sizey_1','','ItemField1 form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Alto"  disabled="disabled"'); ?>
+
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+
+                          <?php echo Core::InsertElement('text','sizez_1','','ItemField1 form-control txC inputMask smallFont DecimalMask','data-inputmask="\'mask\': \'9{+}[.9{+}]\'" placeholder="Profundidad" disabled="disabled"'); ?>
+
+                        </div>
+
+                    </div>
                     <?php //echo Core::InsertElement("text","item_1",'','Hidden',''); ?>
                   </div>
                   <div class="col-xs-1 txC">
@@ -210,6 +231,13 @@
                 <!-- /btn-group -->
                 <?php echo Core::InsertElement('text','change_day','','form-control',' placeholder="Modificar los d&iacute;as de todos los productos"'); ?>
               </div>
+              </div>
+            </div>
+
+            <h4 class="subTitleB"><i class="fa fa-info-circle"></i> Informaci&oacute;n Extra para Uso Interno <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Aquí se puede cargar la información que se requiera."><i class="fa fa-question-circle "></i></span></h4>
+            <div class="row form-group inline-form-custom">
+              <div class="col-xs-12">
+                  <?php echo Core::InsertElement('textarea','additional_information','','form-control',' placeholder="Datos adicionales para uso interno"'); ?>
               </div>
             </div>
 

@@ -5,18 +5,18 @@ $(document).ready(function(){
 	//$("#prueba").keydown();
 	// $("#prueba").onfocus(function(){$(this).change(); alert('entra');});
 	if(get['msg']=='insert')
-		notifySuccess('La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido creada correctamente.');
+		notifySuccess('La orden de compra de <b>'+get['element']+'</b> ha sido creada correctamente.');
 	if(get['msg']=='update')
 	{
-		var popuptext = 'La cotizaci&oacute;n de <b>'+get['element']+'</b> ha sido modificada correctamente'
+		var popuptext = 'La orden de compra de <b>'+get['element']+'</b> ha sido modificada correctamente'
 		if(get['emailsent'])
-			popuptext = popuptext + ' y un email fue enviado a <b>'+get['emailsent']+'</b> con la cotizaci&oacute;n.';
+			popuptext = popuptext + ' y un email fue enviado a <b>'+get['emailsent']+'</b> con la orden de compra.';
 		notifySuccess(popuptext);
 	}
 	if(get['error']=="status")
-		notifyError('La cotizaci&oacute;n no puede ser editada ya que no se encuentra en estado activo.');
+		notifyError('La orden de compra no puede ser editada ya que no se encuentra en estado activo.');
 	if(get['error']=="user")
-		notifyError('La cotizaci&oacute;n que desea editar no existe.');
+		notifyError('La orden de compra que desea editar no existe.');
 
 });
 
@@ -36,27 +36,17 @@ $(function(){
 	$("#BtnCreate").click(function(){
 		var element = $('#company option:selected').html();
 		var target	= 'list.php?msg='+msg+params+'&element='+element;
-		askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','PurchaseForm');
+		askAndSubmit(target,role,'¿Desea crear la orden de compra de <b>'+element+'</b>?','','PurchaseForm');
 	});
 	// $("#BtnCreateNext").click(function(){
 	// 	var element = $('#company option:selected').html();
 	// 	var target		= 'new.php?element='+element+'&msg='+msg+params;
-	// 	askAndSubmit(target,role,'¿Desea crear la cotizaci&oacute;n de <b>'+element+'</b>?','','PurchaseForm');
+	// 	askAndSubmit(target,role,'¿Desea crear la orden de compra de <b>'+element+'</b>?','','PurchaseForm');
 	// });
 	$("#BtnEdit").click(function(){
 		var element = $('#company option:selected').html();
 		var target		= 'list.php?msg='+msg+params+'&element='+element;
-		askAndSubmit(target,role,'¿Desea modificar la cotizaci&oacute;n de <b>'+element+'</b>?','','PurchaseForm');
-	});
-
-	$("#SaveAndSend").click(function(){
-		if($("#action").val()=='insert')
-			var action = 'crear';
-		else
-			var action = 'editar';
-		var element = $('#company option:selected').html();
-		var target		= 'list.php?msg='+msg+params+'&emailsent='+$('#receiver').val()+'&element='+element;
-		askAndSubmit(target,role,'¿Desea '+action+' la cotizaci&oacute;n de <b>'+element+'</b> y enviarla por email al destinatario <b>'+$("#receiver").val()+'</b>?','','EmailWindowForm');
+		askAndSubmit(target,role,'¿Desea modificar la orden de compra de <b>'+element+'</b>?','','PurchaseForm');
 	});
 
 
@@ -108,7 +98,11 @@ $( document ).ready( function()
 
 		getProductInfo();
 
+		updateItemExpireDate();
+
 		// fillProductSizes();
+
+		$( '#real_date' ).change();
 
 });
 
@@ -150,7 +144,7 @@ function updateExpireDate()
 	$("#expire_days").change(function(){
 		if(parseInt($(this).val())>-1)
 		{
-			var creation_date = $("#creation_date").val();
+			var creation_date = $("#real_date").val().split( '/' ).reverse().join( '-' );
 			var ExpireDate = AddDaysToDate($(this).val(),creation_date);
 			$("#expire_date").val(ExpireDate);
 		}
@@ -189,7 +183,7 @@ function DayCheck()
 		{
 			$(this).val($(this).val().replace('_','0'));
 			var time = $(this).val().split(':');
-			console.log($(this).val());
+
 			if(!time[1])
 			{
 				$(this).val(time[0]+':00');
@@ -548,7 +542,7 @@ function addItem()
 	                showHistoryButtons();
 	                checkHistoryButtons();
 									toggleItemFields();
-	                $("#day_"+id).change();
+									$( '#real_date' ).change();
 	            }else{
 	                console.log('Sin información devuelta. Item='+id);
 	            }
@@ -573,9 +567,9 @@ function updateDeliveryDateFromDays()
 {
 	$(".DayPicker").change(function(){
 		var id = $(this).attr("id").split("_");
-		if(parseInt($(this).val())>-1)
+		if(parseInt($(this).val())>-1 && $("#real_date").val())
 		{
-			var creation_date = $("#creation_date").val();
+			var creation_date = $("#real_date").val().split( '/' ).reverse().join( '-' );
 			var DeliveryDate = AddDaysToDate($(this).val(),creation_date);
 			$("#date_"+id[1]).val(DeliveryDate);
 		}
@@ -760,6 +754,37 @@ function fillBranch()
     });
 }
 
+/****************************************\
+|          UPDATE EXPIRE DATE		         |
+\****************************************/
+
+function updateItemExpireDate()
+{
+
+		$( '#real_date' ).change( function( event )
+		{
+
+				event.stopPropagation();
+
+				var realDate = $( this ).val();
+
+				$( '.ItemRow' ).each( function()
+				{
+
+						var item = $( this ).attr( 'item' );
+
+						$( '#date_' + item ).val( realDate );
+
+						$( '#day_' + item ).change();
+
+						$( '#expire_days' ).change();
+
+				});
+
+		});
+
+}
+
 
 /****************************************\
 |    CALCULATE ITEM PRICE BY CUSTOMER    |
@@ -880,6 +905,8 @@ function getProductInfo( product, id )
 
 										$( '#price_' + id ).val( data.price );
 
+										$( '#price_' + id ).change();
+
 								}
 
 						},
@@ -887,7 +914,7 @@ function getProductInfo( product, id )
 						error: function ( response )
 						{
 
-								console.log( 'error' );
+								notifyWarning( 'Se ha producido un error al intentar obtener información del producto.' );
 
 								console.log( response );
 
