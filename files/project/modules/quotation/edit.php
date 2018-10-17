@@ -18,7 +18,7 @@
 
     $Branches   = Core::Select(CompanyBranch::TABLE,CompanyBranch::TABLE_ID.',name',Company::TABLE_ID.'='.$Data[Company::TABLE_ID]);
 
-    $Agents     = Core::Select('company_agent','agent_id,name',Company::TABLE_ID.'='.$Data[Company::TABLE_ID]);
+    $Agents     = Core::Select(CompanyAgent::TABLE,CompanyAgent::TABLE_ID . ',name',Company::TABLE_ID.'='.$Data[Company::TABLE_ID]);
     if(empty($Agents))
     {
       $AgentClass = "warning";
@@ -29,7 +29,7 @@
       $AgentIcon = "male";
       foreach ($Agents as $Agent)
       {
-        if($Agent[CompanyAgent::TABLE_ID]==$Data['agent_id'])
+        if($Agent[CompanyAgent::TABLE_ID]==$Data[CompanyAgent::TABLE_ID])
           $AgentName = $Agent['name'];
       }
     }
@@ -64,7 +64,7 @@
     $FieldInternational = $_GET['international']? "AND international='".$_GET['international']."' ":"";
     $ProductCodes = Product::GetFullCodes();
 
-    $Date1 = date_create(Core::DateTimeFormat($Edit->Data['creation_date'],'date'));
+    $Date1 = date_create(Core::DateTimeFormat($Edit->Data['quotation_date'],'date'));
     $Date2 = date_create(Core::DateTimeFormat($Edit->Data['expire_date'],'date'));
     $Interval = date_diff($Date1, $Date2);
     $ExpireDays = $Interval->format('%a');
@@ -129,7 +129,7 @@
             <h4 class="subTitleB"><i class="fa fa-calendar"></i> Fecha de Cotizaci&oacute;n</h4>
             <div class="row form-group inline-form-custom">
               <div class="col-xs-12">
-                <?php echo Core::InsertElement('text','real_date',date('d/m/Y'),'form-control delivery_date','validateEmpty="Seleccione una Fecha" placeholder="Seleccione una fecha"'); ?>
+                <?php echo Core::InsertElement('text','real_date',Core::FromDBToDate( $Data[ 'quotation_date' ] ),'form-control delivery_date','validateEmpty="Seleccione una Fecha" placeholder="Seleccione una fecha"'); ?>
               </div>
             </div>
 
@@ -264,11 +264,11 @@
                   </div>
                   <div class="col-xs-1 txC">
                     <span id="Price<?php echo $I ?>" class="Hidden ItemText<?php echo $I ?>"></span>
-                    <?php echo Core::InsertElement('text','price_'.$I,$Item['price'],'ItemField'.$I.' form-control txC calcable inputMask','data-inputmask="\'mask\': \'9{+}.99\'" placeholder="Precio" validateEmpty="Ingrese un precio"'); ?>
+                    <?php echo Core::InsertElement('text','price_'.$I,$Item['price'],'ItemField'.$I.' form-control txC smallFont calcable inputMask',' data-inputmask="\'mask\': \'$9{+}[.9{+}]\'" placeholder="Precio" validateEmpty="Ingrese un precio"'); ?>
                   </div>
                   <div class="col-xs-1 txC">
                     <span id="Quantity<?php echo $I ?>" class="Hidden ItemText<?php echo $I ?>"></span>
-                    <?php echo Core::InsertElement('text','quantity_'.$I,$Item['quantity'],'ItemField'.$I.' form-control txC calcable QuantityItem inputMask','data-inputmask="\'mask\': \'9{+}\'" placeholder="Cantidad" validateEmpty="Ingrese una cantidad"'); ?>
+                    <?php echo Core::InsertElement('text','quantity_'.$I,$Item['quantity'],'ItemField'.$I.' form-control txC smallFont calcable QuantityItem inputMask','data-inputmask="\'mask\': \'9{+}\'" placeholder="Cantidad" validateEmpty="Ingrese una cantidad"'); ?>
                   </div>
                   <div class="col-xs-2 txC">
                     <span id="Date<?php echo $I ?>" class="Hidden ItemText<?php echo $I ?> OrderDate"></span>

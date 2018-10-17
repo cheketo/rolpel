@@ -175,11 +175,11 @@
                   </div>
                   <div class="col-xs-1 txC">
                     <span id="Price1" class="Hidden ItemText1"></span>
-                    <?php echo Core::InsertElement('text','price_1','','ItemField1 form-control txC calcable inputMask','data-inputmask="\'mask\': \'9{+}.99\'" placeholder="Precio" validateEmpty="Ingrese un precio"'); ?>
+                    <?php echo Core::InsertElement('text','price_1','','ItemField1 form-control txC smallFont calcable inputMask',' data-inputmask="\'mask\': \'$9{+}[.9{+}]\'" placeholder="Precio" validateEmpty="Ingrese un precio"'); ?>
                   </div>
                   <div class="col-xs-1 txC">
                     <span id="Quantity1" class="Hidden ItemText1"></span>
-                    <?php echo Core::InsertElement('text','quantity_1','','ItemField1 form-control txC calcable QuantityItem inputMask','data-inputmask="\'mask\': \'9{+}\'" placeholder="Cantidad" validateEmpty="Ingrese una cantidad"'); ?>
+                    <?php echo Core::InsertElement('text','quantity_1','','ItemField1 form-control txC smallFont calcable QuantityItem inputMask','data-inputmask="\'mask\': \'9{+}\'" placeholder="Cantidad" validateEmpty="Ingrese una cantidad"'); ?>
                   </div>
                   <div class="col-xs-2 txC">
                     <span id="Date1" class="Hidden ItemText1 OrderDate"></span>

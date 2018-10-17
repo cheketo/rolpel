@@ -2,29 +2,17 @@
     include("../../../core/resources/includes/inc.core.php");
 
     $International = $_GET['international']? $_GET['international']:'N';
-    $Customer = $_GET['customer']? $_GET['customer']:'N';
+    $Customer = 'Y';
     $Provider = $_GET['provider']? $_GET['provider']:'N';
     $New = new Purchase();
-    if($_GET['provider']=='Y')
-    {
-      $Field  = 'provider';
-      $Role   = 'Proveedor';
-      $Title  = ' de Proveedores';
-      $TitleIcon   = 'shopping-cart';
-      $CompanyType = 'sender';
-      $RowTitleClass = 'brown';
-    }elseif($_GET['customer']=='Y'){
+
       $Field  = 'customer';
       $Role   = 'Cliente';
       $Title  = ' a Clientes';
       $TitleIcon   = 'users';
       $CompanyType = 'receiver';
       $RowTitleClass = 'light-blue';
-    }else{
-      // Send it back if customer o provider is not obtained
-      header('Location: list.php?customer='.$_GET['customer'].'&provider='.$_GET['provider'].'&international='.$_GET['international']);
-    	die();
-    }
+    
 
     $FieldInternational = $_GET['international']? "AND international='".$_GET['international']."' ":"";
 
@@ -90,16 +78,6 @@
             <div class="row form-group inline-form-custom">
               <div class="col-xs-12">
                 <?php echo Core::InsertElement('text','real_date',date('d/m/Y'),'form-control delivery_date','validateEmpty="Seleccione una Fecha" placeholder="Seleccione una fecha"'); ?>
-              </div>
-            </div>
-
-            <h4 class="subTitleB"><i class="fa fa-calendar-times-o"></i> Vencimiento <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Plazo máximo en días para que la totalidad de la orden de compra sea entregada."><i class="fa fa-question-circle "></i></span></h4>
-            <div class="row form-group inline-form-custom">
-              <div class="col-xs-12 col-sm-3">
-                <?php echo Core::InsertElement('text','expire_days',10,'form-control','validateEmpty="Ingrese cantidad de d&iacute;as" placeholder="Ingrese cantidad de d&iacute;as"'); ?>
-              </div>
-              <div class="col-xs-12 col-sm-9">
-                <?php echo Core::InsertElement('text','expire_date',date('d/m/Y', $ExpireDate),'form-control','disabled="disabled" placeholder="Fecha Vencimiento"'); ?>
               </div>
             </div>
 

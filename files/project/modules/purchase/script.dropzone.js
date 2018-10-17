@@ -134,72 +134,82 @@ if($('#DropzonePurchase').length)
     });
 }
 
-$(document).ready(function(){
-    if($("#id").length && !isNaN($("#id").val()))
-    {
+// $(document).ready(function(){
+//
+//     PurchaseDropzone()
+//
+// });
 
-        var process = process_url+'?object=Purchase&action=Getpurchasefiles&purchase='+$("#id").val();
-        $.ajax({
-            type: "POST",
-            url: process,
-            cache: false,
-            success: function(data)
-            {
-                try
-                {
-                data = JSON.parse(data);
-                }
-                catch(e)
-                {
-                    notifyError("Ha ocurrido un error al intentar obtener los archivos.");
-                    console.log("Error: "+data);
-                }
-                if(data)
-                {
-                    $.each(data, function(key,value)
-                    {
-                        if(value.size>0)
-                        {
-                            var mockFile = { name: value.full_name, size: value.size };
-                            mainPurchaseDropzone.emit("addedfile", mockFile);
-                            mainPurchaseDropzone.emit("complete", mockFile);
+function PurchaseDropzone()
+{
 
-                            var count = parseInt($("#efilecount").val())+1;
-                            var NewFileHTML = '<input type="hidden" id="efileid_'+count+'" value="'+value.id+'" >';
-                            $("#QFileWrapper").append(NewFileHTML);
-                            $("#efilecount").val(count);
+  if($("#id").length && !isNaN($("#id").val()))
+  {
 
-                            var HTMLRemoveBtn = $('#lastremovebuttonq');
-                            HTMLRemoveBtn.addClass('DeletePurchaseFileFromWrapper');
-                            HTMLRemoveBtn.attr("id",'efile_'+count);
-                            HTMLRemoveBtn.attr("fid",value.id);
-                            HTMLRemoveBtn.attr("filename",value.full_name);
-                            HTMLRemoveBtn.attr("fileurl",value.url);
+      var process = process_url+'?object=Purchase&action=Getpurchasefiles&purchase='+$("#id").val();
+      $.ajax({
+          type: "POST",
+          url: process,
+          cache: false,
+          success: function(data)
+          {
+              try
+              {
+              data = JSON.parse(data);
+              }
+              catch(e)
+              {
+                  notifyError("Ha ocurrido un error al intentar obtener los archivos.");
+                  console.log("Error: "+data);
+              }
+              if(data)
+              {
+                  $.each(data, function(key,value)
+                  {
+                      if(value.size>0)
+                      {
+                          var mockFile = { name: value.full_name, size: value.size };
+                          mainPurchaseDropzone.emit("addedfile", mockFile);
+                          mainPurchaseDropzone.emit("complete", mockFile);
 
-                            $('#lastlinkq').attr("href",value.url);
-                            $('#lastlinkq').attr("id","qlink_"+count);
+                          var count = parseInt($("#efilecount").val())+1;
+                          var NewFileHTML = '<input type="hidden" id="efileid_'+count+'" value="'+value.id+'" >';
+                          $("#QFileWrapper").append(NewFileHTML);
+                          $("#efilecount").val(count);
 
-                            var imageurl = value.url;
+                          var HTMLRemoveBtn = $('#lastremovebuttonq');
+                          HTMLRemoveBtn.addClass('DeletePurchaseFileFromWrapper');
+                          HTMLRemoveBtn.attr("id",'efile_'+count);
+                          HTMLRemoveBtn.attr("fid",value.id);
+                          HTMLRemoveBtn.attr("filename",value.full_name);
+                          HTMLRemoveBtn.attr("fileurl",value.url);
 
-                            var thumbnail = $('#DropzonePurchase .dz-preview.dz-file-preview .dz-image:last').children("img");
-                            if(value.type!="jpg" && value.type!="png" && value.type!="bmp" && value.type!="jpeg")
-                            {
-                                thumbnail.attr('src',GetFileIcon(value.type,"big"));
-                                thumbnail.attr("width","100%");
-                                thumbnail.attr("height","100%");
-                            }else{
-                                thumbnail.attr('src',value.url);
-                                thumbnail.attr("width","100%");
-                                thumbnail.attr("height","100%");
-                            }
-                        }
-                    });
-                    $("#DropzonePurchase .dz-default").hide();
-                }
-            }
-        });
-    }
-});
+                          $('#lastlinkq').attr("href",value.url);
+                          $('#lastlinkq').attr("id","qlink_"+count);
+
+                          var imageurl = value.url;
+
+                          var thumbnail = $('#DropzonePurchase .dz-preview.dz-file-preview .dz-image:last').children("img");
+                          if(value.type!="jpg" && value.type!="png" && value.type!="bmp" && value.type!="jpeg")
+                          {
+                              thumbnail.attr('src',GetFileIcon(value.type,"big"));
+                              thumbnail.attr("width","100%");
+                              thumbnail.attr("height","100%");
+                          }else{
+                              thumbnail.attr('src',value.url);
+                              thumbnail.attr("width","100%");
+                              thumbnail.attr("height","100%");
+                          }
+                      }
+                  });
+                  $("#DropzonePurchase .dz-default").hide();
+              }
+          }
+      });
+  }
+
+
+}
 
 
 ///////////////////////////////// FilesFunctions /////////////////////////////////

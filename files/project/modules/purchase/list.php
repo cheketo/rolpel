@@ -3,7 +3,7 @@
   $List = new Purchase();
   $Head->SetTitle($Menu->GetTitle());
   $Head->SetIcon($Menu->GetHTMLicon());
-  $Head->SetSubTitle('Cotizaciones');
+  $Head->SetSubTitle('Ordenes de Compra');
   $Head->setHead();
   include('../../../project/resources/includes/inc.top.php');
 

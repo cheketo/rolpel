@@ -360,7 +360,7 @@ function calculateRowPrice()
 	$(".calcable").change(function(){
 		var element = $(this).attr("id").split("_");
 		var id = element[1];
-		var price = parseFloat($("#price_"+id).val());
+		var price = parseFloat( $( '#price_' + id).val().replace( '$', '' ) );
 		var quantity = parseInt($("#quantity_"+id).val())
 		if(price>0 && quantity>0)
 			var total = price*quantity;
@@ -619,27 +619,102 @@ function getProductInfo( product, id )
 /****************************************\
 |             LIST FUNCTIONS             |
 \****************************************/
-$(function(){
-	$(".storeElement").click(function(){
-		var ID = $(this).attr('id').split("_");
-		ID = ID[1];
-		var process = process_url+'';
-		var string	= 'id='+ ID +'&action=store&object=Quotation';//&status='+status;
-		$.ajax({
-	        type: "POST",
-	        url: process,
-	        data: string,
-	        cache: false,
-	        success: function(data){
-	            if(data)
-	            {
-	              notifyError('Se produjo un error al archivar la cotización');
-	                console.log('Error al intentar cambiar de estado. Item='+ID+'. Error: '+data);
-	            }else{
-	                $(".searchButton").click();
-	                notifySuccess('La cotización se archiv&oacute; correctamente');
-	            }
-	        }
-	    });
-	});
-});
+function store()
+{
+
+		$(".storeElement").click(function( event ){
+
+			event.stopPropagation();
+			var ID = $(this).attr('id').split("_");
+			ID = ID[1];
+			var process = process_url+'';
+			var string	= 'id='+ ID +'&action=store&object=Quotation';//&status='+status;
+			$.ajax({
+		        type: "POST",
+		        url: process,
+		        data: string,
+		        cache: false,
+		        success: function(response){
+		            if(response)
+		            {
+		              	notifyError('Se produjo un error al archivar la cotización');
+		                console.log('Error al intentar cambiar de estado. Item='+ID+'. Error: '+response);
+		            }else{
+		                $(".searchButton").click();
+		                notifySuccess('La cotización se archiv&oacute; correctamente');
+		            }
+		        }
+		    });
+
+			return false;
+		});
+
+}
+
+function createOrder()
+{
+
+		$( '.createOrder' ).click
+		(
+
+				function( event )
+				{
+
+						event.stopPropagation();
+
+						var id = $( this ).attr( 'id' ).split( '_' );
+
+						id = id[ 1 ];
+
+						var process = process_url;
+
+						var string	= 'id=' + id + '&action=createorder&object=Quotation';
+
+						$.ajax(
+						{
+
+				        type: 'POST',
+
+				        url: process,
+
+				        data: string,
+
+				        cache: false,
+
+				        success: function( response )
+								{
+
+		                purchase = JSON.parse( response );
+
+										window.location.href = '../purchase/edit.php?id=' + purchase.id;
+
+				        },
+								error: function( response )
+								{
+
+										notifyError( 'Se produjo un error al crear la orden.' );
+
+										console.log( 'Error al intentar crear una nueva orden en base a esta cotizaci&oacute;n. Cotizacion=' + id + '. Error: ' );
+
+										console.log( response );
+
+								}
+
+				    });
+
+						return false;
+
+				}
+
+		);
+
+}
+
+function AdditionalSearchFunctions() //DO NOT DELETE
+{
+
+		store();
+
+		createOrder();
+
+}

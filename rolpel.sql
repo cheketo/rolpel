@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.15.7
--- http://www.phpmyadmin.net
+-- version 4.4.15.9
+-- https://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 15, 2018 at 01:18 PM
--- Server version: 5.6.37
--- PHP Version: 7.1.8
+-- Servidor: localhost
+-- Tiempo de generación: 17-10-2018 a las 07:19:15
+-- Versión del servidor: 5.6.37
+-- Versión de PHP: 7.1.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `rolpel`
+-- Base de datos: `rolpel`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `company`
+-- Estructura de tabla para la tabla `company`
 --
 
 CREATE TABLE IF NOT EXISTS `company` (
@@ -53,21 +53,12 @@ CREATE TABLE IF NOT EXISTS `company` (
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=11697 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `company`
---
-
-INSERT INTO `company` (`company_id`, `type_id`, `name`, `cuit`, `iva_id`, `purchase_condition_id`, `iibb`, `vat`, `international`, `customer`, `provider`, `provider_number`, `reputation`, `logo`, `status`, `balance`, `balance_positive`, `balance_initial`, `credit_limit`, `currency_id`, `creation_date`, `last_update`, `old_id`, `created_by`, `updated_by`, `organization_id`) VALUES
-(11694, 2, 'Prueba', 11232322123, 1, 0, '0', '0', 'N', 'Y', 'N', '', 0, '../../../../skin/images/companies/11694/img627676412.png', 'A', 0.00, 0.00, 0.00, 0, 1, '2018-06-18 00:17:22', '2018-08-13 00:41:37', 0, 8, 8, 1),
-(11695, 3, 'Empresa Internacional', 0, 1, 0, '0', '1234567890', 'Y', 'Y', 'Y', '', 0, '../../../../skin/images/companies/default/default.png', 'A', 0.00, 0.00, 0.00, 0, 1, '2018-06-18 00:51:29', '2018-06-22 02:36:47', 0, 8, 8, 1),
-(11696, 2, 'RolPel', 0, 0, 0, '0', '0', 'N', 'Y', 'N', '', 0, '../../../../skin/images/companies/default/default.png', 'A', 0.00, 0.00, 0.00, 0, 1, '2018-06-25 16:35:05', '2018-06-25 19:36:47', 0, 95, 95, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `company_agent`
+-- Estructura de tabla para la tabla `company_agent`
 --
 
 CREATE TABLE IF NOT EXISTS `company_agent` (
@@ -82,23 +73,12 @@ CREATE TABLE IF NOT EXISTS `company_agent` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=1342 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `company_agent`
---
-
-INSERT INTO `company_agent` (`agent_id`, `company_id`, `branch_id`, `name`, `charge`, `email`, `phone`, `extra`, `creation_date`, `created_by`, `organization_id`) VALUES
-(1340, 11694, 5082, 'Carlos Prueba', 'Dueño', 'carlos@prueba.com.ar', '12345678', 'Carlos prefiere que le escriban por WhatsApp', '2018-08-12 21:41:37', 8, 1),
-(1327, 11695, 5078, 'Michael Scott', 'Gerente', 'michael@mail.com', '', 'Habla español', '2018-06-21 23:36:47', 8, 1),
-(1335, 11696, 5080, 'Sergio', 'CEO', '', '', '', '2018-06-25 16:36:47', 95, 1),
-(1336, 11696, 5081, 'Beto', 'Papá', '', '', 'Usa bata verde', '2018-06-25 16:36:47', 95, 1),
-(1337, 11696, 5080, 'Pepe', '', '', '', '', '2018-06-25 16:37:31', 95, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `company_branch`
+-- Estructura de tabla para la tabla `company_branch`
 --
 
 CREATE TABLE IF NOT EXISTS `company_branch` (
@@ -135,22 +115,12 @@ CREATE TABLE IF NOT EXISTS `company_branch` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=5083 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `company_branch`
---
-
-INSERT INTO `company_branch` (`branch_id`, `company_id`, `country_id`, `province_id`, `region_id`, `zone_id`, `name`, `address`, `postal_code`, `phone`, `email`, `website`, `fax`, `main_branch`, `lat`, `lng`, `monday_from`, `monday_to`, `tuesday_from`, `tuesday_to`, `wensday_from`, `wensday_to`, `thursday_from`, `thursday_to`, `friday_from`, `friday_to`, `saturday_from`, `saturday_to`, `sunday_from`, `sunday_to`, `creation_date`, `created_by`, `organization_id`) VALUES
-(5082, 11694, 1, 1, 26, 28, 'Central', 'Robertson 1041', 'C1406', '12345678', 'mail@prueba.com.ar', 'www.prueba.com.ar', '12348900', 'Y', -34.6403159000000000, -58.4542103999999650, '10:00', '17:00', '10:00', '17:00', '', '', '10:00', '17:00', '', '', '12:00', '14:00', '', '', '2018-08-12 21:41:37', 8, 1),
-(5078, 11695, 6, 244, 0, 30, 'Central', 'Camp St 27', '9300', '922-12312303', 'internacional@mail.com', 'www.international.com', '', 'Y', -45.0313185000000000, 99.9999999999999999, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2018-06-21 23:36:47', 8, 1),
-(5080, 11696, 1, 1, 1, 31, 'Central', 'Río Cuarto 2698', 'C1292', '', '', '', '', 'Y', -34.6517410000000000, -58.3830000000000400, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2018-06-25 16:36:47', 95, 1),
-(5081, 11696, 1, 1, 26, 28, 'Beto', 'Robertson 1041', 'C1406', '', '', '', '', 'N', -34.6403159000000000, -58.4542103999999650, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2018-06-25 16:36:47', 95, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `company_type`
+-- Estructura de tabla para la tabla `company_type`
 --
 
 CREATE TABLE IF NOT EXISTS `company_type` (
@@ -165,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `company_type` (
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `company_type`
+-- Volcado de datos para la tabla `company_type`
 --
 
 INSERT INTO `company_type` (`type_id`, `name`, `status`, `creation_date`, `created_by`, `last_update`, `updated_by`, `organization_id`) VALUES
@@ -176,7 +146,7 @@ INSERT INTO `company_type` (`type_id`, `name`, `status`, `creation_date`, `creat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_country`
+-- Estructura de tabla para la tabla `core_country`
 --
 
 CREATE TABLE IF NOT EXISTS `core_country` (
@@ -188,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `core_country` (
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_country`
+-- Volcado de datos para la tabla `core_country`
 --
 
 INSERT INTO `core_country` (`country_id`, `name`, `short_name`, `lat`, `lng`) VALUES
@@ -202,7 +172,7 @@ INSERT INTO `core_country` (`country_id`, `name`, `short_name`, `lat`, `lng`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_group`
+-- Estructura de tabla para la tabla `core_group`
 --
 
 CREATE TABLE IF NOT EXISTS `core_group` (
@@ -217,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `core_group` (
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_group`
+-- Volcado de datos para la tabla `core_group`
 --
 
 INSERT INTO `core_group` (`group_id`, `organization_id`, `title`, `image`, `status`, `creation_date`, `last_modification`, `created_by`) VALUES
@@ -243,7 +213,7 @@ INSERT INTO `core_group` (`group_id`, `organization_id`, `title`, `image`, `stat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_log_email`
+-- Estructura de tabla para la tabla `core_log_email`
 --
 
 CREATE TABLE IF NOT EXISTS `core_log_email` (
@@ -264,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `core_log_email` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_log_error`
+-- Estructura de tabla para la tabla `core_log_error`
 --
 
 CREATE TABLE IF NOT EXISTS `core_log_error` (
@@ -274,12 +244,149 @@ CREATE TABLE IF NOT EXISTS `core_log_error` (
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created_by` int(11) NOT NULL,
   `creation_date` datetime NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=157706 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=157837 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `core_log_error`
+--
+
+INSERT INTO `core_log_error` (`log_id`, `error`, `type`, `description`, `created_by`, `creation_date`) VALUES
+(157706, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 10:42:04'),
+(157707, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 10:45:37'),
+(157708, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 10:52:40'),
+(157709, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 10:55:54'),
+(157710, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 10:57:39'),
+(157711, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 10:58:46'),
+(157712, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:00:04'),
+(157713, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:01:07'),
+(157714, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:08:08'),
+(157715, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:13:57'),
+(157716, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:35:14'),
+(157717, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:36:31'),
+(157718, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:36:56'),
+(157719, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:40:37'),
+(157720, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:50:23'),
+(157721, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:51:11'),
+(157722, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 11:57:50'),
+(157723, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 19:12:56'),
+(157724, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 19:21:45'),
+(157725, 'Unknown column ''monday_from'' in ''field list''', 'MySQL', 'INSERT INTO purchase (company_id,receiver_id,branch_id,agent_id,total,extra,expire_date,monday_from,monday_to,tuesday_from,tuesday_to,wensday_from,wensday_to,thursday_from,thursday_to,friday_from,friday_to,saturday_from,saturday_to,sunday_from,sunday_to,status,creation_date,created_by,organization_id)VALUES(11694,11694,5082,1342,186.1,''Informaci?n extra para el cliente'',''2018-10-17'',''10:00'',''17:00'',''10:00'',''17:00'','''','''',''10:00'',''17:00'','''','''',''12:00'',''14:00'','''','''',''A'',NOW(),8,1)', 8, '2018-10-15 19:23:31'),
+(157726, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''70,86.1,''2018-10-17'',2,NOW(),8,1),(157725,11694,5082,3,5,,,,20,100,''2018-10-15'','' at line 1', 'MySQL', 'INSERT INTO purchase_item (purchase_id,company_id,branch_id,product_id,price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,organization_id)VALUES(157725,11694,5082,1,1.23,20.00,10.00,,70,86.1,''2018-10-17'',2,NOW(),8,1),(157725,11694,5082,3,5,,,,20,100,''2018-10-15'',0,NOW(),8,1)', 8, '2018-10-15 19:23:31'),
+(157727, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''70,86.1,''2018-10-17'',2,NOW(),8,1),(1,11694,5082,3,5,,,,20,100,''2018-10-15'',0,NOW'' at line 1', 'MySQL', 'INSERT INTO purchase_item (purchase_id,company_id,branch_id,product_id,price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,organization_id)VALUES(1,11694,5082,1,1.23,20.00,10.00,,70,86.1,''2018-10-17'',2,NOW(),8,1),(1,11694,5082,3,5,,,,20,100,''2018-10-15'',0,NOW(),8,1)', 8, '2018-10-15 19:41:13'),
+(157728, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 19:46:38'),
+(157729, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:41:15'),
+(157730, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:42:32'),
+(157731, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:43:17'),
+(157732, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:47:03'),
+(157733, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:48:30'),
+(157734, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:48:33'),
+(157735, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:50:04'),
+(157736, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:50:30'),
+(157737, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:54:15'),
+(157738, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:54:29'),
+(157739, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:55:09'),
+(157740, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:56:49'),
+(157741, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 20:59:51'),
+(157742, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:00:25'),
+(157743, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:04:18'),
+(157744, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:07:38'),
+(157745, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:09:10'),
+(157746, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:11:45'),
+(157747, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:13:32'),
+(157748, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:15:46'),
+(157749, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:35:32'),
+(157750, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:37:34'),
+(157751, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:39:55'),
+(157752, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:47:07'),
+(157753, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:47:08'),
+(157754, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:48:59'),
+(157755, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:48:59'),
+(157756, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:50:27'),
+(157757, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:50:28'),
+(157758, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:51:17'),
+(157759, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:52:47'),
+(157760, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:54:09'),
+(157761, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 21:54:10'),
+(157762, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 22:38:18'),
+(157763, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 22:41:07'),
+(157764, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 22:42:50'),
+(157765, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 22:54:44'),
+(157766, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:05:58'),
+(157767, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:06:26'),
+(157768, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:07:31'),
+(157769, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:09:04'),
+(157770, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:09:06'),
+(157771, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:10:53'),
+(157772, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:18:48'),
+(157773, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:23:16'),
+(157774, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:23:17'),
+(157775, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:23:46'),
+(157776, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:28:04'),
+(157777, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:29:20'),
+(157778, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:29:22'),
+(157779, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-15 23:34:48'),
+(157780, 'Unknown column ''$1.23'' in ''field list''', 'MySQL', 'INSERT INTO quotation_item (quotation_id,company_id,branch_id,product_id,price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,organization_id)VALUES(70,11694,5082,1,1.23,20.00,10.00,1.7,3,3.69,''2018-10-28'',2,NOW(),8,1),(70,11694,5082,1,$1.23,20.00,12.00,2.33,50,0,''2018-10-28'',2,NOW(),8,1)', 8, '2018-10-15 23:59:48'),
+(157781, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:17:01'),
+(157782, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:17:48'),
+(157783, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:18:15'),
+(157784, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:18:55'),
+(157785, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:19:35'),
+(157786, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:20:29'),
+(157787, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:20:30'),
+(157788, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 00:20:43'),
+(157789, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''''.receiver_id.''=''.11694.'',branch_id=5082,agent_id=1342,delivery_date=''2018-10-25'' at line 1', 'MySQL', 'UPDATE quotation SET company_id=11694,''.receiver_id.''=''.11694.'',branch_id=5082,agent_id=1342,delivery_date=''2018-10-25'',extra=''Informaci?n extra'',additional_information='''',total=12.65,updated_by=8 WHERE quotation_id=73', 8, '2018-10-16 00:56:04'),
+(157790, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''8,1),(73,11694,5082,1,.23,20.00,12.00,2.33,51,11.73,''2018-10-17'',1,,8,1)'' at line 1', 'MySQL', 'INSERT INTO quotation_item (quotation_id,company_id,branch_id,product_id,price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,organization_id)VALUES(73,11694,5082,1,.23,20.00,10.00,1.70,4,0.92,''2018-10-25'',9,,8,1),(73,11694,5082,1,.23,20.00,12.00,2.33,51,11.73,''2018-10-17'',1,,8,1)', 8, '2018-10-16 00:56:04'),
+(157791, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''''receiver_id=11694'',branch_id=5082,agent_id=1342,delivery_date=''2018-10-25'',extr'' at line 1', 'MySQL', 'UPDATE quotation SET company_id=11694,''receiver_id=11694'',branch_id=5082,agent_id=1342,delivery_date=''2018-10-25'',extra=''Informaci?n extra'',additional_information='''',total=12.65,updated_by=8 WHERE quotation_id=73', 8, '2018-10-16 01:00:36'),
+(157792, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 01:01:28'),
+(157793, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 12:46:51'),
+(157794, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 12:47:14'),
+(157795, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:24:27'),
+(157796, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:24:40'),
+(157797, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:29:12'),
+(157798, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:31:09'),
+(157799, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:31:25'),
+(157800, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:34:46'),
+(157801, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:56:41'),
+(157802, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:57:33'),
+(157803, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:58:39'),
+(157804, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:59:06'),
+(157805, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-16 15:59:28'),
+(157806, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 00:11:14'),
+(157807, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 00:34:01'),
+(157808, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 01:12:58'),
+(157809, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '',''Info extra para el cliente'',''Uso interno'',''2018-10-10 00:00:00'',''2018-11-13 00'' at line 1', 'MySQL', 'INSERT INTO purchase (quotation_id,company_id,branch_id,sender_id,receiver_id,agent_id,currency_id,total,extra,additional_information,purchase_date,delivery_date,status,creation_date,created_by,organization_id)VALUES(74,11696,5080,0,11696,1335,,,''Info extra para el cliente'',''Uso interno'',''2018-10-10 00:00:00'',''2018-11-13 00:00:00'',''''P'',NOW(),8,1)', 8, '2018-10-17 01:16:06'),
+(157810, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''''2018-11-13 00:00:00'',34,NOW(),8,1),(157809,11696,5080,2,25.00,5.00,3.00,0.00,50'' at line 1', 'MySQL', 'INSERT INTO purchase_item (purchase_id,company_id,branch_id,product_id,price,width,height,depth,quantity,total,delivery_date,days,creation_date,created_by,organization_id)VALUES(157809,11696,5080,1,10.23,20.00,10.00,0.00,200,,''2018-11-13 00:00:00'',34,NOW(),8,1),(157809,11696,5080,2,25.00,5.00,3.00,0.00,50,,''2018-10-30 00:00:00'',20,NOW(),8,1)', 8, '2018-10-17 01:16:06'),
+(157811, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '',''Info extra para el cliente'',''Uso interno'',''2018-10-10 00:00:00'',''2018-11-13 00'' at line 1', 'MySQL', 'INSERT INTO purchase (quotation_id,company_id,branch_id,sender_id,receiver_id,agent_id,currency_id,total,extra,additional_information,purchase_date,delivery_date,status,creation_date,created_by,organization_id)VALUES(74,11696,5080,0,11696,1335,,,''Info extra para el cliente'',''Uso interno'',''2018-10-10 00:00:00'',''2018-11-13 00:00:00'',''P'',NOW(),8,1)', 8, '2018-10-17 01:19:55'),
+(157812, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''3296.00,''Info extra para el cliente'',''Uso interno'',''2018-10-10 00:00:00'',''2018-1'' at line 1', 'MySQL', 'INSERT INTO purchase (quotation_id,company_id,branch_id,sender_id,receiver_id,agent_id,currency_id,total,extra,additional_information,purchase_date,delivery_date,status,creation_date,created_by,organization_id)VALUES(74,11696,5080,0,11696,1335,,3296.00,''Info extra para el cliente'',''Uso interno'',''2018-10-10 00:00:00'',''2018-11-13 00:00:00'',''P'',NOW(),8,1)', 8, '2018-10-17 01:25:20'),
+(157813, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 01:36:38'),
+(157814, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 01:36:41'),
+(157815, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 01:39:48'),
+(157816, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 01:44:58'),
+(157817, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 01:55:29'),
+(157818, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '''' at line 1', 'MySQL', 'SELECT agent_id,name FROM company_agent WHERE branch_id=', 8, '2018-10-17 02:23:03'),
+(157819, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '''' at line 1', 'MySQL', 'SELECT agent_id,name FROM company_agent WHERE branch_id=', 8, '2018-10-17 02:26:24'),
+(157820, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:26:25'),
+(157821, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:29:43'),
+(157822, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:33:39'),
+(157823, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:34:41'),
+(157824, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:36:40'),
+(157825, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:36:51'),
+(157826, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:40:46'),
+(157827, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:45:31'),
+(157828, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:45:52'),
+(157829, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:47:13'),
+(157830, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:48:06'),
+(157831, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:51:48'),
+(157832, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:53:25'),
+(157833, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:53:49'),
+(157834, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''''.receiver_id.''=''.11696.'',branch_id=5081,agent_id=1336,delivery_date=''2019-09-25'' at line 1', 'MySQL', 'UPDATE purchase SET company_id=11696,''.receiver_id.''=''.11696.'',branch_id=5081,agent_id=1336,delivery_date=''2019-09-25'',extra=''Cotizaci?n de Prueba Cliente34567890'',additional_information=''Cotizaci?n de Prueba Uso interno1234567'',total=314.22,monday_from=''01:12'',monday_to=''09:20'',tuesday_from=''08:05'',tuesday_to=''14:10'',wensday_from='''',wensday_to='''',thursday_from=''10:30'',thursday_to=''20:50'',friday_from=''09:20''friday_to=''11:09'',saturday_from=''08:10'',saturday_to=''10:30'',sunday_from='''',sunday_to='''',updated_by=8 WHERE purchase_id=1', 8, '2018-10-17 03:16:29'),
+(157835, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''friday_to=''11:09'',saturday_from=''08:10'',saturday_to=''10:30'',sunday_from='''',sunda'' at line 1', 'MySQL', 'UPDATE purchase SET company_id=11696,receiver_id=11696,branch_id=5081,agent_id=1336,delivery_date=''2019-09-25'',extra=''Cotizaci?n de Prueba Cliente34567890'',additional_information=''Cotizaci?n de Prueba Uso interno1234567'',total=314.22,monday_from=''01:12'',monday_to=''09:20'',tuesday_from=''08:05'',tuesday_to=''14:10'',wensday_from='''',wensday_to='''',thursday_from=''10:30'',thursday_to=''20:50'',friday_from=''09:20''friday_to=''11:09'',saturday_from=''08:10'',saturday_to=''10:30'',sunday_from='''',sunday_to='''',updated_by=8 WHERE purchase_id=1', 8, '2018-10-17 03:17:33'),
+(157836, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 03:57:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_log_login`
+-- Estructura de tabla para la tabla `core_log_login`
 --
 
 CREATE TABLE IF NOT EXISTS `core_log_login` (
@@ -290,12 +397,24 @@ CREATE TABLE IF NOT EXISTS `core_log_login` (
   `tries` int(11) NOT NULL,
   `event` varchar(255) CHARACTER SET latin1 NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=MyISAM AUTO_INCREMENT=135 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `core_log_login`
+--
+
+INSERT INTO `core_log_login` (`log_id`, `user`, `password`, `ip`, `tries`, `event`, `date`) VALUES
+(135, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-15 13:40:57'),
+(136, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-15 22:12:50'),
+(137, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-16 15:46:42'),
+(138, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-16 18:24:31'),
+(139, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-17 02:44:37'),
+(140, 'sergio', '', '127.0.0.1', 0, 'OK', '2018-10-17 07:05:11');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_menu`
+-- Estructura de tabla para la tabla `core_menu`
 --
 
 CREATE TABLE IF NOT EXISTS `core_menu` (
@@ -309,10 +428,10 @@ CREATE TABLE IF NOT EXISTS `core_menu` (
   `status` char(1) CHARACTER SET latin1 NOT NULL DEFAULT 'A',
   `view_status` char(1) CHARACTER SET latin1 NOT NULL DEFAULT 'A',
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=143 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=145 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_menu`
+-- Volcado de datos para la tabla `core_menu`
 --
 
 INSERT INTO `core_menu` (`menu_id`, `parent_id`, `title`, `link`, `icon`, `position`, `public`, `status`, `view_status`, `organization_id`) VALUES
@@ -343,16 +462,11 @@ INSERT INTO `core_menu` (`menu_id`, `parent_id`, `title`, `link`, `icon`, `posit
 (27, 7, 'Listado de Grupos', '../../../core/modules/group/list.php', 'fa-list-ul', 2, 'N', 'A', 'A', 0),
 (28, 7, 'Editar Grupo', '../../../core/modules/group/edit.php', 'fa-pencil', 3, 'N', 'A', 'O', 0),
 (29, 8, 'Switcher', '../menu/switcher.php', '', 9, 'N', 'A', 'O', 0),
-(30, 0, 'Pepepito', '../modulo/pepe2php', 'fa-magic', 678, 'Y', 'I', 'O', 1),
 (31, 6, 'Perfiles Eliminados', '../profile/list.php?status=I', 'fa-trash', 3, 'N', 'A', 'A', 0),
 (32, 8, 'Menúes Eliminados', '../menu/list.php?status=I', 'fa-trash', 3, 'N', 'A', 'A', 0),
 (33, 7, 'Grupos Eliminados', '../../../core/modules/group/list.php?status=I', 'fa-trash', 3, 'N', 'A', 'A', 0),
 (34, 5, 'Mi Perfil', '../../../core/modules/user/profile.php', 'fa-child', 4, 'Y', 'A', 'O', 0),
 (35, 6, 'Editar Perfil', '../../../core/modules/profile/edit.php', 'fa-pencil', 3, 'N', 'A', 'O', 0),
-(36, 61, 'Clientes Prueba', '#', 'fa-suitcase', 90, 'N', 'A', 'A', 1),
-(37, 36, 'Nuevo Cliente', '../customer_test/new.php', 'fa-plus', 1, 'N', 'I', 'A', 1),
-(38, 36, 'Listado de Clientes', '../customer_test/list.php', 'fa-bars', 2, 'N', 'I', 'A', 1),
-(39, 36, 'Cuenta Corriente', '../customer_test/account.php', 'fa-dollar', 3, 'N', 'A', 'A', 1),
 (40, 1, 'Geolocalización', '#', 'fa-globe', 5, 'N', 'A', 'O', 1),
 (41, 40, 'Países', '#', 'fa-flag', 1, 'N', 'A', 'A', 1),
 (42, 40, 'Provincias', '#', 'fa-flag-checkered', 2, 'N', 'A', 'A', 1),
@@ -360,107 +474,43 @@ INSERT INTO `core_menu` (`menu_id`, `parent_id`, `title`, `link`, `icon`, `posit
 (44, 41, 'Listado de Países', '../geolocation_country/list.php', 'fa-list-ul', 1, 'N', 'A', 'A', 1),
 (45, 41, 'Nuevo País', '../geolocation_country/new.php', 'fa-plus-square', 0, 'N', 'A', 'A', 1),
 (46, 36, 'Nueva Cuenta Corriente', '../customer_test/new-account.php', 'fa-calculator', 3, 'N', 'A', 'A', 1),
-(47, 0, 'Empresas', '#', 'fa-building', 4, 'N', 'A', 'O', 1),
+(47, 0, 'Empresas', '#', 'fa-building', 3, 'N', 'A', 'O', 1),
 (48, 47, 'Nueva Empresa', '../company/new.php', 'fa-plus-square', 1, 'N', 'A', 'A', 1),
-(49, 0, 'Prueba', '#', 'fa-university', 9, 'N', 'I', 'A', 1),
-(54, 0, 'Proveedores', '#', 'fa-building', 6, 'N', 'A', 'O', 1),
 (50, 53, 'Marcas', '#', 'fa-trademark', 4, 'N', 'A', 'A', 1),
 (51, 50, 'Listado de Marcas', '../../../project/modules/brand/list.php', 'fa-list-ul', 2, 'N', 'A', 'A', 1),
 (52, 50, 'Nueva Marca', '../../../project/modules/brand/new.php', 'fa-plus-square', 1, 'N', 'A', 'A', 1),
-(53, 0, 'Productos', '#', 'fa-cubes', 0, 'N', 'A', 'A', 1),
+(53, 0, 'Productos', '#', 'fa-cubes', 4, 'N', 'A', 'A', 1),
 (55, 54, 'Nacionales', '#', 'fa-flag', 1, 'N', 'A', 'A', 1),
-(56, 54, 'Internacionales', '#', 'fa-globe', 2, 'N', 'A', 'A', 1),
 (57, 2, 'Editar Producto', '../../../project/modules/product/edit.php', 'fa-pencil', 3, 'N', 'A', 'O', 1),
-(58, 55, 'Crear Proveedor', '../provider_national/new.php', 'fa-plus-square', 1, 'N', 'I', 'A', 1),
-(59, 55, 'Editar Proveedor', '../provider_national/edit.php', 'fa-pencil-square', 4, 'N', 'I', 'O', 1),
-(60, 55, 'Listado de Proveedores', '../provider_national/list.php', 'fa-list-ul', 2, 'N', 'I', 'A', 1),
-(61, 0, 'Pruebas', '#', 'fa-bug', 9999, 'N', 'I', 'O', 1),
-(62, 61, 'Listado', '../prueba/list.php', 'fa-bed', 3, 'N', 'I', 'A', 1),
-(63, 0, 'Clientes', '#', 'fa-industry', 3, 'N', 'A', 'O', 1),
-(64, 67, 'Nuevo Cliente', '../customer_national/new.php', 'fa-plus-square', 1, 'N', 'I', 'A', 1),
-(65, 67, 'Listado de Clientes', '../customer_national/list.php', 'fa-align-justify', 2, 'N', 'I', 'A', 1),
-(66, 67, 'Editar Cliente', '../customer_national/edit.php', 'fa-pencil', 0, 'N', 'I', 'O', 1),
-(67, 63, 'Nacionales', '#', 'fa-flag', 1, 'N', 'A', 'A', 1),
-(68, 63, 'Internacionales', '#', 'fa-globe', 2, 'N', 'A', 'A', 1),
-(69, 0, 'Ventas', '#', 'fa-dollar', 2, 'N', 'A', 'O', 1),
-(70, 0, 'Estadísticas', '#', 'fa-area-chart', 15, 'N', 'I', 'O', 1),
-(71, 53, 'Stock', '#', 'fa-th', 0, 'N', 'I', 'O', 1),
-(72, 71, 'Modificar Stock', '#', 'fa-qrcode', 0, 'N', 'I', 'A', 1),
 (73, 107, 'Nueva Orden', '../../../project/modules/purchase/new.php?provider=Y', 'fa-ambulance', 1, 'N', 'A', 'A', 1),
 (74, 76, 'Ordenes Sin Confirmar', '../provider_national_order/list.php?status=P', 'fa-shopping-cart', 2, 'N', 'I', 'A', 1),
 (75, 102, 'Editar Cotización', '../../../project/modules/quotation/edit.php', 'fa-clipboard', 12, 'N', 'A', 'O', 1),
-(76, 0, 'Ordenes de Compra', '#', 'fa-truck', 10, 'N', 'A', 'A', 1),
+(76, 0, 'Ordenes de Compra', '#', 'fa-shopping-cart', 10, 'N', 'A', 'A', 1),
 (77, 107, 'Ordenes Pedidas', '../../../er_national_order/list.php?status=A', 'fa-truck', 3, 'N', 'A', 'A', 1),
-(78, 107, 'Historial de Ordenes', '../../../er_national_order/list.php?status=F', 'fa-hourglass-half', 6, 'N', 'A', 'A', 1),
-(79, 71, 'Ingresos Pendientes', '../stock/stock_pending.php?status=A', 'fa-sign-in', 5, 'N', 'I', 'A', 1),
-(80, 76, 'Generar Factura', '../../../er_national_order/invoice.php', 'fa-file-text', 99, 'N', 'I', 'O', 1),
-(81, 76, 'Ordenes a Controlar', '../provider_national_order/list.php?status=S', 'fa-list-alt', 4, 'N', 'I', 'A', 1),
-(82, 76, 'Ordenes Pend. Ingreso', '../provider_national_order/list.php?status=C', 'fa-sign-in', 4, 'N', 'I', 'A', 1),
-(83, 0, 'Facturación', '#', 'fa-file-text', 2, 'N', 'I', 'O', 1),
-(84, 83, 'A Proveedores', '#', 'fa-building', 2, 'N', 'A', 'A', 1),
-(85, 84, 'Pendientes', '../provider_national_invoice/list.php?status=P&operation=2', 'fa-exclamation-circle', 1, 'N', 'I', 'A', 1),
-(86, 84, 'En Proceso', '../provider_national_invoice/list.php?status=A&operation=2', 'fa-inbox', 2, 'N', 'I', 'A', 1),
-(87, 84, 'Archivo', '../provider_national_invoice/list.php?status=F&operation=2', 'fa-archive', 3, 'N', 'I', 'A', 1),
-(88, 71, 'Ingreso de Stock', '../stock/stock_entrance.php', 'fa-sign-in', 5, 'N', 'I', 'O', 1),
-(89, 55, 'Cotizaciones (Viejo)', '#', 'fa-clipboard', 3, 'N', 'A', 'A', 1),
-(90, 89, 'Nueva Cotización', '../provider_national_order/new.php?status=P', 'fa-cart-plus', 1, 'N', 'A', 'A', 1),
-(91, 89, 'Cotizaciones Activas', '../provider_national_order/list.php?status=P', 'fa-shopping-cart', 2, 'N', 'A', 'A', 1),
-(92, 89, 'Cotizaciones Archivadas', '../provider_national_order/list.php?status=Z', 'fa-archive', 5, 'N', 'A', 'A', 1),
-(93, 76, 'Ver Detalle', '../provider_national_order/view.php', 'fa-eye', 99, 'N', 'A', 'O', 1),
-(94, 1, 'Configuración', '#', 'fa-cogs', 90, 'N', 'I', 'A', 0),
-(95, 94, 'Datos de la Empresa', '../configuration_company/edit.php?id=1', 'fa-home', 1, 'N', 'I', 'A', 0),
-(96, 84, 'Cargar Factura', '../provider_national_invoice/fill.php', 'fa-download', 99, 'N', 'I', 'O', 1),
-(97, 0, 'Alejandro', '../../../core/modules/user/list.php', 'fa-graduation-cap', 5, 'N', 'I', 'A', 1),
-(98, 0, 'Empresas', '#', 'fa-building', 5, 'N', 'A', 'A', 1),
+(78, 76, 'Historial de Ordenes', '../../../project/modules/purchase/list.php?status=F&customer=Y', 'fa-hourglass-half', 99, 'N', 'A', 'A', 1),
+(98, 0, 'Empresas', '#', 'fa-building', 3, 'N', 'A', 'A', 1),
 (99, 98, 'Todas las Empresas', '../../../project/modules/company/list.php', 'fa-book', 0, 'N', 'A', 'A', 1),
 (100, 98, 'Proveedores', '../../../project/modules/company/list.php?provider=Y', 'fa-shopping-cart', 2, 'N', 'A', 'A', 1),
 (101, 98, 'Clientes', '../../../project/modules/company/list.php?customer=Y', 'fa-group', 3, 'N', 'A', 'A', 1),
 (102, 0, 'Cotizaciones', '#', 'fa-clipboard', 6, 'N', 'A', 'A', 1),
-(103, 102, 'De Proveedores', '#', 'fa-shopping-cart', 1, 'N', 'A', 'A', 1),
-(104, 102, 'A Clientes', '#', 'fa-users', 2, 'N', 'A', 'A', 1),
 (105, 98, 'Nueva Empresa', '../../../project/modules/company/new.php', 'fa-plus-square', 9, 'N', 'A', 'A', 1),
-(106, 70, 'Pepe', '#', 'fa-pie-chart', 9, 'N', 'I', 'A', 1),
-(107, 76, 'De Proveedores', '#', 'fa-industry', 1, 'N', 'A', 'A', 1),
-(108, 76, 'A Clientes', '#', 'fa-building', 2, 'N', 'A', 'A', 1),
 (109, 98, 'Editar Empresa', '../../../project/modules/company/edit.php', 'fa-building', 0, 'N', 'A', 'O', 1),
-(110, 103, 'Proveedores Nacionales', '../../../project/modules/quotation/list.php?provider=Y&international=N', 'fa-flag', 1, 'N', 'A', 'A', 1),
-(111, 103, 'Proveedores Internacionales', '../../../project/modules/quotation/list.php?provider=Y&international=Y', 'fa-globe', 2, 'N', 'A', 'A', 1),
-(112, 104, 'Clientes Nacionales', '../../../project/modules/quotation/list.php?customer=Y&international=N', 'fa-flag', 1, 'N', 'A', 'A', 1),
-(113, 104, 'Clientes Internacionales', '../../../project/modules/quotation/list.php?customer=Y&international=Y', 'fa-globe', 2, 'N', 'A', 'A', 1),
-(114, 103, 'Nueva Cotización', '../../../project/modules/quotation/new.php?provider=Y', 'fa-plus-square', 0, 'N', 'A', 'A', 1),
-(115, 104, 'Nueva Cotización', '../../../project/modules/quotation/new.php?customer=Y', 'fa-plus-square', 0, 'N', 'A', 'A', 1),
-(116, 104, 'Historial', '../../../project/modules/quotation/list.php?status=F&customer=Y', 'fa-hourglass-2', 99, 'N', 'A', 'A', 1),
-(117, 103, 'Historial', '../../../project/modules/quotation/list.php?status=F&provider=Y', 'fa-hourglass-2', 99, 'N', 'A', 'A', 1),
-(118, 53, 'Relaciones', '#', 'fa-exchange', 9, 'N', 'I', 'A', 1),
-(119, 118, 'Listado de Relaciones', '../../../project/modules/product/list.relation.php', 'fa-exchange', 3, 'N', 'I', 'A', 1),
-(120, 118, 'Nueva Relación', '../../../project/modules/product/new.relation.php', 'fa-plus-square', 1, 'N', 'I', 'A', 1),
-(121, 53, 'Artículos Genéricos', '#', 'fa-certificate', 80, 'N', 'I', 'O', 1),
-(122, 121, 'Nuevo Artículo', '../../../project/modules/product_abstract/new.php', 'fa-plus-square', 1, 'N', 'I', 'A', 1),
-(123, 121, 'Editar Artículo Genérico', '../../../project/modules/product_abstract/edit.php', 'fa-pencil-square', 0, 'N', 'I', 'O', 1),
-(124, 121, 'Listado de Artículos Pen.', '../../../project/modules/product_abstract/list.php?relation_status=A', 'fa-certificate', 4, 'N', 'I', 'A', 1),
-(125, 53, 'Listas de Precios', '#', 'fa-tag', 70, 'N', 'I', 'O', 1),
-(126, 125, 'Importar', '../../../project/modules/product_price_list/import.php', 'fa-database', 5, 'N', 'I', 'A', 1),
-(127, 121, 'Listado de Artículos Fin.', '../../../project/modules/product_abstract/list.php?relation_status=F', 'fa-check', 6, 'N', 'I', 'A', 1),
-(128, 125, 'Listado de Artículos', '../../../project/modules/product_price_list/list.php', 'fa-list-ul', 1, 'N', 'I', 'A', 1),
-(129, 125, 'Nueva Relación', '../../../project/modules/product_price_list/new.php', 'fa-plus-square', 1, 'N', 'I', 'A', 1),
-(130, 125, 'Comparar Listas de Precio', '#', 'fa-copy', 20, 'N', 'I', 'A', 1),
-(131, 130, 'Nueva Comparación', '../../../project/modules/product_comparation/new.php', 'fa-clone', 1, 'N', 'I', 'A', 1),
-(132, 130, 'Ver Comparaciones', '../../../project/modules/product_comparation/list.php', 'fa-list-ul', 5, 'N', 'I', 'A', 1),
-(133, 0, 'Configuración', '#', 'fa-cogs', 97, 'N', 'A', 'A', 1),
-(134, 133, 'Monedas', '#', 'fa-money', 2, 'N', 'I', 'O', 1),
-(135, 134, 'Nueva Moneda', '../../../project/modules/currency/new.php', 'fa-plus-square', 1, 'N', 'A', 'A', 1),
-(136, 134, 'Listado de Monedas', '../../../project/modules/currency/list.php', 'fa-list-ul', 5, 'N', 'A', 'A', 1),
-(137, 0, 'Camiones', '#', 'fa-truck', 4, 'N', 'A', 'A', 1),
+(112, 102, 'Cotizaciones Activas', '../../../project/modules/quotation/list.php?customer=Y&international=N', 'fa-clipboard', 1, 'N', 'A', 'A', 1),
+(115, 102, 'Nueva Cotización', '../../../project/modules/quotation/new.php?customer=Y', 'fa-plus-square', 0, 'N', 'A', 'A', 1),
+(116, 102, 'Historial', '../../../project/modules/quotation/list.php?status=F&customer=Y', 'fa-hourglass-2', 99, 'N', 'A', 'A', 1),
+(137, 0, 'Camiones', '#', 'fa-bus', 30, 'N', 'A', 'A', 1),
 (138, 137, 'Nuevo Camión', '../../../project/modules/truck/new.php', 'fa-plus-circle', 1, 'N', 'A', 'A', 1),
-(139, 137, 'Editar Camión', '../../../project/modules/truck/edit.php', 'fa-truck', 2, 'N', 'A', 'O', 1),
-(140, 137, 'Listar Camiones', '../../../project/modules/truck/list.php', 'fa-truck', 3, 'N', 'A', 'A', 1),
-(141, 108, 'Nueva Orden', '../../../project/modules/purchase/new.php?customer=Y', 'fa-ambulance', 1, 'N', 'A', 'A', 1),
-(142, 108, 'Ordenes Pendientes', '../../../project/modules/purchase/list.php?status=P', 'fa-exclamation-circle', 2, 'N', 'A', 'A', 1);
+(139, 137, 'Editar Camión', '../../../project/modules/truck/edit.php', 'fa-bus', 2, 'N', 'A', 'O', 1),
+(140, 137, 'Listar Camiones', '../../../project/modules/truck/list.php', 'fa-bus', 3, 'N', 'A', 'A', 1),
+(141, 76, 'Nueva Orden', '../../../project/modules/purchase/new.php?customer=Y', 'fa-cart-plus', 1, 'N', 'A', 'A', 1),
+(142, 76, 'Ordenes Pendientes', '../../../project/modules/purchase/list.php?status=P', 'fa-exclamation-circle', 2, 'N', 'A', 'A', 1),
+(143, 76, 'Ordenes Activas', '../../../project/modules/purchase/list.php?status=A', 'fa-shopping-cart', 5, 'N', 'A', 'A', 1),
+(144, 76, 'Editar Orden de Compra', '../../../project/modules/purchase/edit.php', 'fa-shopping-cart', 5, 'N', 'A', 'O', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_organization`
+-- Estructura de tabla para la tabla `core_organization`
 --
 
 CREATE TABLE IF NOT EXISTS `core_organization` (
@@ -488,17 +538,17 @@ CREATE TABLE IF NOT EXISTS `core_organization` (
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_organization`
+-- Volcado de datos para la tabla `core_organization`
 --
 
 INSERT INTO `core_organization` (`organization_id`, `name`, `corporate_name`, `logo`, `icon`, `address`, `postal_code`, `zone_id`, `region_id`, `province_id`, `country_id`, `lat`, `lng`, `cuit`, `gross_income_tax`, `iva`, `email`, `phone`, `fax`, `website`, `loader_text`) VALUES
-(1, 'RolPel', '', '../../../../skin/images/configuration/company/rolpel.png', 'dropbox', 'Río Cuarto 2698', 'C1292', 10, 10, 6, 1, -34.6376643999999900000000000000, -58.4095608999999740000000000000, 33647656779, '33647656779', 1, 'administracion@rolpel.com.ar', '4303-2464/5', '4303-2464/5', 'www.rolpel.com.ar', '<i class="fa fa-dropbox animated faa-tada faa-fast"></i> RolPel'),
-(2, 'Pepe Autos', '', '', 'car', '', '', 0, 0, 0, 0, 0.0000000000000000000000000000, 0.0000000000000000000000000000, 0, '', 0, '', '', '', '', 'Pepe <i class="fa fa-car faa-tada animated"></i> Autos');
+(1, 'RolPel', '', '../../../../skin/images/configuration/company/rolpel.png', 'dropbox', 'Río Cuarto 2698', 'C1292', 10, 10, 6, 1, '-34.6376643999999900000000000000', '-58.4095608999999740000000000000', 33647656779, '33647656779', 1, 'administracion@rolpel.com.ar', '4303-2464/5', '4303-2464/5', 'www.rolpel.com.ar', '<i class="fa fa-dropbox animated faa-tada faa-fast"></i> RolPel'),
+(2, 'Pepe Autos', '', '', 'car', '', '', 0, 0, 0, 0, '0.0000000000000000000000000000', '0.0000000000000000000000000000', 0, '', 0, '', '', '', '', 'Pepe <i class="fa fa-car faa-tada animated"></i> Autos');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_profile`
+-- Estructura de tabla para la tabla `core_profile`
 --
 
 CREATE TABLE IF NOT EXISTS `core_profile` (
@@ -513,7 +563,7 @@ CREATE TABLE IF NOT EXISTS `core_profile` (
 ) ENGINE=MyISAM AUTO_INCREMENT=366 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_profile`
+-- Volcado de datos para la tabla `core_profile`
 --
 
 INSERT INTO `core_profile` (`profile_id`, `organization_id`, `title`, `image`, `status`, `creation_date`, `last_modification`, `created_by`) VALUES
@@ -538,7 +588,7 @@ INSERT INTO `core_profile` (`profile_id`, `organization_id`, `title`, `image`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_province`
+-- Estructura de tabla para la tabla `core_province`
 --
 
 CREATE TABLE IF NOT EXISTS `core_province` (
@@ -551,7 +601,7 @@ CREATE TABLE IF NOT EXISTS `core_province` (
 ) ENGINE=MyISAM AUTO_INCREMENT=245 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_province`
+-- Volcado de datos para la tabla `core_province`
 --
 
 INSERT INTO `core_province` (`province_id`, `country_id`, `name`, `short_name`, `lat`, `lng`) VALUES
@@ -587,7 +637,7 @@ INSERT INTO `core_province` (`province_id`, `country_id`, `name`, `short_name`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_region`
+-- Estructura de tabla para la tabla `core_region`
 --
 
 CREATE TABLE IF NOT EXISTS `core_region` (
@@ -599,7 +649,7 @@ CREATE TABLE IF NOT EXISTS `core_region` (
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_region`
+-- Volcado de datos para la tabla `core_region`
 --
 
 INSERT INTO `core_region` (`region_id`, `province_id`, `country_id`, `name`, `short_name`) VALUES
@@ -634,17 +684,17 @@ INSERT INTO `core_region` (`region_id`, `province_id`, `country_id`, `name`, `sh
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_relation_group_profile`
+-- Estructura de tabla para la tabla `core_relation_group_profile`
 --
 
 CREATE TABLE IF NOT EXISTS `core_relation_group_profile` (
   `relation_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
   `profile_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=195 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=199 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_relation_group_profile`
+-- Volcado de datos para la tabla `core_relation_group_profile`
 --
 
 INSERT INTO `core_relation_group_profile` (`relation_id`, `group_id`, `profile_id`) VALUES
@@ -652,24 +702,24 @@ INSERT INTO `core_relation_group_profile` (`relation_id`, `group_id`, `profile_i
 (149, 11, 365),
 (27, 10, 355),
 (148, 7, 365),
-(192, 18, 360),
+(198, 18, 360),
 (129, 5, 364),
 (119, 6, 364),
 (131, 7, 364),
 (181, 17, 362),
 (180, 17, 361),
-(191, 17, 360),
-(190, 15, 360),
+(197, 17, 360),
+(196, 15, 360),
 (177, 15, 362),
 (178, 17, 359),
 (147, 6, 365),
 (183, 18, 362),
-(194, 13, 360);
+(195, 13, 360);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_relation_menu_group`
+-- Estructura de tabla para la tabla `core_relation_menu_group`
 --
 
 CREATE TABLE IF NOT EXISTS `core_relation_menu_group` (
@@ -679,7 +729,7 @@ CREATE TABLE IF NOT EXISTS `core_relation_menu_group` (
 ) ENGINE=MyISAM AUTO_INCREMENT=242 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 
 --
--- Dumping data for table `core_relation_menu_group`
+-- Volcado de datos para la tabla `core_relation_menu_group`
 --
 
 INSERT INTO `core_relation_menu_group` (`relation_id`, `menu_id`, `group_id`) VALUES
@@ -708,17 +758,17 @@ INSERT INTO `core_relation_menu_group` (`relation_id`, `menu_id`, `group_id`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_relation_menu_profile`
+-- Estructura de tabla para la tabla `core_relation_menu_profile`
 --
 
 CREATE TABLE IF NOT EXISTS `core_relation_menu_profile` (
   `relation_id` int(11) NOT NULL,
   `menu_id` int(11) NOT NULL,
   `profile_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=574 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=639 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_relation_menu_profile`
+-- Volcado de datos para la tabla `core_relation_menu_profile`
 --
 
 INSERT INTO `core_relation_menu_profile` (`relation_id`, `menu_id`, `profile_id`) VALUES
@@ -729,9 +779,8 @@ INSERT INTO `core_relation_menu_profile` (`relation_id`, `menu_id`, `profile_id`
 (18, 12, 352),
 (19, 16, 352),
 (20, 20, 352),
-(561, 20, 360),
 (107, 7, 357),
-(560, 16, 360),
+(638, 33, 360),
 (114, 5, 353),
 (115, 11, 353),
 (116, 12, 353),
@@ -741,93 +790,94 @@ INSERT INTO `core_relation_menu_profile` (`relation_id`, `menu_id`, `profile_id`
 (121, 21, 353),
 (122, 31, 353),
 (124, 7, 353),
-(559, 12, 360),
-(558, 11, 360),
-(572, 33, 360),
-(557, 5, 360),
+(637, 28, 360),
+(636, 27, 360),
+(635, 26, 360),
+(634, 7, 360),
 (129, 8, 353),
 (130, 9, 353),
 (131, 10, 353),
 (132, 17, 353),
 (133, 32, 353),
 (134, 29, 353),
-(556, 1, 360),
+(633, 35, 360),
 (148, 6, 353),
 (149, 13, 353),
-(571, 28, 360),
-(570, 27, 360),
-(569, 26, 360),
-(547, 110, 360),
-(546, 114, 360),
-(545, 103, 360),
-(544, 102, 360),
-(543, 140, 360),
-(542, 139, 360),
-(541, 138, 360),
-(573, 137, 360),
-(539, 105, 360),
-(538, 101, 360),
-(537, 100, 360),
-(551, 115, 360),
-(555, 75, 360),
-(536, 109, 360),
-(550, 104, 360),
-(554, 116, 360),
-(535, 99, 360),
-(534, 98, 360),
-(533, 25, 360),
-(532, 57, 360),
-(553, 113, 360),
-(531, 18, 360),
-(530, 19, 360),
-(529, 2, 360),
-(528, 51, 360),
-(549, 117, 360),
+(632, 31, 360),
+(631, 21, 360),
+(630, 4, 360),
+(629, 6, 360),
+(628, 34, 360),
+(627, 20, 360),
+(626, 16, 360),
+(625, 12, 360),
+(624, 11, 360),
+(623, 5, 360),
+(622, 1, 360),
+(621, 140, 360),
+(620, 139, 360),
+(619, 138, 360),
+(618, 137, 360),
+(617, 93, 360),
+(616, 78, 360),
+(615, 144, 360),
+(614, 143, 360),
+(613, 142, 360),
+(612, 141, 360),
+(611, 76, 360),
+(610, 116, 360),
+(609, 75, 360),
+(608, 112, 360),
+(607, 115, 360),
+(606, 102, 360),
+(605, 25, 360),
+(604, 57, 360),
 (192, 72, 364),
 (193, 79, 364),
-(568, 7, 360),
-(567, 35, 360),
-(566, 31, 360),
-(565, 21, 360),
-(564, 4, 360),
-(563, 6, 360),
-(552, 112, 360),
-(527, 52, 360),
+(603, 18, 360),
+(602, 19, 360),
+(601, 2, 360),
+(600, 51, 360),
+(599, 52, 360),
+(598, 50, 360),
+(597, 24, 360),
+(596, 22, 360),
 (281, 97, 361),
-(562, 34, 360),
+(595, 23, 360),
 (205, 91, 364),
-(526, 50, 360),
-(525, 24, 360),
+(594, 3, 360),
+(593, 53, 360),
 (280, 92, 361),
-(524, 22, 360),
+(592, 105, 360),
 (210, 92, 364),
 (490, 13, 359),
-(523, 23, 360),
+(591, 101, 360),
 (279, 91, 361),
 (489, 13, 362),
 (215, 97, 364),
 (315, 63, 365),
-(548, 111, 360),
+(590, 100, 360),
 (316, 69, 365),
-(522, 3, 360),
+(589, 109, 360),
 (274, 13, 365),
-(521, 53, 360),
-(520, 13, 360);
+(588, 99, 360),
+(587, 98, 360),
+(586, 13, 360);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_relation_user_group`
+-- Estructura de tabla para la tabla `core_relation_user_group`
 --
 
 CREATE TABLE IF NOT EXISTS `core_relation_user_group` (
   `relation_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=183 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_relation_user_group`
+-- Volcado de datos para la tabla `core_relation_user_group`
 --
 
 INSERT INTO `core_relation_user_group` (`relation_id`, `user_id`, `group_id`) VALUES
@@ -850,12 +900,13 @@ INSERT INTO `core_relation_user_group` (`relation_id`, `user_id`, `group_id`) VA
 (144, 88, 6),
 (149, 8, 11),
 (181, 95, 13),
-(180, 94, 13);
+(180, 94, 13),
+(184, 1, 18);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_relation_user_menu`
+-- Estructura de tabla para la tabla `core_relation_user_menu`
 --
 
 CREATE TABLE IF NOT EXISTS `core_relation_user_menu` (
@@ -865,7 +916,7 @@ CREATE TABLE IF NOT EXISTS `core_relation_user_menu` (
 ) ENGINE=MyISAM AUTO_INCREMENT=588 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_relation_user_menu`
+-- Volcado de datos para la tabla `core_relation_user_menu`
 --
 
 INSERT INTO `core_relation_user_menu` (`relation_id`, `menu_id`, `user_id`) VALUES
@@ -934,7 +985,7 @@ INSERT INTO `core_relation_user_menu` (`relation_id`, `menu_id`, `user_id`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_user`
+-- Estructura de tabla para la tabla `core_user`
 --
 
 CREATE TABLE IF NOT EXISTS `core_user` (
@@ -956,19 +1007,18 @@ CREATE TABLE IF NOT EXISTS `core_user` (
 ) ENGINE=MyISAM AUTO_INCREMENT=98 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_user`
+-- Volcado de datos para la tabla `core_user`
 --
 
 INSERT INTO `core_user` (`user_id`, `organization_id`, `user`, `password`, `first_name`, `last_name`, `email`, `phone`, `profile_id`, `img`, `status`, `tries`, `last_access`, `creation_date`, `creator_id`) VALUES
-(1, 1, 'sergio', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sergio', 'Rodriguez', 'carlos@rolpel.com.ar', '', 360, '../../../../skin/images/users/default/default11.png', 'A', 0, '2018-07-18 19:39:01', '2018-06-18 01:22:39', 8),
+(1, 1, 'sergio', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Sergio', 'Rodriguez', 'carlos@rolpel.com.ar', '', 360, '../../../../skin/images/users/default/default11.png', 'A', 0, '2018-10-17 04:05:11', '2018-06-18 01:22:39', 8),
 (2, 1, 'ana', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ana', 'Rodriguez', 'cobranzas@rolpel.com.ar', '', 360, '../../../../skin/images/users/default/default06.png', 'A', 0, '2018-06-22 09:20:18', '2018-04-27 14:18:36', 8),
-(8, 1, 'cheketo', '49e09dc76bf5ba6fdcbfb710a7d8842d867bad54', 'Alejandro', 'Romero', 'romero.m.alejandro@gmail.com', '', 333, '../../../../skin/images/users/default/default21.png', 'A', 0, '2018-09-25 17:20:35', '0000-00-00 00:00:00', 0);
-
+(8, 1, 'cheketo', '49e09dc76bf5ba6fdcbfb710a7d8842d867bad54', 'Alejandro', 'Romero', 'romero.m.alejandro@gmail.com', '', 333, '../../../../skin/images/users/default/default21.png', 'A', 0, '2018-10-16 23:44:37', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `core_view_group_list`
+-- Estructura Stand-in para la vista `core_view_group_list`
 --
 CREATE TABLE IF NOT EXISTS `core_view_group_list` (
 `group_id` int(11)
@@ -986,7 +1036,7 @@ CREATE TABLE IF NOT EXISTS `core_view_group_list` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `core_view_menu_list`
+-- Estructura Stand-in para la vista `core_view_menu_list`
 --
 CREATE TABLE IF NOT EXISTS `core_view_menu_list` (
 `menu_id` int(11)
@@ -1011,7 +1061,7 @@ CREATE TABLE IF NOT EXISTS `core_view_menu_list` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `core_view_profile_list`
+-- Estructura Stand-in para la vista `core_view_profile_list`
 --
 CREATE TABLE IF NOT EXISTS `core_view_profile_list` (
 `profile_id` int(11)
@@ -1029,7 +1079,7 @@ CREATE TABLE IF NOT EXISTS `core_view_profile_list` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `core_view_user_list`
+-- Estructura Stand-in para la vista `core_view_user_list`
 --
 CREATE TABLE IF NOT EXISTS `core_view_user_list` (
 `user_id` int(11)
@@ -1056,7 +1106,7 @@ CREATE TABLE IF NOT EXISTS `core_view_user_list` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `core_zone`
+-- Estructura de tabla para la tabla `core_zone`
 --
 
 CREATE TABLE IF NOT EXISTS `core_zone` (
@@ -1069,7 +1119,7 @@ CREATE TABLE IF NOT EXISTS `core_zone` (
 ) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `core_zone`
+-- Volcado de datos para la tabla `core_zone`
 --
 
 INSERT INTO `core_zone` (`zone_id`, `region_id`, `province_id`, `country_id`, `name`, `short_name`) VALUES
@@ -1108,7 +1158,7 @@ INSERT INTO `core_zone` (`zone_id`, `region_id`, `province_id`, `country_id`, `n
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- Estructura de tabla para la tabla `product`
 --
 
 CREATE TABLE IF NOT EXISTS `product` (
@@ -1128,43 +1178,12 @@ CREATE TABLE IF NOT EXISTS `product` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=50494 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`product_id`, `code`, `price`, `organization_id`, `category_id`, `brand_id`, `title`, `width`, `height`, `depth`, `description`, `status`, `modification_date`, `creation_date`, `created_by`, `updated_by`) VALUES
-(50489, '', 1.23, 1, 164, 1000, 'Caja2', 20.00, 10.00, 0.00, 'Caja de cartón cuadrada o rectangular', 'A', '2018-06-22 02:14:48', '2018-06-21 23:14:48', 8, 95),
-(50490, '', 0.00, 1, 164, 1000, 'Rollo', 0.00, 0.00, 0.00, '', 'A', '2018-06-22 05:45:01', '2018-06-22 02:45:01', 95, 0),
-(50491, '', 0.00, 1, 165, 1000, 'Rollo2', 0.00, 0.00, 0.00, '', 'A', '2018-06-25 20:18:03', '2018-06-25 17:18:03', 95, 0),
-(50492, '', 0.00, 1, 165, 1000, 'Pruebón', 0.00, 0.00, 0.00, '', 'A', '2018-08-27 05:20:32', '2018-08-27 02:20:32', 8, 0),
-(50493, '', 12.45, 1, 166, 1000, 'Pruebín', 1.50, 0.00, 1.50, '', 'A', '2018-08-27 05:22:07', '2018-08-27 02:22:07', 8, 0);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_abstract`
---
-
-CREATE TABLE IF NOT EXISTS `product_abstract` (
-  `abstract_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `order_number` int(11) NOT NULL,
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A' COMMENT 'A=ACTIVO / I=INACTIVO',
-  `relation_status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A' COMMENT 'A=En Proceso, F=Todas las relaciones establecidas',
-  `creation_date` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=12188 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_brand`
+-- Estructura de tabla para la tabla `product_brand`
 --
 
 CREATE TABLE IF NOT EXISTS `product_brand` (
@@ -1175,19 +1194,12 @@ CREATE TABLE IF NOT EXISTS `product_brand` (
   `country_id` int(11) NOT NULL,
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
   `creation_date` datetime NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `product_brand`
---
-
-INSERT INTO `product_brand` (`brand_id`, `organization_id`, `name`, `name_short`, `country_id`, `status`, `creation_date`) VALUES
-(1000, 1, 'RolPel', '', 0, 'A', '2018-06-21 21:54:14');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_category`
+-- Estructura de tabla para la tabla `product_category`
 --
 
 CREATE TABLE IF NOT EXISTS `product_category` (
@@ -1201,68 +1213,12 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   `created_by` int(11) NOT NULL,
   `last_modification` datetime NOT NULL,
   `updated_by` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=167 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `product_category`
---
-
-INSERT INTO `product_category` (`category_id`, `organization_id`, `parent_id`, `title`, `short_title`, `status`, `creation_date`, `created_by`, `last_modification`, `updated_by`) VALUES
-(164, 1, 0, 'Cartones', 'Cartones', 'A', '2018-06-21 21:53:06', 8, '0000-00-00 00:00:00', 0),
-(165, 1, 0, 'Estandar', 'Estandar', 'A', '2018-06-25 17:16:59', 95, '0000-00-00 00:00:00', 0),
-(166, 1, 0, 'No estandar', 'No estandar', 'A', '2018-06-25 17:17:15', 95, '0000-00-00 00:00:00', 0);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_comparation`
---
-
-CREATE TABLE IF NOT EXISTS `product_comparation` (
-  `comparation_id` int(11) NOT NULL,
-  `stock_min` char(1) COLLATE utf8_unicode_ci NOT NULL,
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
-  `creation_date` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Contiene las comparaciones de listados de precios de los proveedores.';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_comparation_item`
---
-
-CREATE TABLE IF NOT EXISTS `product_comparation_item` (
-  `item_id` int(11) NOT NULL,
-  `comparation_id` int(11) NOT NULL,
-  `relation_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `abstract_id` int(11) NOT NULL,
-  `brand_id` int(11) NOT NULL,
-  `position` int(5) NOT NULL COMMENT 'Posicion dentro de la ponderacion de opciones para un articulo',
-  `order_quantity` int(11) NOT NULL COMMENT 'Cantidad de stock que se planea pedir de ese articulo a ese proveedor',
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
-  `price` decimal(10,2) NOT NULL COMMENT 'Supuesto precio al que el proveedor vende ese articulo',
-  `stock` int(11) NOT NULL COMMENT 'Supuesto stock disponible del proveedor',
-  `currency_id` int(11) NOT NULL,
-  `dollar_exchange_rate` decimal(10,2) NOT NULL COMMENT 'Tasa cambiaria que se aplico para obtener el precio de venta en dolares',
-  `list_date` date NOT NULL COMMENT 'Fecha de la lista de precios del proveedor, de la cual se obtuvo el precio y el stock',
-  `actual_stock` int(11) NOT NULL COMMENT 'Stock para ese articulo',
-  `abstract_stock` int(11) NOT NULL COMMENT 'Sumatoria del stock para los articulos pertenecientes a las marcas seleccionadas',
-  `actual_stock_diff` int(11) NOT NULL COMMENT 'Diferencia entre el stock del articulo y su stock minimo',
-  `abstract_stock_diff` int(11) NOT NULL COMMENT 'Diferencia entre la sumatoria de stocks de los articulos para las marcas seleccionadas  y la sumatoria de stock minimos de los mismos articulos',
-  `single_comparation` tinyint(1) NOT NULL COMMENT 'Este campo indica si es el único artículo en comparación de un abstract_id',
-  `creation_date` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=580 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_image`
+-- Estructura de tabla para la tabla `product_image`
 --
 
 CREATE TABLE IF NOT EXISTS `product_image` (
@@ -1275,105 +1231,7 @@ CREATE TABLE IF NOT EXISTS `product_image` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_relation`
---
-
-CREATE TABLE IF NOT EXISTS `product_relation` (
-  `relation_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `abstract_id` int(11) NOT NULL,
-  `import_id` int(11) NOT NULL,
-  `currency_id` int(11) NOT NULL,
-  `brand_id` int(11) NOT NULL,
-  `provider_brand_id` int(11) NOT NULL,
-  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `price` decimal(20,2) NOT NULL,
-  `stock` int(11) NOT NULL,
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
-  `list_date` date NOT NULL,
-  `creation_date` datetime NOT NULL,
-  `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=5055 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_relation_brand`
---
-
-CREATE TABLE IF NOT EXISTS `product_relation_brand` (
-  `brand_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `product_brand_id` int(11) NOT NULL,
-  `import_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
-  `creation_date` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=6226 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_relation_import`
---
-
-CREATE TABLE IF NOT EXISTS `product_relation_import` (
-  `import_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `brand_id` int(11) NOT NULL,
-  `currency_id` int(11) NOT NULL,
-  `list_date` date NOT NULL,
-  `file` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
-  `creation_date` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_relation_import_item`
---
-
-CREATE TABLE IF NOT EXISTS `product_relation_import_item` (
-  `item_id` int(11) NOT NULL,
-  `import_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `abstract_id` int(11) NOT NULL,
-  `brand_id` int(11) NOT NULL,
-  `provider_brand_id` int(11) NOT NULL,
-  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
-  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `stock` int(11) NOT NULL,
-  `brand` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `original_brand_id` int(11) NOT NULL,
-  `original_abstract_id` int(11) NOT NULL,
-  `original_code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `original_price` decimal(10,2) NOT NULL,
-  `original_stock` int(11) NOT NULL,
-  `creation_date` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=78429 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `purchase`
+-- Estructura de tabla para la tabla `purchase`
 --
 
 CREATE TABLE IF NOT EXISTS `purchase` (
@@ -1387,12 +1245,24 @@ CREATE TABLE IF NOT EXISTS `purchase` (
   `total` decimal(20,2) NOT NULL,
   `quotation_id` int(11) NOT NULL,
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'P',
-  `quotation_date` date NOT NULL,
+  `purchase_date` date NOT NULL,
   `delivery_date` datetime NOT NULL,
-  `expire_date` datetime NOT NULL,
-  `expire_days` int(11) NOT NULL,
   `extra` text COLLATE utf8_unicode_ci NOT NULL,
   `additional_information` text COLLATE utf8_unicode_ci NOT NULL,
+  `monday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `monday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `tuesday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `tuesday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `wensday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `wensday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `thursday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `thursday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `friday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `friday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `saturday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `saturday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `sunday_from` char(5) COLLATE utf8_unicode_ci NOT NULL,
+  `sunday_to` char(5) COLLATE utf8_unicode_ci NOT NULL,
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1403,7 +1273,7 @@ CREATE TABLE IF NOT EXISTS `purchase` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchase_email`
+-- Estructura de tabla para la tabla `purchase_email`
 --
 
 CREATE TABLE IF NOT EXISTS `purchase_email` (
@@ -1425,7 +1295,7 @@ CREATE TABLE IF NOT EXISTS `purchase_email` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchase_file`
+-- Estructura de tabla para la tabla `purchase_file`
 --
 
 CREATE TABLE IF NOT EXISTS `purchase_file` (
@@ -1447,7 +1317,7 @@ CREATE TABLE IF NOT EXISTS `purchase_file` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchase_file_new`
+-- Estructura de tabla para la tabla `purchase_file_new`
 --
 
 CREATE TABLE IF NOT EXISTS `purchase_file_new` (
@@ -1466,7 +1336,7 @@ CREATE TABLE IF NOT EXISTS `purchase_file_new` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchase_item`
+-- Estructura de tabla para la tabla `purchase_item`
 --
 
 CREATE TABLE IF NOT EXISTS `purchase_item` (
@@ -1489,19 +1359,12 @@ CREATE TABLE IF NOT EXISTS `purchase_item` (
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `purchase_item`
---
-
-INSERT INTO `purchase_item` (`item_id`, `purchase_id`, `company_id`, `branch_id`, `product_id`, `currency_id`, `width`, `height`, `depth`, `price`, `quantity`, `total`, `delivery_date`, `days`, `created_by`, `creation_date`, `modification_date`, `updated_by`, `organization_id`) VALUES
-(1, 157705, 11694, 5082, 50491, 0, 1.00, 5.00, 1.00, 1200.00, 5, 6000.00, '2018-09-30 00:00:00', 5, 8, '2018-09-25 17:40:49', '2018-09-25 20:40:49', 0, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quotation`
+-- Estructura de tabla para la tabla `quotation`
 --
 
 CREATE TABLE IF NOT EXISTS `quotation` (
@@ -1520,26 +1383,18 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   `expire_date` datetime NOT NULL,
   `expire_days` int(11) NOT NULL,
   `extra` text COLLATE utf8_unicode_ci NOT NULL,
+  `additional_information` text CHARACTER SET utf8 NOT NULL,
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-ALTER TABLE `quotation` ADD `additional_information` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `extra`;
-
---
--- Dumping data for table `quotation`
---
-
-INSERT INTO `quotation` (`quotation_id`, `company_id`, `branch_id`, `sender_id`, `receiver_id`, `agent_id`, `currency_id`, `total`, `type_id`, `status`, `quotation_date`, `delivery_date`, `expire_date`, `expire_days`, `extra`, `creation_date`, `created_by`, `modification_date`, `updated_by`, `organization_id`) VALUES
-(69, 11694, 5075, 0, 11694, 1323, 0, 1550.00, 0, 'A', '0000-00-00', '2018-07-02 00:00:00', '0000-00-00 00:00:00', 0, 'Cotización de Prueba', '2018-06-22 03:11:28', 95, '2018-06-22 06:11:28', 0, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quotation_email`
+-- Estructura de tabla para la tabla `quotation_email`
 --
 
 CREATE TABLE IF NOT EXISTS `quotation_email` (
@@ -1556,12 +1411,12 @@ CREATE TABLE IF NOT EXISTS `quotation_email` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quotation_file`
+-- Estructura de tabla para la tabla `quotation_file`
 --
 
 CREATE TABLE IF NOT EXISTS `quotation_file` (
@@ -1578,12 +1433,12 @@ CREATE TABLE IF NOT EXISTS `quotation_file` (
   `quotation_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quotation_file_new`
+-- Estructura de tabla para la tabla `quotation_file_new`
 --
 
 CREATE TABLE IF NOT EXISTS `quotation_file_new` (
@@ -1597,21 +1452,12 @@ CREATE TABLE IF NOT EXISTS `quotation_file_new` (
   `creation_date` datetime NOT NULL,
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=154 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `quotation_file_new`
---
-
-INSERT INTO `quotation_file_new` (`file_id`, `product_id`, `name`, `url`, `status`, `created_by`, `updated_by`, `creation_date`, `modification_date`, `organization_id`) VALUES
-(151, 0, 'roadtrip', '../../../../skin/files/quotation/new/roadtrip.jpg', 'I', 8, 8, '2018-08-12 01:07:07', '2018-08-12 04:07:20', 1),
-(152, 0, 'roadtrip', '../../../../skin/files/quotation/new/roadtrip.jpg', 'I', 8, 8, '2018-08-12 01:07:25', '2018-08-12 04:07:36', 1),
-(153, 0, 'roadtrip', '../../../../skin/files/quotation/new/roadtrip.jpg', 'I', 8, 8, '2018-08-12 01:07:30', '2018-08-12 04:07:39', 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quotation_item`
+-- Estructura de tabla para la tabla `quotation_item`
 --
 
 CREATE TABLE IF NOT EXISTS `quotation_item` (
@@ -1621,6 +1467,9 @@ CREATE TABLE IF NOT EXISTS `quotation_item` (
   `branch_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `currency_id` int(11) NOT NULL,
+  `width` decimal(6,2) NOT NULL,
+  `height` decimal(6,2) NOT NULL,
+  `depth` decimal(6,2) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `quantity` int(11) NOT NULL,
   `total` decimal(12,2) NOT NULL,
@@ -1631,22 +1480,12 @@ CREATE TABLE IF NOT EXISTS `quotation_item` (
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=1183 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-ALTER TABLE `quotation_item` ADD `width` DECIMAL(6,2) NOT NULL AFTER `currency_id`, ADD `height` DECIMAL(6,2) NOT NULL AFTER `width`, ADD `depth` DECIMAL(6,2) NOT NULL AFTER `height`;
-
---
--- Dumping data for table `quotation_item`
---
-
-INSERT INTO `quotation_item` (`item_id`, `quotation_id`, `company_id`, `branch_id`, `product_id`, `currency_id`, `price`, `quantity`, `total`, `delivery_date`, `days`, `created_by`, `creation_date`, `modification_date`, `updated_by`, `organization_id`) VALUES
-(1181, 69, 11694, 5075, 50489, 0, 5.00, 70, 350.00, '2018-07-02 00:00:00', 10, 95, '2018-06-22 03:11:28', '2018-06-22 06:11:28', 0, 1),
-(1182, 69, 11694, 5075, 50490, 0, 20.00, 60, 1200.00, '2018-07-02 00:00:00', 10, 95, '2018-06-22 03:11:28', '2018-06-22 06:11:28', 0, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `relation_company_broker`
+-- Estructura de tabla para la tabla `relation_company_broker`
 --
 
 CREATE TABLE IF NOT EXISTS `relation_company_broker` (
@@ -1661,7 +1500,7 @@ CREATE TABLE IF NOT EXISTS `relation_company_broker` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tax_iva_type`
+-- Estructura de tabla para la tabla `tax_iva_type`
 --
 
 CREATE TABLE IF NOT EXISTS `tax_iva_type` (
@@ -1672,29 +1511,29 @@ CREATE TABLE IF NOT EXISTS `tax_iva_type` (
 ) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `tax_iva_type`
+-- Volcado de datos para la tabla `tax_iva_type`
 --
 
 INSERT INTO `tax_iva_type` (`type_id`, `name`, `status`, `percentage`) VALUES
-(1, 'IVA Responsable Inscripto', 'A', 21.000),
-(2, 'IVA Responsable No Inscripto', 'A', 21.000),
-(4, 'IVA Sujeto Excento', 'A', 0.000),
-(5, 'Consumidor Final', 'A', 21.000),
-(6, 'Sujeto No Categorizado', 'A', 21.000),
-(7, 'Proveedor de Exterior', 'A', 0.000),
-(8, 'Cliente del Exterior', 'A', 21.000),
-(9, 'IVA Liberado – Ley Nº 19.640', 'A', 0.000),
-(10, 'IVA Responsable Inscripto – Agente de Percepción', 'A', 21.000),
-(11, 'Pequeño Contribuyente Eventual', 'A', 10.500),
-(12, 'Responsable Monotributo', 'A', 0.000),
-(13, 'Monotributista Social', 'A', 0.000),
-(14, 'Pequeño Contribuyente Eventual Social', 'A', 0.000),
-(3, 'IVA No Responsable', 'A', 0.000);
+(1, 'IVA Responsable Inscripto', 'A', '21.000'),
+(2, 'IVA Responsable No Inscripto', 'A', '21.000'),
+(4, 'IVA Sujeto Excento', 'A', '0.000'),
+(5, 'Consumidor Final', 'A', '21.000'),
+(6, 'Sujeto No Categorizado', 'A', '21.000'),
+(7, 'Proveedor de Exterior', 'A', '0.000'),
+(8, 'Cliente del Exterior', 'A', '21.000'),
+(9, 'IVA Liberado – Ley Nº 19.640', 'A', '0.000'),
+(10, 'IVA Responsable Inscripto – Agente de Percepción', 'A', '21.000'),
+(11, 'Pequeño Contribuyente Eventual', 'A', '10.500'),
+(12, 'Responsable Monotributo', 'A', '0.000'),
+(13, 'Monotributista Social', 'A', '0.000'),
+(14, 'Pequeño Contribuyente Eventual Social', 'A', '0.000'),
+(3, 'IVA No Responsable', 'A', '0.000');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `truck`
+-- Estructura de tabla para la tabla `truck`
 --
 
 CREATE TABLE IF NOT EXISTS `truck` (
@@ -1709,86 +1548,351 @@ CREATE TABLE IF NOT EXISTS `truck` (
   `status` char(1) NOT NULL DEFAULT 'A',
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
-  `last_update` timestamp NOT NULL,
+  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `truck`
---
-
-INSERT INTO `truck` (`truck_id`, `driver_id`, `brand`, `model`, `year`, `plate`, `code`, `capacity`, `status`, `creation_date`, `created_by`, `last_update`, `updated_by`, `organization_id`) VALUES
-(1, 96, 'Mercedes-Benz', 'Axor 1933 LS/36', 2017, 'AB-123-CD', 'Camión Rojo', 12009, 'A', '2018-06-18 03:10:10', 8, '0000-00-00 00:00:00', 8, 1);
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `core_view_group_list`
+-- Estructura Stand-in para la vista `view_brand_list`
+--
+CREATE TABLE IF NOT EXISTS `view_brand_list` (
+`brand_id` int(11)
+,`product_id` int(11)
+,`category_id` int(5)
+,`organization_id` int(11)
+,`name` varchar(255)
+,`code` varchar(255)
+,`status` char(1)
+,`creation_date` datetime
+,`category` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_category_list`
+--
+CREATE TABLE IF NOT EXISTS `view_category_list` (
+`category_id` int(5)
+,`organization_id` int(11)
+,`parent_id` int(5)
+,`title` varchar(255)
+,`short_title` varchar(25)
+,`status` char(1)
+,`creation_date` datetime
+,`created_by` int(11)
+,`updated_by` int(11)
+,`last_modification` datetime
+,`parent` varchar(255)
+,`parent_short` varchar(25)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_company_list`
+--
+CREATE TABLE IF NOT EXISTS `view_company_list` (
+`company_id` int(11)
+,`old_id` int(11)
+,`branch_id` int(11)
+,`broker_id` int(11)
+,`type_id` int(11)
+,`organization_id` int(11)
+,`name` varchar(255)
+,`type` varchar(255)
+,`cuit` bigint(15)
+,`iva_id` int(5)
+,`iva` varchar(255)
+,`iibb` varchar(255)
+,`international` char(1)
+,`international_text` varchar(10)
+,`vat` varchar(255)
+,`customer` char(1)
+,`provider` char(1)
+,`relation_text` varchar(19)
+,`logo` varchar(255)
+,`status` char(1)
+,`balance` decimal(30,2)
+,`branch` varchar(150)
+,`address` varchar(255)
+,`postal_code` varchar(150)
+,`phone` varchar(150)
+,`email` varchar(255)
+,`website` varchar(255)
+,`fax` varchar(150)
+,`main_branch` char(1)
+,`country_id` int(11)
+,`country` varchar(255)
+,`country_short` varchar(50)
+,`province_id` int(11)
+,`province` varchar(255)
+,`province_short` varchar(50)
+,`region_id` int(11)
+,`region` varchar(255)
+,`region_short` varchar(50)
+,`zone_id` int(11)
+,`zone` varchar(255)
+,`zone_short` varchar(50)
+,`lat` decimal(18,16)
+,`lng` decimal(18,16)
+,`broker` varchar(511)
+,`broker_email` varchar(255)
+,`broker_img` varchar(255)
+,`creation_date` datetime
+,`last_update` timestamp
+,`created_by` int(11)
+,`updated_by` int(11)
+,`monday_from` char(5)
+,`monday_to` char(5)
+,`tuesday_from` char(5)
+,`tuesday_to` char(5)
+,`wensday_from` char(5)
+,`wensday_to` char(5)
+,`thursday_from` char(5)
+,`thursday_to` char(5)
+,`friday_from` char(5)
+,`friday_to` char(5)
+,`saturday_from` char(5)
+,`saturday_to` char(5)
+,`sunday_from` char(5)
+,`sunday_to` char(5)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_product_list`
+--
+CREATE TABLE IF NOT EXISTS `view_product_list` (
+`product_id` int(11)
+,`title` varchar(255)
+,`organization_id` int(11)
+,`category_id` int(11)
+,`brand_id` int(11)
+,`price` decimal(10,2)
+,`width` decimal(6,2)
+,`height` decimal(6,2)
+,`depth` decimal(6,2)
+,`description` text
+,`status` char(1)
+,`creation_date` datetime
+,`modification_date` timestamp
+,`created_by` int(11)
+,`updated_by` int(11)
+,`category` varchar(255)
+,`brand` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_purchase_list`
+--
+CREATE TABLE IF NOT EXISTS `view_purchase_list` (
+`purchase_id` int(11)
+,`quotation_id` int(11)
+,`company_id` int(11)
+,`branch_id` int(11)
+,`sender_id` int(11)
+,`receiver_id` int(11)
+,`agent_id` int(11)
+,`status` char(1)
+,`extra` text
+,`creation_date` datetime
+,`purchase_delivery_date` datetime
+,`purchase_date` datetime
+,`monday_from` char(5)
+,`monday_to` char(5)
+,`tuesday_from` char(5)
+,`tuesday_to` char(5)
+,`wensday_from` char(5)
+,`wensday_to` char(5)
+,`thursday_from` char(5)
+,`thursday_to` char(5)
+,`friday_from` char(5)
+,`friday_to` char(5)
+,`saturday_from` char(5)
+,`saturday_to` char(5)
+,`sunday_from` char(5)
+,`sunday_to` char(5)
+,`creation_date_item` datetime
+,`days` int(7)
+,`organization_id` int(11)
+,`item_id` int(11)
+,`product_id` int(11)
+,`price` decimal(10,2)
+,`quantity` int(11)
+,`delivery_date` datetime
+,`title` varchar(255)
+,`brand_id` int(11)
+,`category_id` int(11)
+,`company` varchar(255)
+,`cuit` bigint(15)
+,`iva_id` int(5)
+,`agent` varchar(150)
+,`email` varchar(150)
+,`category` varchar(255)
+,`brand` varchar(255)
+,`total_quantity` decimal(32,0)
+,`total_item` decimal(12,2)
+,`total_purchase` decimal(20,2)
+,`role` varchar(9)
+,`provider` varchar(1)
+,`customer` varchar(1)
+,`international` char(1)
+,`additional_information` text
+,`width` decimal(6,2)
+,`height` decimal(6,2)
+,`depth` decimal(6,2)
+,`product_width` decimal(6,2)
+,`product_height` decimal(6,2)
+,`product_depth` decimal(6,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_quotation_list`
+--
+CREATE TABLE IF NOT EXISTS `view_quotation_list` (
+`quotation_id` int(11)
+,`company_id` int(11)
+,`branch_id` int(11)
+,`sender_id` int(11)
+,`receiver_id` int(11)
+,`agent_id` int(11)
+,`status` char(1)
+,`extra` text
+,`additional_information` text
+,`creation_date` datetime
+,`expire_days` int(11)
+,`expire_date` datetime
+,`quotation_date` datetime
+,`creation_date_item` datetime
+,`days` int(7)
+,`organization_id` int(11)
+,`item_id` int(11)
+,`product_id` int(11)
+,`width` decimal(6,2)
+,`height` decimal(6,2)
+,`depth` decimal(6,2)
+,`price` decimal(10,2)
+,`quantity` int(11)
+,`delivery_date` datetime
+,`title` varchar(255)
+,`brand_id` int(11)
+,`category_id` int(11)
+,`company` varchar(255)
+,`cuit` bigint(15)
+,`iva_id` int(5)
+,`agent` varchar(150)
+,`email` varchar(150)
+,`category` varchar(255)
+,`brand` varchar(255)
+,`total_quantity` decimal(32,0)
+,`total_item` decimal(12,2)
+,`total_quotation` decimal(20,2)
+,`role` varchar(9)
+,`provider` varchar(1)
+,`customer` varchar(1)
+,`international` char(1)
+,`purchase_id` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `view_truck_list`
+--
+CREATE TABLE IF NOT EXISTS `view_truck_list` (
+`truck_id` int(11)
+,`driver_id` int(11)
+,`brand` varchar(50)
+,`model` varchar(50)
+,`year` int(11)
+,`plate` varchar(10)
+,`code` varchar(50)
+,`capacity` int(6)
+,`status` char(1)
+,`creation_date` datetime
+,`created_by` int(11)
+,`last_update` timestamp
+,`updated_by` int(11)
+,`organization_id` int(11)
+,`driver` varchar(511)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `core_view_group_list`
 --
 DROP TABLE IF EXISTS `core_view_group_list`;
 
-CREATE VIEW `core_view_group_list` AS select `a`.`group_id` AS `group_id`,`a`.`title` AS `title`,`a`.`organization_id` AS `organization_id`,`a`.`image` AS `image`,`a`.`status` AS `status`,`a`.`created_by` AS `created_by`,`a`.`creation_date` AS `creation_date`,`b`.`profile_id` AS `profile_id`,`c`.`title` AS `profile`,`a`.`last_modification` AS `last_modification` from ((`core_group` `a` join `core_relation_group_profile` `b` on((`a`.`group_id` = `b`.`group_id`))) join `core_profile` `c` on((`b`.`profile_id` = `c`.`profile_id`))) group by `a`.`group_id` order by `a`.`title`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `core_view_group_list` AS select `a`.`group_id` AS `group_id`,`a`.`title` AS `title`,`a`.`organization_id` AS `organization_id`,`a`.`image` AS `image`,`a`.`status` AS `status`,`a`.`created_by` AS `created_by`,`a`.`creation_date` AS `creation_date`,`b`.`profile_id` AS `profile_id`,`c`.`title` AS `profile`,`a`.`last_modification` AS `last_modification` from ((`core_group` `a` join `core_relation_group_profile` `b` on((`a`.`group_id` = `b`.`group_id`))) join `core_profile` `c` on((`b`.`profile_id` = `c`.`profile_id`))) group by `a`.`group_id` order by `a`.`title`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `core_view_menu_list`
+-- Estructura para la vista `core_view_menu_list`
 --
 DROP TABLE IF EXISTS `core_view_menu_list`;
 
-CREATE  VIEW `core_view_menu_list` AS select `a`.`menu_id` AS `menu_id`,`a`.`parent_id` AS `parent_id`,`a`.`icon` AS `icon`,`a`.`title` AS `title`,`a`.`link` AS `link`,if((`a`.`link` = '#'),'Sin link',substr(`a`.`link`,10)) AS `link_text`,`a`.`position` AS `position`,`a`.`public` AS `public`,if((`a`.`public` = 'Y'),'Público','Privado') AS `public_text`,`a`.`view_status` AS `view_status`,if((`a`.`view_status` = 'O'),'Oculto','Visible') AS `view_status_text`,`a`.`status` AS `status`,`a`.`organization_id` AS `organization_id`,`d`.`title` AS `profile`,`e`.`title` AS `group_title`,`b`.`profile_id` AS `profile_id`,`c`.`group_id` AS `group_id` from ((((`core_menu` `a` left join `core_relation_menu_profile` `b` on((`a`.`menu_id` = `b`.`menu_id`))) left join `core_relation_menu_group` `c` on((`a`.`menu_id` = `c`.`menu_id`))) left join `core_profile` `d` on((`d`.`profile_id` = `b`.`profile_id`))) left join `core_group` `e` on((`e`.`group_id` = `c`.`group_id`))) where (1 = 1) group by `a`.`menu_id` order by `a`.`title`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `core_view_menu_list` AS select `a`.`menu_id` AS `menu_id`,`a`.`parent_id` AS `parent_id`,`a`.`icon` AS `icon`,`a`.`title` AS `title`,`a`.`link` AS `link`,if((`a`.`link` = '#'),'Sin link',substr(`a`.`link`,10)) AS `link_text`,`a`.`position` AS `position`,`a`.`public` AS `public`,if((`a`.`public` = 'Y'),'Público','Privado') AS `public_text`,`a`.`view_status` AS `view_status`,if((`a`.`view_status` = 'O'),'Oculto','Visible') AS `view_status_text`,`a`.`status` AS `status`,`a`.`organization_id` AS `organization_id`,`d`.`title` AS `profile`,`e`.`title` AS `group_title`,`b`.`profile_id` AS `profile_id`,`c`.`group_id` AS `group_id` from ((((`core_menu` `a` left join `core_relation_menu_profile` `b` on((`a`.`menu_id` = `b`.`menu_id`))) left join `core_relation_menu_group` `c` on((`a`.`menu_id` = `c`.`menu_id`))) left join `core_profile` `d` on((`d`.`profile_id` = `b`.`profile_id`))) left join `core_group` `e` on((`e`.`group_id` = `c`.`group_id`))) where (1 = 1) group by `a`.`menu_id` order by `a`.`title`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `core_view_profile_list`
+-- Estructura para la vista `core_view_profile_list`
 --
 DROP TABLE IF EXISTS `core_view_profile_list`;
 
-CREATE VIEW `core_view_profile_list` AS select `a`.`profile_id` AS `profile_id`,`a`.`organization_id` AS `organization_id`,`a`.`title` AS `title`,`a`.`status` AS `status`,`a`.`image` AS `image`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`last_modification` AS `last_modification`,`b`.`group_id` AS `group_id`,`c`.`title` AS `group_title` from ((`core_profile` `a` join `core_relation_group_profile` `b` on((`a`.`profile_id` = `b`.`profile_id`))) join `core_group` `c` on((`b`.`group_id` = `c`.`group_id`))) group by `a`.`profile_id` order by `a`.`title`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `core_view_profile_list` AS select `a`.`profile_id` AS `profile_id`,`a`.`organization_id` AS `organization_id`,`a`.`title` AS `title`,`a`.`status` AS `status`,`a`.`image` AS `image`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`last_modification` AS `last_modification`,`b`.`group_id` AS `group_id`,`c`.`title` AS `group_title` from ((`core_profile` `a` join `core_relation_group_profile` `b` on((`a`.`profile_id` = `b`.`profile_id`))) join `core_group` `c` on((`b`.`group_id` = `c`.`group_id`))) group by `a`.`profile_id` order by `a`.`title`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `core_view_user_list`
+-- Estructura para la vista `core_view_user_list`
 --
 DROP TABLE IF EXISTS `core_view_user_list`;
 
-CREATE VIEW `core_view_user_list` AS select `a`.`user_id` AS `user_id`,`a`.`organization_id` AS `organization_id`,`a`.`user` AS `user`,`a`.`password` AS `password`,`a`.`first_name` AS `first_name`,`a`.`last_name` AS `last_name`,concat(`a`.`first_name`,' ',`a`.`last_name`) AS `full_name`,concat(`a`.`first_name`,' ',`a`.`last_name`,' (',`a`.`user`,')') AS `full_user_name`,`a`.`email` AS `email`,`a`.`profile_id` AS `profile_id`,`a`.`img` AS `img`,`a`.`status` AS `status`,`a`.`tries` AS `tries`,`a`.`last_access` AS `last_access`,`a`.`creation_date` AS `creation_date`,`a`.`creator_id` AS `creator_id`,`p`.`title` AS `profile`,coalesce(`g`.`title`,'') AS `group_title`,coalesce(`g`.`group_id`,0) AS `group_id` from (((`core_user` `a` left join `core_relation_user_group` `r` on((`r`.`user_id` = `a`.`user_id`))) left join `core_group` `g` on((`r`.`group_id` = `g`.`group_id`))) left join `core_profile` `p` on((`p`.`profile_id` = `a`.`profile_id`))) where (1 = 1) group by `a`.`user_id` order by `a`.`first_name`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `core_view_user_list` AS select `a`.`user_id` AS `user_id`,`a`.`organization_id` AS `organization_id`,`a`.`user` AS `user`,`a`.`password` AS `password`,`a`.`first_name` AS `first_name`,`a`.`last_name` AS `last_name`,concat(`a`.`first_name`,' ',`a`.`last_name`) AS `full_name`,concat(`a`.`first_name`,' ',`a`.`last_name`,' (',`a`.`user`,')') AS `full_user_name`,`a`.`email` AS `email`,`a`.`profile_id` AS `profile_id`,`a`.`img` AS `img`,`a`.`status` AS `status`,`a`.`tries` AS `tries`,`a`.`last_access` AS `last_access`,`a`.`creation_date` AS `creation_date`,`a`.`creator_id` AS `creator_id`,`p`.`title` AS `profile`,coalesce(`g`.`title`,'') AS `group_title`,coalesce(`g`.`group_id`,0) AS `group_id` from (((`core_user` `a` left join `core_relation_user_group` `r` on((`r`.`user_id` = `a`.`user_id`))) left join `core_group` `g` on((`r`.`group_id` = `g`.`group_id`))) left join `core_profile` `p` on((`p`.`profile_id` = `a`.`profile_id`))) where (1 = 1) group by `a`.`user_id` order by `a`.`first_name`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_brand_list`
+-- Estructura para la vista `view_brand_list`
 --
 DROP TABLE IF EXISTS `view_brand_list`;
 
-CREATE VIEW `view_brand_list` AS select `a`.`brand_id` AS `brand_id`,`b`.`product_id` AS `product_id`,`c`.`category_id` AS `category_id`,`a`.`organization_id` AS `organization_id`,`a`.`name` AS `name`,`b`.`code` AS `code`,`a`.`status` AS `status`,`a`.`creation_date` AS `creation_date`,`c`.`title` AS `category` from ((`product_brand` `a` left join `product` `b` on((`b`.`brand_id` = `a`.`brand_id`))) left join `product_category` `c` on((`c`.`category_id` = `b`.`category_id`))) order by `a`.`name`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_brand_list` AS select `a`.`brand_id` AS `brand_id`,`b`.`product_id` AS `product_id`,`c`.`category_id` AS `category_id`,`a`.`organization_id` AS `organization_id`,`a`.`name` AS `name`,`b`.`code` AS `code`,`a`.`status` AS `status`,`a`.`creation_date` AS `creation_date`,`c`.`title` AS `category` from ((`product_brand` `a` left join `product` `b` on((`b`.`brand_id` = `a`.`brand_id`))) left join `product_category` `c` on((`c`.`category_id` = `b`.`category_id`))) order by `a`.`name`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_category_list`
+-- Estructura para la vista `view_category_list`
 --
 DROP TABLE IF EXISTS `view_category_list`;
 
-CREATE VIEW `view_category_list` AS select `a`.`category_id` AS `category_id`,`a`.`organization_id` AS `organization_id`,`a`.`parent_id` AS `parent_id`,`a`.`title` AS `title`,`a`.`short_title` AS `short_title`,`a`.`status` AS `status`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`updated_by` AS `updated_by`,`a`.`last_modification` AS `last_modification`,coalesce(`b`.`title`,'Sin Padre') AS `parent`,coalesce(`b`.`short_title`,'Sin Padre') AS `parent_short` from (`product_category` `a` left join `product_category` `b` on((`a`.`parent_id` = `b`.`category_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_category_list` AS select `a`.`category_id` AS `category_id`,`a`.`organization_id` AS `organization_id`,`a`.`parent_id` AS `parent_id`,`a`.`title` AS `title`,`a`.`short_title` AS `short_title`,`a`.`status` AS `status`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`updated_by` AS `updated_by`,`a`.`last_modification` AS `last_modification`,coalesce(`b`.`title`,'Sin Padre') AS `parent`,coalesce(`b`.`short_title`,'Sin Padre') AS `parent_short` from (`product_category` `a` left join `product_category` `b` on((`a`.`parent_id` = `b`.`category_id`)));
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_company_list`
+-- Estructura para la vista `view_company_list`
 --
 DROP TABLE IF EXISTS `view_company_list`;
 
-CREATE VIEW `view_company_list` AS select `a`.`company_id` AS `company_id`,`a`.`old_id` AS `old_id`,`b`.`branch_id` AS `branch_id`,`e`.`broker_id` AS `broker_id`,`a`.`type_id` AS `type_id`,`a`.`organization_id` AS `organization_id`,`a`.`name` AS `name`,`d`.`name` AS `type`,`a`.`cuit` AS `cuit`,`a`.`iva_id` AS `iva_id`,`t`.`name` AS `iva`,`a`.`iibb` AS `iibb`,`a`.`international` AS `international`,if((`a`.`international` = 'N'),'Nacional','Extranjero') AS `international_text`,`a`.`vat` AS `vat`,`a`.`customer` AS `customer`,`a`.`provider` AS `provider`,if(((`a`.`customer` = 'Y') and (`a`.`provider` = 'Y')),'Cliente y Proveedor',if((`a`.`customer` = 'Y'),'Cliente','Proveedor')) AS `relation_text`,`a`.`logo` AS `logo`,`a`.`status` AS `status`,`a`.`balance` AS `balance`,`b`.`name` AS `branch`,`b`.`address` AS `address`,`b`.`postal_code` AS `postal_code`,`b`.`phone` AS `phone`,`b`.`email` AS `email`,`b`.`website` AS `website`,`b`.`fax` AS `fax`,`b`.`main_branch` AS `main_branch`,`b`.`country_id` AS `country_id`,`g`.`name` AS `country`,`g`.`short_name` AS `country_short`,`b`.`province_id` AS `province_id`,`h`.`name` AS `province`,`h`.`short_name` AS `province_short`,`b`.`region_id` AS `region_id`,`i`.`name` AS `region`,`i`.`short_name` AS `region_short`,`b`.`zone_id` AS `zone_id`,`j`.`name` AS `zone`,`j`.`short_name` AS `zone_short`,`b`.`lat` AS `lat`,`b`.`lng` AS `lng`,coalesce(`f`.`full_name`,'Sin Corredor') AS `broker`,coalesce(`f`.`email`,'') AS `broker_email`,coalesce(`f`.`img`,'') AS `broker_img`,`a`.`creation_date` AS `creation_date`,`a`.`last_update` AS `last_update`,`a`.`created_by` AS `created_by`,`a`.`updated_by` AS `updated_by`,`b`.`monday_from` AS `monday_from`,`b`.`monday_to` AS `monday_to`,`b`.`tuesday_from` AS `tuesday_from`,`b`.`tuesday_to` AS `tuesday_to`,`b`.`wensday_from` AS `wensday_from`,`b`.`wensday_to` AS `wensday_to`,`b`.`thursday_from` AS `thursday_from`,`b`.`thursday_to` AS `thursday_to`,`b`.`friday_from` AS `friday_from`,`b`.`friday_to` AS `friday_to`,`b`.`saturday_from` AS `saturday_from`,`b`.`saturday_to` AS `saturday_to`,`b`.`sunday_from` AS `sunday_from`,`b`.`sunday_to` AS `sunday_to` from (((((((((`company` `a` left join `tax_iva_type` `t` on((`t`.`type_id` = `a`.`iva_id`))) join `company_type` `d` on((`d`.`type_id` = `a`.`type_id`))) join `company_branch` `b` on((`a`.`company_id` = `b`.`company_id`))) left join `relation_company_broker` `e` on((`e`.`branch_id` = `b`.`branch_id`))) left join `core_view_user_list` `f` on((`f`.`user_id` = `e`.`broker_id`))) left join `core_country` `g` on((`g`.`country_id` = `b`.`country_id`))) left join `core_province` `h` on((`h`.`province_id` = `b`.`province_id`))) left join `core_region` `i` on((`i`.`region_id` = `b`.`region_id`))) left join `core_zone` `j` on((`j`.`zone_id` = `b`.`zone_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_company_list` AS select `a`.`company_id` AS `company_id`,`a`.`old_id` AS `old_id`,`b`.`branch_id` AS `branch_id`,`e`.`broker_id` AS `broker_id`,`a`.`type_id` AS `type_id`,`a`.`organization_id` AS `organization_id`,`a`.`name` AS `name`,`d`.`name` AS `type`,`a`.`cuit` AS `cuit`,`a`.`iva_id` AS `iva_id`,`t`.`name` AS `iva`,`a`.`iibb` AS `iibb`,`a`.`international` AS `international`,if((`a`.`international` = 'N'),'Nacional','Extranjero') AS `international_text`,`a`.`vat` AS `vat`,`a`.`customer` AS `customer`,`a`.`provider` AS `provider`,if(((`a`.`customer` = 'Y') and (`a`.`provider` = 'Y')),'Cliente y Proveedor',if((`a`.`customer` = 'Y'),'Cliente','Proveedor')) AS `relation_text`,`a`.`logo` AS `logo`,`a`.`status` AS `status`,`a`.`balance` AS `balance`,`b`.`name` AS `branch`,`b`.`address` AS `address`,`b`.`postal_code` AS `postal_code`,`b`.`phone` AS `phone`,`b`.`email` AS `email`,`b`.`website` AS `website`,`b`.`fax` AS `fax`,`b`.`main_branch` AS `main_branch`,`b`.`country_id` AS `country_id`,`g`.`name` AS `country`,`g`.`short_name` AS `country_short`,`b`.`province_id` AS `province_id`,`h`.`name` AS `province`,`h`.`short_name` AS `province_short`,`b`.`region_id` AS `region_id`,`i`.`name` AS `region`,`i`.`short_name` AS `region_short`,`b`.`zone_id` AS `zone_id`,`j`.`name` AS `zone`,`j`.`short_name` AS `zone_short`,`b`.`lat` AS `lat`,`b`.`lng` AS `lng`,coalesce(`f`.`full_name`,'Sin Corredor') AS `broker`,coalesce(`f`.`email`,'') AS `broker_email`,coalesce(`f`.`img`,'') AS `broker_img`,`a`.`creation_date` AS `creation_date`,`a`.`last_update` AS `last_update`,`a`.`created_by` AS `created_by`,`a`.`updated_by` AS `updated_by`,`b`.`monday_from` AS `monday_from`,`b`.`monday_to` AS `monday_to`,`b`.`tuesday_from` AS `tuesday_from`,`b`.`tuesday_to` AS `tuesday_to`,`b`.`wensday_from` AS `wensday_from`,`b`.`wensday_to` AS `wensday_to`,`b`.`thursday_from` AS `thursday_from`,`b`.`thursday_to` AS `thursday_to`,`b`.`friday_from` AS `friday_from`,`b`.`friday_to` AS `friday_to`,`b`.`saturday_from` AS `saturday_from`,`b`.`saturday_to` AS `saturday_to`,`b`.`sunday_from` AS `sunday_from`,`b`.`sunday_to` AS `sunday_to` from (((((((((`company` `a` left join `tax_iva_type` `t` on((`t`.`type_id` = `a`.`iva_id`))) join `company_type` `d` on((`d`.`type_id` = `a`.`type_id`))) join `company_branch` `b` on((`a`.`company_id` = `b`.`company_id`))) left join `relation_company_broker` `e` on((`e`.`branch_id` = `b`.`branch_id`))) left join `core_view_user_list` `f` on((`f`.`user_id` = `e`.`broker_id`))) left join `core_country` `g` on((`g`.`country_id` = `b`.`country_id`))) left join `core_province` `h` on((`h`.`province_id` = `b`.`province_id`))) left join `core_region` `i` on((`i`.`region_id` = `b`.`region_id`))) left join `core_zone` `j` on((`j`.`zone_id` = `b`.`zone_id`)));
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_product_list`
+-- Estructura para la vista `view_product_list`
 --
 DROP TABLE IF EXISTS `view_product_list`;
 
@@ -1797,36 +1901,36 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_purchase_list`
+-- Estructura para la vista `view_purchase_list`
 --
 DROP TABLE IF EXISTS `view_purchase_list`;
 
-CREATE VIEW `view_purchase_list` AS select `a`.`purchase_id` AS `purchase_id`,`a`.`quotation_id` AS `quotation_id`,`a`.`company_id` AS `company_id`,`a`.`sender_id` AS `sender_id`,`a`.`receiver_id` AS `receiver_id`,`a`.`agent_id` AS `agent_id`,`a`.`status` AS `status`,`a`.`extra` AS `extra`,`a`.`creation_date` AS `creation_date`,`a`.`expire_days` AS `expire_days`,`a`.`expire_date` AS `expire_date`,if((`a`.`purchase_date` = '0000-00-00'),`a`.`creation_date`,`a`.`purchase_date`) AS `purchase_date`,`b`.`creation_date` AS `creation_date_item`,`b`.`days` AS `days`,`a`.`organization_id` AS `organization_id`,`b`.`item_id` AS `item_id`,`b`.`product_id` AS `product_id`,`b`.`price` AS `price`,`b`.`quantity` AS `quantity`,`b`.`delivery_date` AS `delivery_date`,`c`.`title` AS `title`,`c`.`brand_id` AS `brand_id`,`c`.`category_id` AS `category_id`,`e`.`name` AS `company`,`e`.`cuit` AS `cuit`,`e`.`iva_id` AS `iva_id`,`o`.`name` AS `agent`,`o`.`email` AS `email`,`f`.`title` AS `category`,`g`.`name` AS `brand`,sum(`b`.`quantity`) AS `total_quantity`,`b`.`total` AS `total_item`,`a`.`total` AS `total_purchase`,if((`a`.`company_id` = `a`.`sender_id`),'Proveedor','Cliente') AS `role`,if((`a`.`company_id` = `a`.`sender_id`),'Y','N') AS `provider`,if((`a`.`company_id` = `a`.`receiver_id`),'Y','N') AS `customer`,`e`.`international` AS `international`,`a`.`additional_information` AS `additional_information`,`b`.`width` AS `width`,`b`.`height` AS `height`,`b`.`depth` AS `depth`,`c`.`width` AS `product_width`,`c`.`height` AS `product_height`,`c`.`depth` AS `product_depth` from ((((((`purchase` `a` join `purchase_item` `b` on((`b`.`purchase_id` = `a`.`purchase_id`))) join `product` `c` on((`b`.`product_id` = `c`.`product_id`))) join `company` `e` on((`a`.`company_id` = `e`.`company_id`))) join `product_category` `f` on((`f`.`category_id` = `c`.`category_id`))) join `product_brand` `g` on((`g`.`brand_id` = `c`.`brand_id`))) left join `company_agent` `o` on((`a`.`agent_id` = `o`.`agent_id`))) group by `b`.`item_id`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_purchase_list` AS select `a`.`purchase_id` AS `purchase_id`,`a`.`quotation_id` AS `quotation_id`,`a`.`company_id` AS `company_id`,`a`.`branch_id` AS `branch_id`,`a`.`sender_id` AS `sender_id`,`a`.`receiver_id` AS `receiver_id`,`a`.`agent_id` AS `agent_id`,`a`.`status` AS `status`,`a`.`extra` AS `extra`,`a`.`creation_date` AS `creation_date`,`a`.`delivery_date` AS `purchase_delivery_date`,if((`a`.`purchase_date` = '0000-00-00'),`a`.`creation_date`,`a`.`purchase_date`) AS `purchase_date`,`a`.`monday_from` AS `monday_from`,`a`.`monday_to` AS `monday_to`,`a`.`tuesday_from` AS `tuesday_from`,`a`.`tuesday_to` AS `tuesday_to`,`a`.`wensday_from` AS `wensday_from`,`a`.`wensday_to` AS `wensday_to`,`a`.`thursday_from` AS `thursday_from`,`a`.`thursday_to` AS `thursday_to`,`a`.`friday_from` AS `friday_from`,`a`.`friday_to` AS `friday_to`,`a`.`saturday_from` AS `saturday_from`,`a`.`saturday_to` AS `saturday_to`,`a`.`sunday_from` AS `sunday_from`,`a`.`sunday_to` AS `sunday_to`,`b`.`creation_date` AS `creation_date_item`,`b`.`days` AS `days`,`a`.`organization_id` AS `organization_id`,`b`.`item_id` AS `item_id`,`b`.`product_id` AS `product_id`,`b`.`price` AS `price`,`b`.`quantity` AS `quantity`,`b`.`delivery_date` AS `delivery_date`,`c`.`title` AS `title`,`c`.`brand_id` AS `brand_id`,`c`.`category_id` AS `category_id`,`e`.`name` AS `company`,`e`.`cuit` AS `cuit`,`e`.`iva_id` AS `iva_id`,`o`.`name` AS `agent`,`o`.`email` AS `email`,`f`.`title` AS `category`,`g`.`name` AS `brand`,sum(`b`.`quantity`) AS `total_quantity`,`b`.`total` AS `total_item`,`a`.`total` AS `total_purchase`,if((`a`.`company_id` = `a`.`sender_id`),'Proveedor','Cliente') AS `role`,if((`a`.`company_id` = `a`.`sender_id`),'Y','N') AS `provider`,if((`a`.`company_id` = `a`.`receiver_id`),'Y','N') AS `customer`,`e`.`international` AS `international`,`a`.`additional_information` AS `additional_information`,`b`.`width` AS `width`,`b`.`height` AS `height`,`b`.`depth` AS `depth`,`c`.`width` AS `product_width`,`c`.`height` AS `product_height`,`c`.`depth` AS `product_depth` from ((((((`purchase` `a` join `purchase_item` `b` on((`b`.`purchase_id` = `a`.`purchase_id`))) join `product` `c` on((`b`.`product_id` = `c`.`product_id`))) join `company` `e` on((`a`.`company_id` = `e`.`company_id`))) join `product_category` `f` on((`f`.`category_id` = `c`.`category_id`))) join `product_brand` `g` on((`g`.`brand_id` = `c`.`brand_id`))) left join `company_agent` `o` on((`a`.`agent_id` = `o`.`agent_id`))) group by `b`.`item_id`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_quotation_list`
+-- Estructura para la vista `view_quotation_list`
 --
 DROP TABLE IF EXISTS `view_quotation_list`;
 
-CREATE VIEW `view_quotation_list` AS select `a`.`quotation_id` AS `quotation_id`,`a`.`company_id` AS `company_id`,`a`.`branch_id` AS `branch_id`,`a`.`sender_id` AS `sender_id`,`a`.`receiver_id` AS `receiver_id`,`a`.`agent_id` AS `agent_id`,`a`.`status` AS `status`,`a`.`extra` AS `extra`,a.additional_information,`a`.`creation_date` AS `creation_date`,`a`.`expire_days` AS `expire_days`,`a`.`expire_date` AS `expire_date`,if((`a`.`quotation_date` = '0000-00-00'),`a`.`creation_date`,`a`.`quotation_date`) AS `quotation_date`,`b`.`creation_date` AS `creation_date_item`,`b`.`days` AS `days`,`a`.`organization_id` AS `organization_id`,`b`.`item_id` AS `item_id`,`b`.`product_id` AS `product_id`,b.width,b.height,b.depth,`b`.`price` AS `price`,`b`.`quantity` AS `quantity`,`b`.`delivery_date` AS `delivery_date`,`c`.`title` AS `title`,`c`.`brand_id` AS `brand_id`,`c`.`category_id` AS `category_id`,`e`.`name` AS `company`,`e`.`cuit` AS `cuit`,`e`.`iva_id` AS `iva_id`,`o`.`name` AS `agent`,`o`.`email` AS `email`,`f`.`title` AS `category`,`g`.`name` AS `brand`,sum(`b`.`quantity`) AS `total_quantity`,`b`.`total` AS `total_item`,`a`.`total` AS `total_quotation`,if((`a`.`company_id` = `a`.`sender_id`),'Proveedor','Cliente') AS `role`,if((`a`.`company_id` = `a`.`sender_id`),'Y','N') AS `provider`,if((`a`.`company_id` = `a`.`receiver_id`),'Y','N') AS `customer`,`e`.`international` AS `international`,`p`.`purchase_id` AS `purchase_id` from (((((((`quotation` `a` join `quotation_item` `b` on((`b`.`quotation_id` = `a`.`quotation_id`))) join `product` `c` on((`b`.`product_id` = `c`.`product_id`))) join `company` `e` on((`a`.`company_id` = `e`.`company_id`))) join `product_category` `f` on((`f`.`category_id` = `c`.`category_id`))) join `product_brand` `g` on((`g`.`brand_id` = `c`.`brand_id`))) left join `company_agent` `o` on((`a`.`agent_id` = `o`.`agent_id`))) left join `purchase` `p` on((`p`.`quotation_id` = `a`.`quotation_id`))) group by `b`.`item_id`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_quotation_list` AS select `a`.`quotation_id` AS `quotation_id`,`a`.`company_id` AS `company_id`,`a`.`branch_id` AS `branch_id`,`a`.`sender_id` AS `sender_id`,`a`.`receiver_id` AS `receiver_id`,`a`.`agent_id` AS `agent_id`,`a`.`status` AS `status`,`a`.`extra` AS `extra`,`a`.`additional_information` AS `additional_information`,`a`.`creation_date` AS `creation_date`,`a`.`expire_days` AS `expire_days`,`a`.`expire_date` AS `expire_date`,if((`a`.`quotation_date` = '0000-00-00'),`a`.`creation_date`,`a`.`quotation_date`) AS `quotation_date`,`b`.`creation_date` AS `creation_date_item`,`b`.`days` AS `days`,`a`.`organization_id` AS `organization_id`,`b`.`item_id` AS `item_id`,`b`.`product_id` AS `product_id`,`b`.`width` AS `width`,`b`.`height` AS `height`,`b`.`depth` AS `depth`,`b`.`price` AS `price`,`b`.`quantity` AS `quantity`,`b`.`delivery_date` AS `delivery_date`,`c`.`title` AS `title`,`c`.`brand_id` AS `brand_id`,`c`.`category_id` AS `category_id`,`e`.`name` AS `company`,`e`.`cuit` AS `cuit`,`e`.`iva_id` AS `iva_id`,`o`.`name` AS `agent`,`o`.`email` AS `email`,`f`.`title` AS `category`,`g`.`name` AS `brand`,sum(`b`.`quantity`) AS `total_quantity`,`b`.`total` AS `total_item`,`a`.`total` AS `total_quotation`,if((`a`.`company_id` = `a`.`sender_id`),'Proveedor','Cliente') AS `role`,if((`a`.`company_id` = `a`.`sender_id`),'Y','N') AS `provider`,if((`a`.`company_id` = `a`.`receiver_id`),'Y','N') AS `customer`,`e`.`international` AS `international`,`p`.`purchase_id` AS `purchase_id` from (((((((`quotation` `a` join `quotation_item` `b` on((`b`.`quotation_id` = `a`.`quotation_id`))) join `product` `c` on((`b`.`product_id` = `c`.`product_id`))) join `company` `e` on((`a`.`company_id` = `e`.`company_id`))) join `product_category` `f` on((`f`.`category_id` = `c`.`category_id`))) join `product_brand` `g` on((`g`.`brand_id` = `c`.`brand_id`))) left join `company_agent` `o` on((`a`.`agent_id` = `o`.`agent_id`))) left join `purchase` `p` on((`p`.`quotation_id` = `a`.`quotation_id`))) group by `b`.`item_id`;
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_truck_list`
+-- Estructura para la vista `view_truck_list`
 --
 DROP TABLE IF EXISTS `view_truck_list`;
 
-CREATE VIEW `view_truck_list` AS select `a`.`truck_id` AS `truck_id`,`a`.`driver_id` AS `driver_id`,`a`.`brand` AS `brand`,`a`.`model` AS `model`,`a`.`year` AS `year`,`a`.`plate` AS `plate`,`a`.`code` AS `code`,`a`.`capacity` AS `capacity`,`a`.`status` AS `status`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`last_update` AS `last_update`,`a`.`updated_by` AS `updated_by`,`a`.`organization_id` AS `organization_id`,concat(`b`.`last_name`,' ',`b`.`first_name`) AS `driver` from (`truck` `a` join `core_user` `b` on((`b`.`user_id` = `a`.`driver_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_truck_list` AS select `a`.`truck_id` AS `truck_id`,`a`.`driver_id` AS `driver_id`,`a`.`brand` AS `brand`,`a`.`model` AS `model`,`a`.`year` AS `year`,`a`.`plate` AS `plate`,`a`.`code` AS `code`,`a`.`capacity` AS `capacity`,`a`.`status` AS `status`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`last_update` AS `last_update`,`a`.`updated_by` AS `updated_by`,`a`.`organization_id` AS `organization_id`,concat(`b`.`last_name`,' ',`b`.`first_name`) AS `driver` from (`truck` `a` join `core_user` `b` on((`b`.`user_id` = `a`.`driver_id`)));
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `company`
+-- Indices de la tabla `company`
 --
 ALTER TABLE `company`
   ADD PRIMARY KEY (`company_id`),
@@ -1834,237 +1938,181 @@ ALTER TABLE `company`
   ADD KEY `cuit` (`cuit`);
 
 --
--- Indexes for table `company_agent`
+-- Indices de la tabla `company_agent`
 --
 ALTER TABLE `company_agent`
   ADD PRIMARY KEY (`agent_id`);
 
 --
--- Indexes for table `company_branch`
+-- Indices de la tabla `company_branch`
 --
 ALTER TABLE `company_branch`
   ADD PRIMARY KEY (`branch_id`);
 
 --
--- Indexes for table `company_type`
+-- Indices de la tabla `company_type`
 --
 ALTER TABLE `company_type`
   ADD PRIMARY KEY (`type_id`);
 
 --
--- Indexes for table `core_country`
+-- Indices de la tabla `core_country`
 --
 ALTER TABLE `core_country`
   ADD PRIMARY KEY (`country_id`);
 
 --
--- Indexes for table `core_group`
+-- Indices de la tabla `core_group`
 --
 ALTER TABLE `core_group`
   ADD PRIMARY KEY (`group_id`);
 
 --
--- Indexes for table `core_log_email`
+-- Indices de la tabla `core_log_email`
 --
 ALTER TABLE `core_log_email`
   ADD PRIMARY KEY (`log_id`);
 
 --
--- Indexes for table `core_log_error`
+-- Indices de la tabla `core_log_error`
 --
 ALTER TABLE `core_log_error`
   ADD PRIMARY KEY (`log_id`);
 
 --
--- Indexes for table `core_log_login`
+-- Indices de la tabla `core_log_login`
 --
 ALTER TABLE `core_log_login`
   ADD PRIMARY KEY (`log_id`);
 
 --
--- Indexes for table `core_menu`
+-- Indices de la tabla `core_menu`
 --
 ALTER TABLE `core_menu`
   ADD PRIMARY KEY (`menu_id`);
 
 --
--- Indexes for table `core_organization`
+-- Indices de la tabla `core_organization`
 --
 ALTER TABLE `core_organization`
   ADD PRIMARY KEY (`organization_id`);
 
 --
--- Indexes for table `core_profile`
+-- Indices de la tabla `core_profile`
 --
 ALTER TABLE `core_profile`
   ADD PRIMARY KEY (`profile_id`);
 
 --
--- Indexes for table `core_province`
+-- Indices de la tabla `core_province`
 --
 ALTER TABLE `core_province`
   ADD PRIMARY KEY (`province_id`);
 
 --
--- Indexes for table `core_region`
+-- Indices de la tabla `core_region`
 --
 ALTER TABLE `core_region`
   ADD PRIMARY KEY (`region_id`);
 
 --
--- Indexes for table `core_relation_group_profile`
+-- Indices de la tabla `core_relation_group_profile`
 --
 ALTER TABLE `core_relation_group_profile`
   ADD PRIMARY KEY (`relation_id`);
 
 --
--- Indexes for table `core_relation_menu_group`
+-- Indices de la tabla `core_relation_menu_group`
 --
 ALTER TABLE `core_relation_menu_group`
   ADD PRIMARY KEY (`relation_id`);
 
 --
--- Indexes for table `core_relation_menu_profile`
+-- Indices de la tabla `core_relation_menu_profile`
 --
 ALTER TABLE `core_relation_menu_profile`
   ADD PRIMARY KEY (`relation_id`);
 
 --
--- Indexes for table `core_relation_user_group`
+-- Indices de la tabla `core_relation_user_group`
 --
 ALTER TABLE `core_relation_user_group`
   ADD PRIMARY KEY (`relation_id`),
   ADD KEY `admin_id` (`user_id`,`group_id`);
 
 --
--- Indexes for table `core_relation_user_menu`
+-- Indices de la tabla `core_relation_user_menu`
 --
 ALTER TABLE `core_relation_user_menu`
   ADD PRIMARY KEY (`relation_id`);
 
 --
--- Indexes for table `core_user`
+-- Indices de la tabla `core_user`
 --
 ALTER TABLE `core_user`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- Indexes for table `core_zone`
+-- Indices de la tabla `core_zone`
 --
 ALTER TABLE `core_zone`
   ADD PRIMARY KEY (`zone_id`);
 
 --
--- Indexes for table `product`
+-- Indices de la tabla `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`product_id`),
   ADD KEY `code` (`title`);
 
 --
--- Indexes for table `product_abstract`
---
-ALTER TABLE `product_abstract`
-  ADD PRIMARY KEY (`abstract_id`),
-  ADD UNIQUE KEY `code` (`code`),
-  ADD KEY `order_number` (`order_number`);
-
---
--- Indexes for table `product_brand`
+-- Indices de la tabla `product_brand`
 --
 ALTER TABLE `product_brand`
   ADD PRIMARY KEY (`brand_id`);
 
 --
--- Indexes for table `product_category`
+-- Indices de la tabla `product_category`
 --
 ALTER TABLE `product_category`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `product_comparation`
---
-ALTER TABLE `product_comparation`
-  ADD PRIMARY KEY (`comparation_id`);
-
---
--- Indexes for table `product_comparation_item`
---
-ALTER TABLE `product_comparation_item`
-  ADD PRIMARY KEY (`item_id`);
-
---
--- Indexes for table `product_image`
+-- Indices de la tabla `product_image`
 --
 ALTER TABLE `product_image`
   ADD PRIMARY KEY (`image_id`);
 
 --
--- Indexes for table `product_relation`
---
-ALTER TABLE `product_relation`
-  ADD PRIMARY KEY (`relation_id`),
-  ADD KEY `company_id` (`company_id`,`item_id`),
-  ADD KEY `code` (`code`),
-  ADD KEY `abstract_id` (`abstract_id`),
-  ADD KEY `brand_id` (`brand_id`),
-  ADD KEY `status` (`status`),
-  ADD KEY `import_id` (`import_id`);
-
---
--- Indexes for table `product_relation_brand`
---
-ALTER TABLE `product_relation_brand`
-  ADD PRIMARY KEY (`brand_id`);
-
---
--- Indexes for table `product_relation_import`
---
-ALTER TABLE `product_relation_import`
-  ADD PRIMARY KEY (`import_id`),
-  ADD KEY `company_id` (`company_id`);
-
---
--- Indexes for table `product_relation_import_item`
---
-ALTER TABLE `product_relation_import_item`
-  ADD PRIMARY KEY (`item_id`),
-  ADD KEY `import_id` (`import_id`),
-  ADD KEY `abstract_id` (`abstract_id`),
-  ADD KEY `brand_id` (`brand_id`),
-  ADD KEY `code` (`code`),
-  ADD KEY `price` (`price`),
-  ADD KEY `stock` (`stock`);
-
---
--- Indexes for table `purchase`
+-- Indices de la tabla `purchase`
 --
 ALTER TABLE `purchase`
   ADD PRIMARY KEY (`purchase_id`),
   ADD KEY `company_id` (`company_id`),
   ADD KEY `sender_id` (`sender_id`),
-  ADD KEY `receiver_id` (`receiver_id`);
+  ADD KEY `receiver_id` (`receiver_id`),
+  ADD KEY `purchase_id` (`purchase_id`);
 
 --
--- Indexes for table `purchase_email`
+-- Indices de la tabla `purchase_email`
 --
 ALTER TABLE `purchase_email`
   ADD PRIMARY KEY (`email_id`);
 
 --
--- Indexes for table `purchase_file`
+-- Indices de la tabla `purchase_file`
 --
 ALTER TABLE `purchase_file`
   ADD PRIMARY KEY (`file_id`);
 
 --
--- Indexes for table `purchase_file_new`
+-- Indices de la tabla `purchase_file_new`
 --
 ALTER TABLE `purchase_file_new`
   ADD PRIMARY KEY (`file_id`);
 
 --
--- Indexes for table `purchase_item`
+-- Indices de la tabla `purchase_item`
 --
 ALTER TABLE `purchase_item`
   ADD PRIMARY KEY (`item_id`),
@@ -2074,7 +2122,7 @@ ALTER TABLE `purchase_item`
   ADD KEY `delivery_date` (`delivery_date`);
 
 --
--- Indexes for table `quotation`
+-- Indices de la tabla `quotation`
 --
 ALTER TABLE `quotation`
   ADD PRIMARY KEY (`quotation_id`),
@@ -2083,25 +2131,25 @@ ALTER TABLE `quotation`
   ADD KEY `receiver_id` (`receiver_id`);
 
 --
--- Indexes for table `quotation_email`
+-- Indices de la tabla `quotation_email`
 --
 ALTER TABLE `quotation_email`
   ADD PRIMARY KEY (`email_id`);
 
 --
--- Indexes for table `quotation_file`
+-- Indices de la tabla `quotation_file`
 --
 ALTER TABLE `quotation_file`
   ADD PRIMARY KEY (`file_id`);
 
 --
--- Indexes for table `quotation_file_new`
+-- Indices de la tabla `quotation_file_new`
 --
 ALTER TABLE `quotation_file_new`
   ADD PRIMARY KEY (`file_id`);
 
 --
--- Indexes for table `quotation_item`
+-- Indices de la tabla `quotation_item`
 --
 ALTER TABLE `quotation_item`
   ADD PRIMARY KEY (`item_id`),
@@ -2111,252 +2159,217 @@ ALTER TABLE `quotation_item`
   ADD KEY `delivery_date` (`delivery_date`);
 
 --
--- Indexes for table `relation_company_broker`
+-- Indices de la tabla `relation_company_broker`
 --
 ALTER TABLE `relation_company_broker`
   ADD PRIMARY KEY (`relation_id`);
 
 --
--- Indexes for table `tax_iva_type`
+-- Indices de la tabla `tax_iva_type`
 --
 ALTER TABLE `tax_iva_type`
   ADD PRIMARY KEY (`type_id`);
 
 --
--- Indexes for table `truck`
+-- Indices de la tabla `truck`
 --
 ALTER TABLE `truck`
   ADD PRIMARY KEY (`truck_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `company`
+-- AUTO_INCREMENT de la tabla `company`
 --
 ALTER TABLE `company`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11697;
+  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `company_agent`
+-- AUTO_INCREMENT de la tabla `company_agent`
 --
 ALTER TABLE `company_agent`
-  MODIFY `agent_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1342;
+  MODIFY `agent_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `company_branch`
+-- AUTO_INCREMENT de la tabla `company_branch`
 --
 ALTER TABLE `company_branch`
-  MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5083;
+  MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `company_type`
+-- AUTO_INCREMENT de la tabla `company_type`
 --
 ALTER TABLE `company_type`
   MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `core_country`
+-- AUTO_INCREMENT de la tabla `core_country`
 --
 ALTER TABLE `core_country`
   MODIFY `country_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `core_group`
+-- AUTO_INCREMENT de la tabla `core_group`
 --
 ALTER TABLE `core_group`
   MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
--- AUTO_INCREMENT for table `core_log_email`
+-- AUTO_INCREMENT de la tabla `core_log_email`
 --
 ALTER TABLE `core_log_email`
   MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
 --
--- AUTO_INCREMENT for table `core_log_error`
+-- AUTO_INCREMENT de la tabla `core_log_error`
 --
 ALTER TABLE `core_log_error`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=157706;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=157837;
 --
--- AUTO_INCREMENT for table `core_log_login`
+-- AUTO_INCREMENT de la tabla `core_log_login`
 --
 ALTER TABLE `core_log_login`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=135;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=141;
 --
--- AUTO_INCREMENT for table `core_menu`
+-- AUTO_INCREMENT de la tabla `core_menu`
 --
 ALTER TABLE `core_menu`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=143;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=145;
 --
--- AUTO_INCREMENT for table `core_organization`
+-- AUTO_INCREMENT de la tabla `core_organization`
 --
 ALTER TABLE `core_organization`
   MODIFY `organization_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `core_profile`
+-- AUTO_INCREMENT de la tabla `core_profile`
 --
 ALTER TABLE `core_profile`
   MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=366;
 --
--- AUTO_INCREMENT for table `core_province`
+-- AUTO_INCREMENT de la tabla `core_province`
 --
 ALTER TABLE `core_province`
   MODIFY `province_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=245;
 --
--- AUTO_INCREMENT for table `core_region`
+-- AUTO_INCREMENT de la tabla `core_region`
 --
 ALTER TABLE `core_region`
   MODIFY `region_id` int(11) NOT NULL AUTO_INCREMENT COMMENT ' ',AUTO_INCREMENT=28;
 --
--- AUTO_INCREMENT for table `core_relation_group_profile`
+-- AUTO_INCREMENT de la tabla `core_relation_group_profile`
 --
 ALTER TABLE `core_relation_group_profile`
-  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=195;
+  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=199;
 --
--- AUTO_INCREMENT for table `core_relation_menu_group`
+-- AUTO_INCREMENT de la tabla `core_relation_menu_group`
 --
 ALTER TABLE `core_relation_menu_group`
   MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=242;
 --
--- AUTO_INCREMENT for table `core_relation_menu_profile`
+-- AUTO_INCREMENT de la tabla `core_relation_menu_profile`
 --
 ALTER TABLE `core_relation_menu_profile`
-  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=574;
+  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=639;
 --
--- AUTO_INCREMENT for table `core_relation_user_group`
+-- AUTO_INCREMENT de la tabla `core_relation_user_group`
 --
 ALTER TABLE `core_relation_user_group`
-  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=183;
+  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=185;
 --
--- AUTO_INCREMENT for table `core_relation_user_menu`
+-- AUTO_INCREMENT de la tabla `core_relation_user_menu`
 --
 ALTER TABLE `core_relation_user_menu`
   MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=588;
 --
--- AUTO_INCREMENT for table `core_user`
+-- AUTO_INCREMENT de la tabla `core_user`
 --
 ALTER TABLE `core_user`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=98;
 --
--- AUTO_INCREMENT for table `core_zone`
+-- AUTO_INCREMENT de la tabla `core_zone`
 --
 ALTER TABLE `core_zone`
   MODIFY `zone_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 --
--- AUTO_INCREMENT for table `product`
+-- AUTO_INCREMENT de la tabla `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=50494;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `product_abstract`
---
-ALTER TABLE `product_abstract`
-  MODIFY `abstract_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12188;
---
--- AUTO_INCREMENT for table `product_brand`
+-- AUTO_INCREMENT de la tabla `product_brand`
 --
 ALTER TABLE `product_brand`
-  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1001;
+  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `product_category`
+-- AUTO_INCREMENT de la tabla `product_category`
 --
 ALTER TABLE `product_category`
-  MODIFY `category_id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=167;
+  MODIFY `category_id` int(5) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `product_comparation`
---
-ALTER TABLE `product_comparation`
-  MODIFY `comparation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
---
--- AUTO_INCREMENT for table `product_comparation_item`
---
-ALTER TABLE `product_comparation_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=580;
---
--- AUTO_INCREMENT for table `product_image`
+-- AUTO_INCREMENT de la tabla `product_image`
 --
 ALTER TABLE `product_image`
   MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `product_relation`
---
-ALTER TABLE `product_relation`
-  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5055;
---
--- AUTO_INCREMENT for table `product_relation_brand`
---
-ALTER TABLE `product_relation_brand`
-  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6226;
---
--- AUTO_INCREMENT for table `product_relation_import`
---
-ALTER TABLE `product_relation_import`
-  MODIFY `import_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=48;
---
--- AUTO_INCREMENT for table `product_relation_import_item`
---
-ALTER TABLE `product_relation_import_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=78429;
---
--- AUTO_INCREMENT for table `purchase`
+-- AUTO_INCREMENT de la tabla `purchase`
 --
 ALTER TABLE `purchase`
   MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `purchase_email`
+-- AUTO_INCREMENT de la tabla `purchase_email`
 --
 ALTER TABLE `purchase_email`
   MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `purchase_file`
+-- AUTO_INCREMENT de la tabla `purchase_file`
 --
 ALTER TABLE `purchase_file`
   MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `purchase_file_new`
+-- AUTO_INCREMENT de la tabla `purchase_file_new`
 --
 ALTER TABLE `purchase_file_new`
   MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `purchase_item`
+-- AUTO_INCREMENT de la tabla `purchase_item`
 --
 ALTER TABLE `purchase_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `quotation`
+-- AUTO_INCREMENT de la tabla `quotation`
 --
 ALTER TABLE `quotation`
-  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=70;
+  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `quotation_email`
+-- AUTO_INCREMENT de la tabla `quotation_email`
 --
 ALTER TABLE `quotation_email`
-  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `quotation_file`
+-- AUTO_INCREMENT de la tabla `quotation_file`
 --
 ALTER TABLE `quotation_file`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=42;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `quotation_file_new`
+-- AUTO_INCREMENT de la tabla `quotation_file_new`
 --
 ALTER TABLE `quotation_file_new`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=154;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `quotation_item`
+-- AUTO_INCREMENT de la tabla `quotation_item`
 --
 ALTER TABLE `quotation_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1183;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `relation_company_broker`
+-- AUTO_INCREMENT de la tabla `relation_company_broker`
 --
 ALTER TABLE `relation_company_broker`
   MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=415;
 --
--- AUTO_INCREMENT for table `tax_iva_type`
+-- AUTO_INCREMENT de la tabla `tax_iva_type`
 --
 ALTER TABLE `tax_iva_type`
   MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=141;
 --
--- AUTO_INCREMENT for table `truck`
+-- AUTO_INCREMENT de la tabla `truck`
 --
 ALTER TABLE `truck`
-  MODIFY `truck_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `truck_id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

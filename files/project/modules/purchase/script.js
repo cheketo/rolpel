@@ -18,6 +18,14 @@ $(document).ready(function(){
 	if(get['error']=="user")
 		notifyError('La orden de compra que desea editar no existe.');
 
+		if( $( '#status' ).val() == 'P' )
+		{
+
+				displayDaysAndTime();
+				changeDaysAndTime();
+
+		}
+
 });
 
 /****************************************\
@@ -28,14 +36,14 @@ $(function(){
 	var msg = $("#action").val();
 	var params = '';
 	if(get['customer'])
-		params += '&customer='+get['customer'];
-	if(get['provider'])
-		params += '&provider='+get['provider'];
-	if(get['international'])
-		params += '&international='+get['international'];
+		params += '&customer=Y';
+	// if(get['provider'])
+	// 	params += '&provider='+get['provider'];
+	// if(get['international'])
+	// 	params += '&international='+get['international'];
 	$("#BtnCreate").click(function(){
 		var element = $('#company option:selected').html();
-		var target	= 'list.php?msg='+msg+params+'&element='+element;
+		var target	= 'list.php?status=A&msg='+msg+params+'&element='+element;
 		askAndSubmit(target,role,'¿Desea crear la orden de compra de <b>'+element+'</b>?','','PurchaseForm');
 	});
 	// $("#BtnCreateNext").click(function(){
@@ -45,10 +53,9 @@ $(function(){
 	// });
 	$("#BtnEdit").click(function(){
 		var element = $('#company option:selected').html();
-		var target		= 'list.php?msg='+msg+params+'&element='+element;
+		var target		= 'list.php?status=A&msg='+msg+params+'&element='+element;
 		askAndSubmit(target,role,'¿Desea modificar la orden de compra de <b>'+element+'</b>?','','PurchaseForm');
 	});
-
 
 });
 
