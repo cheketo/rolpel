@@ -20,6 +20,6 @@ $SESSION_CONFIG['time'] = 15800;
 /****************************************\
 |               CONSTANTS                |
 \****************************************/
-define("PROCESS", "../../../core/resources/processes/proc.core.php");
+define( "PROCESS", "../../../core/resources/processes/proc.core.php" );
 
 ?>

@@ -12,7 +12,7 @@
       $TitleIcon   = 'users';
       $CompanyType = 'receiver';
       $RowTitleClass = 'light-blue';
-    
+
 
     $FieldInternational = $_GET['international']? "AND international='".$_GET['international']."' ":"";
 
@@ -119,7 +119,7 @@
                 <div class="row">
 
                     <!-- Monday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
@@ -164,7 +164,7 @@
                     </div>
 
                     <!-- Tuesday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
@@ -211,7 +211,7 @@
                     </div>
 
                     <!-- Wensday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
@@ -258,7 +258,7 @@
                     </div>
 
                     <!-- Thursday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
@@ -305,7 +305,7 @@
                     </div>
 
                     <!-- Friday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
@@ -352,7 +352,7 @@
                     </div>
 
                     <!-- Saturday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
@@ -399,7 +399,7 @@
                     </div>
 
                     <!-- Sunday -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
                         <div class="row form-group inline-form-custom">
 
