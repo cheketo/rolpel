@@ -628,10 +628,10 @@
                 <div class="col-xs-4 txC">
                   Productos Totales: <strong id="TotalItems" >><?php echo $TotalItems ?></strong>
                 </div>
-                <div class="col-xs-3 txC">
+                <div class="col-xs-4 txC">
                   Cantidad Total: <strong id="TotalQuantity" >0</strong>
                 </div>
-                <div class="col-xs-3 txC">
+                <div class="col-xs-4 txC">
                   Costo Total: <strong  id="TotalPrice">$ 0.00</strong> <span class="text-danger">(Sin IVA)</span>
                   <?php echo Core::InsertElement("hidden","total_price","0"); ?>
                 </div>

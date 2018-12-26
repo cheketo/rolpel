@@ -167,27 +167,6 @@ class Purchase
 			return $HTML;
 		}
 
-		protected static function MakeGridHTML($Object)
-		{
-			$ButtonsHTML = '<span class="roundItemActionsGroup">'.self::MakeActionButtonsHTML($Object,'grid').'</span>';
-			$HTML = '<div class="flex-allCenter imgSelector">
-			              <div class="imgSelectorInner">
-			                <img src="'.$Object->Img.'" alt="'.$Object->Data['company'].'" class="img-responsive">
-			                <div class="imgSelectorContent">
-			                  <div class="roundItemBigActions">
-			                    '.$ButtonsHTML.'
-			                    <span class="roundItemCheckDiv"><a href="#"><button type="button" class="btn roundBtnIconGreen Hidden" name="button"><i class="fa fa-check"></i></button></a></span>
-			                  </div>
-			                </div>
-			              </div>
-			              <div class="roundItemText">
-			                <p><b>'.$Object->Data['company'].'</b></p>
-			                <p>('.$Object->Data['purchase_id'].')</p>
-			              </div>
-			            </div>';
-			return $HTML;
-		}
-
 		public static function MakeNoRegsHTML()
 		{
 			return '<div class="callout callout-info"><h4><i class="icon fa fa-info-circle"></i> No se encontraron ordenes de compra.</h4><p>Puede crear una nueva haciendo click <a href="new.php?'.self::GetParams().'">aqui</a>.</p></div>';
