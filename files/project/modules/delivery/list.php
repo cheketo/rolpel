@@ -2,13 +2,13 @@
 
     include( '../../../core/resources/includes/inc.core.php' );
 
-    $List = new Purchase();
+    $List = new Delivery();
 
     $Head->SetTitle( $Menu->GetTitle() );
 
     $Head->SetIcon( $Menu->GetHTMLicon() );
 
-    $Head->SetSubTitle( 'Ordenes de Compra' );
+    $Head->SetSubTitle( 'Repartos' );
 
     $Head->setHead();
 
@@ -23,5 +23,5 @@
     $Foot->SetScript( '../../../core/resources/js/script.core.searchlist.js' );
 
     include( '../../../project/resources/includes/inc.bottom.php' );
-    
+
 ?>

@@ -43,7 +43,7 @@ $(function(){
 	// 	params += '&international='+get['international'];
 	$("#BtnCreate").click(function(){
 		var element = $('#company option:selected').html();
-		var target	= 'list.php?status=A&msg='+msg+params+'&element='+element;
+		var target	= 'list.php?status=P&msg='+msg+params+'&element='+element;
 		askAndSubmit(target,role,'¿Desea crear la orden de compra de <b>'+element+'</b>?','','PurchaseForm');
 	});
 	// $("#BtnCreateNext").click(function(){
@@ -282,8 +282,8 @@ function resetDayAndTimeInputs()
 }
 
 
-/****************************************\
-| CHANGE DELIVERY TIME WHE BRANCH CHANGE |
+ /****************************************\
+| CHANGE DELIVERY TIME WHEN BRANCH CHANGE |
 \****************************************/
 function changeDaysAndTime()
 {
@@ -982,27 +982,189 @@ function getProductInfo( product, id )
 /****************************************\
 |             LIST FUNCTIONS             |
 \****************************************/
-$(function(){
-	$(".storeElement").click(function(){
-		var ID = $(this).attr('id').split("_");
-		ID = ID[1];
-		var process = process_url+'';
-		var string	= 'id='+ ID +'&action=store&object=Purchase';//&status='+status;
-		$.ajax({
-	        type: "POST",
-	        url: process,
-	        data: string,
-	        cache: false,
-	        success: function(data){
-	            if(data)
-	            {
-	              notifyError('Se produjo un error al archivar la cotización');
-	                console.log('Error al intentar cambiar de estado. Item='+ID+'. Error: '+data);
-	            }else{
-	                $(".searchButton").click();
-	                notifySuccess('La cotización se archiv&oacute; correctamente');
-	            }
-	        }
-	    });
+function AdditionalSearchFunctions()
+{
+
+		storeElement();
+
+		deliverElement();
+
+		rollbackElement();
+
+}
+
+function storeElement()
+{
+
+	$( '.storeElement' ).click( function()
+	{
+
+			var element = $( this );
+
+			alertify.confirm( utf8_decode( '¿Desea pagar y dar por finalizada la orden de compra de <b>' + element.attr( 'company' ) + '</b>?<br>Esta acci&oacute;n no se puede deshacer.' ), function( e )
+			{
+
+					if( e )
+					{
+
+							var ID = element.attr('id').split("_");
+
+							ID = ID[1];
+
+							var process = process_url;
+
+							var string	= 'id='+ ID +'&action=store&object=Purchase';//&status='+status;
+
+							$.ajax(
+							{
+
+									type: 'POST',
+
+									url: process,
+
+									data: string,
+
+									cache: false,
+
+									success: function( data )
+									{
+
+											if( data )
+											{
+
+													notifyError( 'Se produjo un error al archivar la orden de compra' );
+
+													console.log( 'Error al intentar cambiar de estado. Item=' + ID + '. Error: ' + data );
+
+											}else{
+
+													$( '.searchButton' ).click();
+
+													notifySuccess( 'La orden se archiv&oacute; correctamente' );
+
+											}
+
+									}
+
+							});
+
+					}
+
+			});
+
 	});
-});
+
+}
+
+function deliverElement()
+{
+
+		$( '.deliveryElement' ).click( function()
+		{
+
+				var ID = $(this).attr('id').split("_");
+
+				ID = ID[1];
+
+				var process = process_url;
+
+				var string	= 'id='+ ID +'&action=deliver&object=Purchase';//&status='+status;
+
+				$.ajax(
+				{
+
+						type: 'POST',
+
+						url: process,
+
+						data: string,
+
+						cache: false,
+
+						success: function( data )
+						{
+
+								if( data )
+								{
+
+										notifyError( 'Se produjo un error al pasar a reparto la orden de compra' );
+
+										console.log( 'Error al intentar cambiar de estado. Item=' + ID + '. Error: ' + data );
+
+								}else{
+
+										notifySuccess( 'Ahora la orden se encuentra en reparto' );
+
+										$( '.searchButton' ).click();
+
+								}
+
+						}
+
+				});
+
+		});
+
+}
+
+function rollbackElement()
+{
+
+		$( '.rollbackElement' ).click( function()
+		{
+
+				var ID = $(this).attr('id').split("_");
+
+				ID = ID[1];
+
+				var process = process_url;
+
+				var string	= 'id='+ ID +'&action=rollback&object=Purchase';//&status='+status;
+
+				$.ajax(
+				{
+
+						type: 'POST',
+
+						url: process,
+
+						data: string,
+
+						cache: false,
+
+						success: function( data )
+						{
+
+								if( data )
+								{
+
+										notifyError( 'Se produjo un error al pasar a pendiente la orden de compra' );
+
+										console.log( 'Error al intentar cambiar de estado. Item=' + ID + '. Error: ' + data );
+
+								}else{
+
+										notifySuccess( 'Ahora la orden se encuentra pendiente' );
+
+										$( '.searchButton' ).click();
+
+								}
+
+						}
+
+				});
+
+		});
+
+}
+//
+// $( function()
+// {
+//
+// 		storeElement();
+//
+// 		deliverElement();
+//
+// 		rollbackElement();
+//
+// });

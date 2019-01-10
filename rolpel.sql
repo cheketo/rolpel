@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-10-2018 a las 07:19:15
+-- Tiempo de generación: 10-01-2019 a las 21:58:01
 -- Versión del servidor: 5.6.37
 -- Versión de PHP: 7.1.8
 
@@ -53,7 +53,15 @@ CREATE TABLE IF NOT EXISTS `company` (
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `company`
+--
+
+INSERT INTO `company` (`company_id`, `type_id`, `name`, `cuit`, `iva_id`, `purchase_condition_id`, `iibb`, `vat`, `international`, `customer`, `provider`, `provider_number`, `reputation`, `logo`, `status`, `balance`, `balance_positive`, `balance_initial`, `credit_limit`, `currency_id`, `creation_date`, `last_update`, `old_id`, `created_by`, `updated_by`, `organization_id`) VALUES
+(1, 1, 'Alejandro Romero', 0, 0, 0, '0', '0', 'N', 'Y', 'N', '', 0, '../../../../skin/images/companies/1/img922459835.jpg', 'A', '0.00', '0.00', '0.00', 0, 1, '2018-12-26 08:09:28', '2018-12-26 11:09:28', 0, 8, 0, 1),
+(2, 2, 'Casati', 0, 0, 0, '0', '0', 'N', 'Y', 'N', '', 0, '../../../../skin/images/companies/default/default.png', 'A', '0.00', '0.00', '0.00', 0, 1, '2019-01-10 17:51:44', '2019-01-10 20:51:44', 0, 2, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -73,7 +81,14 @@ CREATE TABLE IF NOT EXISTS `company_agent` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `company_agent`
+--
+
+INSERT INTO `company_agent` (`agent_id`, `company_id`, `branch_id`, `name`, `charge`, `email`, `phone`, `extra`, `creation_date`, `created_by`, `organization_id`) VALUES
+(1, 2, 4, 'Jorge', 'Compras', '', '', '', '2019-01-10 17:51:44', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -115,7 +130,17 @@ CREATE TABLE IF NOT EXISTS `company_branch` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `company_branch`
+--
+
+INSERT INTO `company_branch` (`branch_id`, `company_id`, `country_id`, `province_id`, `region_id`, `zone_id`, `name`, `address`, `postal_code`, `phone`, `email`, `website`, `fax`, `main_branch`, `lat`, `lng`, `monday_from`, `monday_to`, `tuesday_from`, `tuesday_to`, `wensday_from`, `wensday_to`, `thursday_from`, `thursday_to`, `friday_from`, `friday_to`, `saturday_from`, `saturday_to`, `sunday_from`, `sunday_to`, `creation_date`, `created_by`, `organization_id`) VALUES
+(1, 1, 1, 1, 26, 28, 'Central', 'Robertson 1041', 'C1406', '1530234991', 'romero.m.alejandro@gmail.com', 'http://www.innovastudio.com.ar', '', 'Y', '-34.6403159000000000', '-58.4542103999999650', '', '', '10:00', '21:30', '10:01', '21:30', '10:00', '17:00', '', '', '', '', '', '', '2018-12-26 08:09:28', 8, 1),
+(2, 1, 1, 1, 26, 28, 'Rivera Indarte', 'Rivera Indarte 1066', 'C1406', '46314431', '', '', '', 'N', '-34.6406231000000000', '-58.4540570000000340', '08:00', '18:00', '', '', '', '', '', '', '08:00', '18:00', '', '', '', '', '2018-12-26 08:09:28', 8, 1),
+(3, 1, 1, 1, 26, 28, 'Carlos Ortiz', 'Carlos Ortiz 1273', 'C1406', '', '', '', '', 'N', '-34.6415610000000000', '-58.4510397999999900', '', '', '', '', '', '', '', '', '', '', '10:00', '13:00', '10:00', '12:00', '2018-12-26 08:09:28', 8, 1),
+(4, 2, 1, 1, 28, 32, 'Central', 'Catamarca 1234', 'C1246', '', '', '', '', 'Y', '-34.6244457000000000', '-58.4031370000000150', '09:15', '22:00', '', '', '', '', '', '', '', '', '', '', '', '', '2019-01-10 17:51:44', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -244,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `core_log_error` (
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created_by` int(11) NOT NULL,
   `creation_date` datetime NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=157837 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=157856 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_log_error`
@@ -381,7 +406,26 @@ INSERT INTO `core_log_error` (`log_id`, `error`, `type`, `description`, `created
 (157833, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 02:53:49'),
 (157834, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''''.receiver_id.''=''.11696.'',branch_id=5081,agent_id=1336,delivery_date=''2019-09-25'' at line 1', 'MySQL', 'UPDATE purchase SET company_id=11696,''.receiver_id.''=''.11696.'',branch_id=5081,agent_id=1336,delivery_date=''2019-09-25'',extra=''Cotizaci?n de Prueba Cliente34567890'',additional_information=''Cotizaci?n de Prueba Uso interno1234567'',total=314.22,monday_from=''01:12'',monday_to=''09:20'',tuesday_from=''08:05'',tuesday_to=''14:10'',wensday_from='''',wensday_to='''',thursday_from=''10:30'',thursday_to=''20:50'',friday_from=''09:20''friday_to=''11:09'',saturday_from=''08:10'',saturday_to=''10:30'',sunday_from='''',sunday_to='''',updated_by=8 WHERE purchase_id=1', 8, '2018-10-17 03:16:29'),
 (157835, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''friday_to=''11:09'',saturday_from=''08:10'',saturday_to=''10:30'',sunday_from='''',sunda'' at line 1', 'MySQL', 'UPDATE purchase SET company_id=11696,receiver_id=11696,branch_id=5081,agent_id=1336,delivery_date=''2019-09-25'',extra=''Cotizaci?n de Prueba Cliente34567890'',additional_information=''Cotizaci?n de Prueba Uso interno1234567'',total=314.22,monday_from=''01:12'',monday_to=''09:20'',tuesday_from=''08:05'',tuesday_to=''14:10'',wensday_from='''',wensday_to='''',thursday_from=''10:30'',thursday_to=''20:50'',friday_from=''09:20''friday_to=''11:09'',saturday_from=''08:10'',saturday_to=''10:30'',sunday_from='''',sunday_to='''',updated_by=8 WHERE purchase_id=1', 8, '2018-10-17 03:17:33'),
-(157836, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 03:57:50');
+(157836, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-10-17 03:57:50'),
+(157837, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 07:59:30'),
+(157838, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 07:59:45'),
+(157839, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 07:59:50'),
+(157840, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 08:03:56'),
+(157841, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 08:09:43'),
+(157842, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 08:13:51'),
+(157843, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2018-12-26 08:21:41'),
+(157844, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '''', ''P'', NOW(),8,1)'' at line 1', 'MySQL', 'INSERT INTO delivery (truck_id,branch_id,delivery_date, status, creation_date, created_by,organization_id)VALUES(1,2018-12-30'', ''P'', NOW(),8,1)', 8, '2018-12-27 04:10:25'),
+(157845, 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '''', ''P'', NOW(),8,1)'' at line 1', 'MySQL', 'INSERT INTO delivery (truck_id,delivery_date, status, creation_date, created_by,organization_id)VALUES(1,2018-12-30'', ''P'', NOW(),8,1)', 8, '2018-12-27 04:11:26'),
+(157846, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2019-01-07 05:14:26'),
+(157847, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2019-01-07 07:22:54'),
+(157848, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 17:55:03'),
+(157849, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 17:55:16'),
+(157850, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 17:55:33'),
+(157851, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 17:55:44'),
+(157852, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 17:59:44'),
+(157853, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 17:59:46'),
+(157854, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 2, '2019-01-10 18:01:31'),
+(157855, 'Table ''rolpel.currency'' doesn''t exist', 'MySQL', 'SELECT currency_id,title FROM currency ORDER BY title DESC', 8, '2019-01-10 18:01:53');
 
 -- --------------------------------------------------------
 
@@ -397,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `core_log_login` (
   `tries` int(11) NOT NULL,
   `event` varchar(255) CHARACTER SET latin1 NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_log_login`
@@ -409,7 +453,18 @@ INSERT INTO `core_log_login` (`log_id`, `user`, `password`, `ip`, `tries`, `even
 (137, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-16 15:46:42'),
 (138, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-16 18:24:31'),
 (139, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-10-17 02:44:37'),
-(140, 'sergio', '', '127.0.0.1', 0, 'OK', '2018-10-17 07:05:11');
+(140, 'sergio', '', '127.0.0.1', 0, 'OK', '2018-10-17 07:05:11'),
+(141, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-12-07 05:40:33'),
+(142, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-12-26 10:47:28'),
+(143, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-12-27 02:19:21'),
+(144, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-12-27 05:55:20'),
+(145, 'cheketo', '', '127.0.0.1', 0, 'OK', '2018-12-27 13:51:47'),
+(146, 'cheketo', '', '127.0.0.1', 0, 'OK', '2019-01-06 20:33:35'),
+(147, 'cheketo', '', '127.0.0.1', 0, 'OK', '2019-01-07 06:45:22'),
+(148, 'cheketo', '', '127.0.0.1', 0, 'OK', '2019-01-10 20:46:06'),
+(149, 'ana', '1234', '127.0.0.1', 1, 'Clave Incorrecta', '2019-01-10 20:47:02'),
+(150, 'ana', '', '127.0.0.1', 0, 'OK', '2019-01-10 20:47:07'),
+(151, 'cheketo', '', '127.0.0.1', 0, 'OK', '2019-01-10 21:01:47');
 
 -- --------------------------------------------------------
 
@@ -428,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `core_menu` (
   `status` char(1) CHARACTER SET latin1 NOT NULL DEFAULT 'A',
   `view_status` char(1) CHARACTER SET latin1 NOT NULL DEFAULT 'A',
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=145 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_menu`
@@ -486,8 +541,8 @@ INSERT INTO `core_menu` (`menu_id`, `parent_id`, `title`, `link`, `icon`, `posit
 (74, 76, 'Ordenes Sin Confirmar', '../provider_national_order/list.php?status=P', 'fa-shopping-cart', 2, 'N', 'I', 'A', 1),
 (75, 102, 'Editar Cotización', '../../../project/modules/quotation/edit.php', 'fa-clipboard', 12, 'N', 'A', 'O', 1),
 (76, 0, 'Ordenes de Compra', '#', 'fa-shopping-cart', 10, 'N', 'A', 'A', 1),
-(77, 107, 'Ordenes Pedidas', '../../../er_national_order/list.php?status=A', 'fa-truck', 3, 'N', 'A', 'A', 1),
-(78, 76, 'Historial de Ordenes', '../../../project/modules/purchase/list.php?status=F&customer=Y', 'fa-hourglass-half', 99, 'N', 'A', 'A', 1),
+(77, 107, 'Ordenes Pedidas', '../../../er_national_order/list.php?status=A', 'fa-truck', 3, 'N', 'I', 'A', 1),
+(78, 76, 'Historial de Ordenes', '../../../project/modules/purchase/list.php?status=F', 'fa-hourglass-half', 99, 'N', 'A', 'A', 1),
 (98, 0, 'Empresas', '#', 'fa-building', 3, 'N', 'A', 'A', 1),
 (99, 98, 'Todas las Empresas', '../../../project/modules/company/list.php', 'fa-book', 0, 'N', 'A', 'A', 1),
 (100, 98, 'Proveedores', '../../../project/modules/company/list.php?provider=Y', 'fa-shopping-cart', 2, 'N', 'A', 'A', 1),
@@ -504,8 +559,15 @@ INSERT INTO `core_menu` (`menu_id`, `parent_id`, `title`, `link`, `icon`, `posit
 (140, 137, 'Listar Camiones', '../../../project/modules/truck/list.php', 'fa-bus', 3, 'N', 'A', 'A', 1),
 (141, 76, 'Nueva Orden', '../../../project/modules/purchase/new.php?customer=Y', 'fa-cart-plus', 1, 'N', 'A', 'A', 1),
 (142, 76, 'Ordenes Pendientes', '../../../project/modules/purchase/list.php?status=P', 'fa-exclamation-circle', 2, 'N', 'A', 'A', 1),
-(143, 76, 'Ordenes Activas', '../../../project/modules/purchase/list.php?status=A', 'fa-shopping-cart', 5, 'N', 'A', 'A', 1),
-(144, 76, 'Editar Orden de Compra', '../../../project/modules/purchase/edit.php', 'fa-shopping-cart', 5, 'N', 'A', 'O', 1);
+(143, 76, 'Ordenes en Reparto', '../../../project/modules/purchase/list.php?status=A', 'fa-shopping-cart', 5, 'N', 'A', 'A', 1),
+(144, 76, 'Editar Orden de Compra', '../../../project/modules/purchase/edit.php', 'fa-shopping-cart', 5, 'N', 'A', 'O', 1),
+(145, 0, 'Repartos', '#', 'fa-truck', 10, 'N', 'A', 'A', 1),
+(146, 145, 'Repartos Pendientes', '../../../project/modules/delivery/list.php?status=P', 'fa-exclamation-circle', 5, 'N', 'A', 'A', 1),
+(147, 145, 'Repartos Activos', '../../../project/modules/delivery/list.php?status=A', 'fa-road', 6, 'N', 'A', 'A', 1),
+(148, 145, 'Repartos Finalizados', '../../../project/modules/delivery/list.php?status=F', 'fa-thumbs-o-up', 7, 'N', 'A', 'A', 1),
+(149, 145, 'Nuevo Reparto', '../../../project/modules/delivery/new.php', 'fa-ambulance', 1, 'N', 'A', 'A', 1),
+(150, 145, 'Editar Reparto', '../../../project/modules/delivery/edit.php', 'fa-truck', 2, 'N', 'A', 'O', 1),
+(151, 145, 'Asignar Ordenes de Compra', '../../../project/modules/delivery/orders.php', 'fa-stack-overflow', 4, 'N', 'A', 'O', 1);
 
 -- --------------------------------------------------------
 
@@ -646,7 +708,7 @@ CREATE TABLE IF NOT EXISTS `core_region` (
   `country_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `short_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_region`
@@ -679,7 +741,8 @@ INSERT INTO `core_region` (`region_id`, `province_id`, `country_id`, `name`, `sh
 (24, 6, 1, 'San Fernando', 'San Fernando'),
 (25, 19, 1, 'Comuna 4', 'Comuna 4'),
 (26, 1, 1, 'Comuna 7', 'Comuna 7'),
-(27, 243, 5, 'Adams County', 'Adams County');
+(27, 243, 5, 'Adams County', 'Adams County'),
+(28, 1, 1, 'Comuna 3', 'Comuna 3');
 
 -- --------------------------------------------------------
 
@@ -726,7 +789,7 @@ CREATE TABLE IF NOT EXISTS `core_relation_menu_group` (
   `relation_id` int(11) NOT NULL,
   `menu_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=242 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=256 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_relation_menu_group`
@@ -753,7 +816,19 @@ INSERT INTO `core_relation_menu_group` (`relation_id`, `menu_id`, `group_id`) VA
 (165, 92, 8),
 (166, 97, 8),
 (192, 30, 6),
-(191, 13, 6);
+(191, 13, 6),
+(244, 146, 13),
+(245, 146, 18),
+(246, 147, 13),
+(247, 147, 18),
+(248, 148, 13),
+(249, 148, 18),
+(250, 149, 13),
+(251, 149, 18),
+(252, 150, 13),
+(253, 150, 18),
+(254, 151, 13),
+(255, 151, 18);
 
 -- --------------------------------------------------------
 
@@ -765,7 +840,7 @@ CREATE TABLE IF NOT EXISTS `core_relation_menu_profile` (
   `relation_id` int(11) NOT NULL,
   `menu_id` int(11) NOT NULL,
   `profile_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=639 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=651 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_relation_menu_profile`
@@ -819,9 +894,9 @@ INSERT INTO `core_relation_menu_profile` (`relation_id`, `menu_id`, `profile_id`
 (619, 138, 360),
 (618, 137, 360),
 (617, 93, 360),
-(616, 78, 360),
+(640, 78, 360),
 (615, 144, 360),
-(614, 143, 360),
+(650, 143, 360),
 (613, 142, 360),
 (612, 141, 360),
 (611, 76, 360),
@@ -862,7 +937,14 @@ INSERT INTO `core_relation_menu_profile` (`relation_id`, `menu_id`, `profile_id`
 (274, 13, 365),
 (588, 99, 360),
 (587, 98, 360),
-(586, 13, 360);
+(586, 13, 360),
+(649, 145, 360),
+(642, 146, 360),
+(643, 147, 360),
+(644, 148, 360),
+(645, 149, 360),
+(646, 150, 360),
+(647, 151, 360);
 
 -- --------------------------------------------------------
 
@@ -1012,8 +1094,8 @@ CREATE TABLE IF NOT EXISTS `core_user` (
 
 INSERT INTO `core_user` (`user_id`, `organization_id`, `user`, `password`, `first_name`, `last_name`, `email`, `phone`, `profile_id`, `img`, `status`, `tries`, `last_access`, `creation_date`, `creator_id`) VALUES
 (1, 1, 'sergio', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Sergio', 'Rodriguez', 'carlos@rolpel.com.ar', '', 360, '../../../../skin/images/users/default/default11.png', 'A', 0, '2018-10-17 04:05:11', '2018-06-18 01:22:39', 8),
-(2, 1, 'ana', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ana', 'Rodriguez', 'cobranzas@rolpel.com.ar', '', 360, '../../../../skin/images/users/default/default06.png', 'A', 0, '2018-06-22 09:20:18', '2018-04-27 14:18:36', 8),
-(8, 1, 'cheketo', '49e09dc76bf5ba6fdcbfb710a7d8842d867bad54', 'Alejandro', 'Romero', 'romero.m.alejandro@gmail.com', '', 333, '../../../../skin/images/users/default/default21.png', 'A', 0, '2018-10-16 23:44:37', '0000-00-00 00:00:00', 0);
+(2, 1, 'ana', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ana', 'Rodriguez', 'cobranzas@rolpel.com.ar', '', 333, '../../../../skin/images/users/default/default06.png', 'A', 0, '2019-01-10 17:47:07', '2018-04-27 14:18:36', 8),
+(8, 1, 'cheketo', '49e09dc76bf5ba6fdcbfb710a7d8842d867bad54', 'Alejandro', 'Romero', 'romero.m.alejandro@gmail.com', '', 333, '../../../../skin/images/users/default/default21.png', 'A', 0, '2019-01-10 18:01:47', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -1116,7 +1198,7 @@ CREATE TABLE IF NOT EXISTS `core_zone` (
   `country_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `short_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `core_zone`
@@ -1153,7 +1235,80 @@ INSERT INTO `core_zone` (`zone_id`, `region_id`, `province_id`, `country_id`, `n
 (28, 26, 1, 1, 'Flores', 'Flores'),
 (29, 27, 243, 5, 'Thornton', 'Thornton'),
 (30, 0, 244, 6, 'Queenstown', 'Queenstown'),
-(31, 1, 1, 1, 'Barracas', 'Barracas');
+(31, 1, 1, 1, 'Barracas', 'Barracas'),
+(32, 28, 1, 1, 'San Cristobal', 'San Cristobal');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `delivery`
+--
+
+CREATE TABLE IF NOT EXISTS `delivery` (
+  `delivery_id` int(11) NOT NULL,
+  `delivery_date` date NOT NULL,
+  `delivery_week_day` int(1) NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `truck_id` int(11) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'P',
+  `created_by` int(11) NOT NULL,
+  `creation_date` datetime NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `modification_date` datetime NOT NULL,
+  `organization_id` int(11) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `delivery`
+--
+
+INSERT INTO `delivery` (`delivery_id`, `delivery_date`, `delivery_week_day`, `start_date`, `end_date`, `truck_id`, `status`, `created_by`, `creation_date`, `updated_by`, `modification_date`, `organization_id`) VALUES
+(3, '2018-12-30', 0, NULL, NULL, 1, 'P', 8, '2018-12-27 04:11:49', 0, '0000-00-00 00:00:00', 1),
+(2, '2018-12-27', 5, NULL, NULL, 1, 'P', 8, '2018-12-27 02:00:00', 0, '0000-00-00 00:00:00', 1),
+(4, '2019-01-06', 0, NULL, NULL, 1, 'P', 8, '2019-01-06 17:33:53', 0, '0000-00-00 00:00:00', 1),
+(5, '2019-01-10', 0, NULL, NULL, 1, 'P', 8, '2019-01-10 18:09:31', 0, '0000-00-00 00:00:00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `delivery_order`
+--
+
+CREATE TABLE IF NOT EXISTS `delivery_order` (
+  `order_id` int(11) NOT NULL,
+  `delivery_id` int(11) NOT NULL,
+  `purchase_id` int(11) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'P',
+  `position` int(3) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `creation_date` datetime NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `organization_id` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `delivery_order_item`
+--
+
+CREATE TABLE IF NOT EXISTS `delivery_order_item` (
+  `item_id` int(11) NOT NULL,
+  `delivery_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `purchase_id` int(11) NOT NULL,
+  `purchase_item_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `quantity_delivered` int(11) NOT NULL,
+  `quantity_returned` int(11) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `creation_date` datetime NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `organization_id` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1178,7 +1333,19 @@ CREATE TABLE IF NOT EXISTS `product` (
   `creation_date` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `product`
+--
+
+INSERT INTO `product` (`product_id`, `code`, `price`, `organization_id`, `category_id`, `brand_id`, `title`, `width`, `height`, `depth`, `description`, `status`, `modification_date`, `creation_date`, `created_by`, `updated_by`) VALUES
+(1, '', '0.00', 1, 1, 1, 'Caja Estandar', '60.00', '40.00', '40.00', '', 'A', '2018-12-26 11:12:35', '2018-12-26 08:12:35', 8, 0),
+(2, '', '0.00', 1, 2, 1, 'Rollo Estandar', '1.00', '3.00', '0.00', '', 'A', '2018-12-26 11:13:21', '2018-12-26 08:13:21', 8, 0),
+(3, '', '0.00', 1, 1, 1, 'Caja', '0.00', '0.00', '0.00', '', 'A', '2018-12-26 11:13:39', '2018-12-26 08:13:39', 8, 0),
+(4, '', '0.00', 1, 2, 1, 'Rollo', '0.00', '0.00', '0.00', '', 'A', '2018-12-26 11:13:48', '2018-12-26 08:13:48', 8, 0),
+(5, '', '0.00', 1, 1, 1, 'Esquinero', '0.00', '0.00', '0.00', '', 'A', '2019-01-10 20:54:45', '2019-01-10 17:54:45', 2, 0),
+(6, '', '0.00', 1, 1, 1, 'Caja Estandar 60x30x20', '60.00', '30.00', '20.00', '', 'A', '2019-01-10 21:05:54', '2019-01-10 18:05:54', 8, 0);
 
 -- --------------------------------------------------------
 
@@ -1194,7 +1361,14 @@ CREATE TABLE IF NOT EXISTS `product_brand` (
   `country_id` int(11) NOT NULL,
   `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A',
   `creation_date` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `product_brand`
+--
+
+INSERT INTO `product_brand` (`brand_id`, `organization_id`, `name`, `name_short`, `country_id`, `status`, `creation_date`) VALUES
+(1, 1, 'Rol-Pel', '', 0, 'A', '2018-12-26 08:10:24');
 
 -- --------------------------------------------------------
 
@@ -1213,7 +1387,16 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   `created_by` int(11) NOT NULL,
   `last_modification` datetime NOT NULL,
   `updated_by` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `product_category`
+--
+
+INSERT INTO `product_category` (`category_id`, `organization_id`, `parent_id`, `title`, `short_title`, `status`, `creation_date`, `created_by`, `last_modification`, `updated_by`) VALUES
+(1, 1, 0, 'Cajas', 'Cajas', 'A', '2018-12-26 08:10:47', 8, '0000-00-00 00:00:00', 0),
+(2, 1, 0, 'Rollos', 'Rollos', 'A', '2018-12-26 08:11:04', 8, '0000-00-00 00:00:00', 0),
+(3, 1, 0, 'Planchas', 'Planchas', 'A', '2019-01-10 17:52:48', 2, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -1268,7 +1451,17 @@ CREATE TABLE IF NOT EXISTS `purchase` (
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `purchase`
+--
+
+INSERT INTO `purchase` (`purchase_id`, `company_id`, `branch_id`, `sender_id`, `receiver_id`, `agent_id`, `currency_id`, `total`, `quotation_id`, `status`, `purchase_date`, `delivery_date`, `extra`, `additional_information`, `monday_from`, `monday_to`, `tuesday_from`, `tuesday_to`, `wensday_from`, `wensday_to`, `thursday_from`, `thursday_to`, `friday_from`, `friday_to`, `saturday_from`, `saturday_to`, `sunday_from`, `sunday_to`, `creation_date`, `created_by`, `modification_date`, `updated_by`, `organization_id`) VALUES
+(1, 1, 1, 0, 1, 0, 0, '11500.00', 1, 'A', '2018-12-25', '2019-01-14 00:00:00', 'Información extra para el cliente', 'Datos de uso interno', '', '', '10:00', '21:30', '10:01', '21:30', '10:00', '17:00', '', '', '', '', '', '', '2018-12-26 08:16:00', 8, '2018-12-27 10:55:25', 8, 1),
+(2, 1, 2, 0, 1, 0, 0, '3200.00', 0, 'A', '2018-12-26', '2019-01-02 00:00:00', '', '', '08:00', '18:00', '', '', '', '', '', '', '08:00', '18:00', '', '', '', '', '2018-12-26 08:22:15', 8, '2018-12-27 10:55:23', 0, 1),
+(3, 1, 3, 0, 1, 0, 0, '250.00', 0, 'A', '2018-11-01', '2018-11-11 00:00:00', '', '', '', '', '', '', '', '', '', '', '02:05', '11:00', '', '', '', '', '2019-01-07 07:23:58', 8, '2019-01-07 10:24:03', 0, 1),
+(4, 2, 4, 0, 2, 1, 0, '93000.00', 0, 'A', '2019-01-10', '2019-03-01 00:00:00', '', '', '', '', '', '', '', '', '', '', '10:00', '11:00', '', '', '', '', '2019-01-10 18:07:45', 8, '2019-01-10 21:09:01', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1354,12 +1547,27 @@ CREATE TABLE IF NOT EXISTS `purchase_item` (
   `total` decimal(12,2) NOT NULL,
   `delivery_date` datetime NOT NULL,
   `days` int(7) NOT NULL,
+  `quantity_delivered` int(11) NOT NULL,
+  `quantity_returned` int(11) NOT NULL,
+  `status` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'P',
   `created_by` int(11) NOT NULL,
   `creation_date` datetime NOT NULL,
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `purchase_item`
+--
+
+INSERT INTO `purchase_item` (`item_id`, `purchase_id`, `company_id`, `branch_id`, `product_id`, `currency_id`, `width`, `height`, `depth`, `price`, `quantity`, `total`, `delivery_date`, `days`, `quantity_delivered`, `quantity_returned`, `status`, `created_by`, `creation_date`, `modification_date`, `updated_by`, `organization_id`) VALUES
+(4, 1, 1, 1, 2, 0, '1.00', '3.00', '0.00', '5000.00', 2, '10000.00', '2019-01-14 00:00:00', 20, 0, 0, 'P', 8, '2018-12-26 08:20:24', '2018-12-26 11:20:24', 0, 1),
+(3, 1, 1, 1, 1, 0, '60.00', '40.00', '40.00', '5.00', 300, '1500.00', '2018-12-30 00:00:00', 5, 0, 0, 'P', 8, '2018-12-26 08:20:24', '2018-12-26 11:20:24', 0, 1),
+(5, 2, 1, 2, 3, 0, '40.00', '40.00', '40.00', '8.00', 400, '3200.00', '2019-01-02 00:00:00', 7, 0, 0, 'P', 8, '2018-12-26 08:22:15', '2018-12-26 11:22:15', 0, 1),
+(6, 3, 1, 3, 1, 0, '60.00', '40.00', '40.00', '5.00', 50, '250.00', '2018-11-11 00:00:00', 10, 0, 0, 'P', 8, '2019-01-07 07:23:58', '2019-01-07 10:23:58', 0, 1),
+(7, 4, 2, 4, 1, 0, '65.00', '40.00', '40.00', '40.00', 2000, '80000.00', '2019-03-01 00:00:00', 50, 0, 0, 'P', 8, '2019-01-10 18:07:45', '2019-01-10 21:07:45', 0, 1),
+(8, 4, 2, 4, 6, 0, '60.00', '30.00', '20.00', '13.00', 1000, '13000.00', '2019-01-30 00:00:00', 20, 0, 0, 'P', 8, '2019-01-10 18:07:45', '2019-01-10 21:07:45', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1389,7 +1597,14 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `quotation`
+--
+
+INSERT INTO `quotation` (`quotation_id`, `company_id`, `branch_id`, `sender_id`, `receiver_id`, `agent_id`, `currency_id`, `total`, `type_id`, `status`, `quotation_date`, `delivery_date`, `expire_date`, `expire_days`, `extra`, `additional_information`, `creation_date`, `created_by`, `modification_date`, `updated_by`, `organization_id`) VALUES
+(1, 1, 1, 0, 1, 0, 0, '11500.00', 0, 'F', '2018-12-25', '2019-01-14 00:00:00', '2019-01-14 00:00:00', 20, '', '', '2018-12-26 08:15:45', 8, '2018-12-26 11:16:00', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1480,7 +1695,15 @@ CREATE TABLE IF NOT EXISTS `quotation_item` (
   `modification_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `quotation_item`
+--
+
+INSERT INTO `quotation_item` (`item_id`, `quotation_id`, `company_id`, `branch_id`, `product_id`, `currency_id`, `width`, `height`, `depth`, `price`, `quantity`, `total`, `delivery_date`, `days`, `created_by`, `creation_date`, `modification_date`, `updated_by`, `organization_id`) VALUES
+(1, 1, 1, 1, 1, 0, '60.00', '40.00', '40.00', '5.00', 300, '1500.00', '2018-12-30 00:00:00', 5, 8, '2018-12-26 08:15:45', '2018-12-26 11:15:45', 0, 1),
+(2, 1, 1, 1, 2, 0, '1.00', '3.00', '0.00', '5000.00', 2, '10000.00', '2019-01-14 00:00:00', 20, 8, '2018-12-26 08:15:45', '2018-12-26 11:15:45', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1551,7 +1774,14 @@ CREATE TABLE IF NOT EXISTS `truck` (
   `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
   `organization_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `truck`
+--
+
+INSERT INTO `truck` (`truck_id`, `driver_id`, `brand`, `model`, `year`, `plate`, `code`, `capacity`, `status`, `creation_date`, `created_by`, `last_update`, `updated_by`, `organization_id`) VALUES
+(1, 1, 'Mercedes Benz', 'Cargo', 1998, 'DXU624', 'Camión 1', 50, 'A', '2018-12-27 03:12:38', 8, '2018-12-27 06:12:38', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -2059,6 +2289,24 @@ ALTER TABLE `core_zone`
   ADD PRIMARY KEY (`zone_id`);
 
 --
+-- Indices de la tabla `delivery`
+--
+ALTER TABLE `delivery`
+  ADD PRIMARY KEY (`delivery_id`);
+
+--
+-- Indices de la tabla `delivery_order`
+--
+ALTER TABLE `delivery_order`
+  ADD PRIMARY KEY (`order_id`);
+
+--
+-- Indices de la tabla `delivery_order_item`
+--
+ALTER TABLE `delivery_order_item`
+  ADD PRIMARY KEY (`item_id`);
+
+--
 -- Indices de la tabla `product`
 --
 ALTER TABLE `product`
@@ -2184,17 +2432,17 @@ ALTER TABLE `truck`
 -- AUTO_INCREMENT de la tabla `company`
 --
 ALTER TABLE `company`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `company_agent`
 --
 ALTER TABLE `company_agent`
-  MODIFY `agent_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `agent_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `company_branch`
 --
 ALTER TABLE `company_branch`
-  MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `company_type`
 --
@@ -2219,17 +2467,17 @@ ALTER TABLE `core_log_email`
 -- AUTO_INCREMENT de la tabla `core_log_error`
 --
 ALTER TABLE `core_log_error`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=157837;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=157856;
 --
 -- AUTO_INCREMENT de la tabla `core_log_login`
 --
 ALTER TABLE `core_log_login`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=141;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=152;
 --
 -- AUTO_INCREMENT de la tabla `core_menu`
 --
 ALTER TABLE `core_menu`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=145;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=152;
 --
 -- AUTO_INCREMENT de la tabla `core_organization`
 --
@@ -2249,7 +2497,7 @@ ALTER TABLE `core_province`
 -- AUTO_INCREMENT de la tabla `core_region`
 --
 ALTER TABLE `core_region`
-  MODIFY `region_id` int(11) NOT NULL AUTO_INCREMENT COMMENT ' ',AUTO_INCREMENT=28;
+  MODIFY `region_id` int(11) NOT NULL AUTO_INCREMENT COMMENT ' ',AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT de la tabla `core_relation_group_profile`
 --
@@ -2259,12 +2507,12 @@ ALTER TABLE `core_relation_group_profile`
 -- AUTO_INCREMENT de la tabla `core_relation_menu_group`
 --
 ALTER TABLE `core_relation_menu_group`
-  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=242;
+  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=256;
 --
 -- AUTO_INCREMENT de la tabla `core_relation_menu_profile`
 --
 ALTER TABLE `core_relation_menu_profile`
-  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=639;
+  MODIFY `relation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=651;
 --
 -- AUTO_INCREMENT de la tabla `core_relation_user_group`
 --
@@ -2284,22 +2532,37 @@ ALTER TABLE `core_user`
 -- AUTO_INCREMENT de la tabla `core_zone`
 --
 ALTER TABLE `core_zone`
-  MODIFY `zone_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
+  MODIFY `zone_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT de la tabla `delivery`
+--
+ALTER TABLE `delivery`
+  MODIFY `delivery_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT de la tabla `delivery_order`
+--
+ALTER TABLE `delivery_order`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `delivery_order_item`
+--
+ALTER TABLE `delivery_order_item`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `product_brand`
 --
 ALTER TABLE `product_brand`
-  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `brand_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `product_category`
 --
 ALTER TABLE `product_category`
-  MODIFY `category_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `category_id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `product_image`
 --
@@ -2309,7 +2572,7 @@ ALTER TABLE `product_image`
 -- AUTO_INCREMENT de la tabla `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `purchase_email`
 --
@@ -2329,12 +2592,12 @@ ALTER TABLE `purchase_file_new`
 -- AUTO_INCREMENT de la tabla `purchase_item`
 --
 ALTER TABLE `purchase_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `quotation`
 --
 ALTER TABLE `quotation`
-  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `quotation_email`
 --
@@ -2354,7 +2617,7 @@ ALTER TABLE `quotation_file_new`
 -- AUTO_INCREMENT de la tabla `quotation_item`
 --
 ALTER TABLE `quotation_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `relation_company_broker`
 --
@@ -2369,7 +2632,7 @@ ALTER TABLE `tax_iva_type`
 -- AUTO_INCREMENT de la tabla `truck`
 --
 ALTER TABLE `truck`
-  MODIFY `truck_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `truck_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

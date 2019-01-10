@@ -82,14 +82,23 @@ class Purchase
 			if($Mode!='grid') $HTML .=	'<a class="hint--bottom hint--bounce" aria-label="M&aacute;s informaci&oacute;n"><button type="button" class="btn bg-navy ExpandButton" id="expand_'.$Object->ID.'"><i class="fa fa-plus"></i></button></a> ';;
 			if($Object->Data['status']!="I")
 			{
-				$HTML	.= '<a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="view.php?id='.$Object->ID.'" id="payment_'.$Object->ID.'"><button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button></a> ';
+				// $HTML	.= '<a class="hint--bottom hint--bounce" aria-label="Ver Detalle" href="view.php?id='.$Object->ID.'" id="payment_'.$Object->ID.'"><button type="button" class="btn btn-github"><i class="fa fa-eye"></i></button></a> ';
 				if($Object->Data['status']!="F")
 				{
 					if($Object->Data['status']=="A")
 					{
 
-							$HTML	.= '<a class="hint--bottom hint--bounce hint--warning deliveryOrder" aria-label="Pasar a Reparto" process="'.PROCESS.'" id="purchase_'.$Object->ID.'" status="'.$Row->Data['status'].'"><button type="button" class="btn bg-brown"><i class="fa fa-truck"></i></button></a> ';
-							$HTML	.= '<a class="hint--bottom hint--bounce hint--success storeElement" aria-label="Pagada y Finalizada" process="'.PROCESS.'" id="store_'.$Object->ID.'"><button type="button" class="btn btn-success"><i class="fa fa-check-circle"></i></button></a>';
+							$HTML	.= '<a class="hint--bottom hint--bounce hint--warning rollbackElement" aria-label="Regresar a Pendiente" process="'.PROCESS.'" id="rollback_'.$Object->ID.'"><button type="button" class="btn btn-warning"><i class="fa fa-rotate-left"></i></button></a> ';
+
+					}
+
+					if( $Object->Data[ 'status' ] == 'P' )
+					{
+
+							$HTML	.= '<a class="hint--bottom hint--bounce hint--success storeElement" aria-label="Pagada y Finalizada" process="'.PROCESS.'" id="store_'.$Object->ID.'" company="' . $Object->Data['company'] . '"><button type="button" class="btn btn-success"><i class="fa fa-check-circle"></i></button></a> ';
+
+							$HTML	.= '<a class="hint--bottom hint--bounce hint--warning deliveryElement" aria-label="Pasar a Reparto" process="'.PROCESS.'" id="delivery_'.$Object->ID.'"><button type="button" class="btn bg-brown"><i class="fa fa-truck"></i></button></a> ';
+
 
 					}
 					$HTML	.= '<a href="edit.php?id='.$Object->ID.self::GetParams().'" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
@@ -98,6 +107,7 @@ class Purchase
 					$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La orden de compra de <b>'.$Object->Data['company'].'</b> ha sido eliminada.');
 					$HTML	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>.');
 				}
+				// $HTML	.= '<a class="hint--bottom hint--bounce hint--warning rollbackElement" aria-label="Regresar a Pendiente" process="'.PROCESS.'" id="rollback_'.$Object->ID.'"><button type="button" class="btn btn-warning"><i class="fa fa-rotate-left"></i></button></a> ';
 			}else{
 				$HTML	.= '<a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" process="'.PROCESS.'" id="activate_'.$Object->ID.'"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
 				$HTML	.= Core::InsertElement('hidden','activate_question_'.$Object->ID,'&iquest;Desea activar la orden de compra de <b>'.$Object->Data['company'].'</b>?');
@@ -329,7 +339,7 @@ class Purchase
 																			$SaturdayTo . "','" .
 																			$SundayFrom . "','" .
 																			$SundayTo . "'," .
-																			"'A',NOW()," .
+																			"'P',NOW()," .
 																			$_SESSION[ CoreUser::TABLE_ID ] . "," .
 																			$_SESSION[ 'organization_id' ]
 
@@ -535,7 +545,7 @@ class Purchase
 
 			$Field				= $_POST['company_type'].'_id';
 
-			$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",".$Field."=".$CompanyID.",".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",purchase_date='".$RealDate."',delivery_date='".$DeliveryDate."',extra='".$Extra."',additional_information='".$Additional."',total=".$Total.",monday_from='".$MondayFrom."',monday_to='".$MondayTo."',tuesday_from='".$TuesdayFrom."',tuesday_to='".$TuesdayTo."',wensday_from='".$WensdayFrom."',wensday_to='".$WensdayTo."',thursday_from='".$ThursdayFrom."',thursday_to='".$ThursdayTo."',friday_from='".$FridayFrom."',friday_to='".$FridayTo."',saturday_from='".$SaturdayFrom."',saturday_to='".$SaturdayTo."',sunday_from='".$SundayFrom."',sunday_to='".$SundayTo."',status='A',updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
+			$Update		= Core::Update(self::TABLE,Company::TABLE_ID."=".$CompanyID.",".$Field."=".$CompanyID.",".CompanyBranch::TABLE_ID."=".$BranchID.",agent_id=".$AgentID.",purchase_date='".$RealDate."',delivery_date='".$DeliveryDate."',extra='".$Extra."',additional_information='".$Additional."',total=".$Total.",monday_from='".$MondayFrom."',monday_to='".$MondayTo."',tuesday_from='".$TuesdayFrom."',tuesday_to='".$TuesdayTo."',wensday_from='".$WensdayFrom."',wensday_to='".$WensdayTo."',thursday_from='".$ThursdayFrom."',thursday_to='".$ThursdayTo."',friday_from='".$FridayFrom."',friday_to='".$FridayTo."',saturday_from='".$SaturdayFrom."',saturday_to='".$SaturdayTo."',sunday_from='".$SundayFrom."',sunday_to='".$SundayTo."',updated_by=".$_SESSION[CoreUser::TABLE_ID],self::TABLE_ID."=".$ID);
 
 			// DELETE OLD ITEMS
 			PurchaseItem::DeleteItems($ID);
@@ -562,13 +572,27 @@ class Purchase
 		public function Store()
 		{
 
-				$ID	= $_POST['id'];
+				$ID	= $_POST[ 'id' ];
 
-				$Purchase = new Purchase( $ID );
+				Core::Update( self::TABLE, "status = 'F'", self::TABLE_ID . "=" . $ID );
 
-				$Total = $Purchase->Data[ 'total_purchase' ];
+		}
 
-				Core::Update(self::TABLE,"status = 'F'",self::TABLE_ID."=".$ID);
+		public function Deliver()
+		{
+
+				$ID	= $_POST[ 'id' ];
+
+				Core::Update( self::TABLE, "status = 'A'", self::TABLE_ID . "=" . $ID );
+
+		}
+
+		public function Rollback()
+		{
+
+				$ID	= $_POST[ 'id' ];
+
+				Core::Update( self::TABLE, "status = 'P'", self::TABLE_ID . "=" . $ID );
 
 		}
 
@@ -908,4 +932,5 @@ class Purchase
 		}
 
 }
+
 ?>

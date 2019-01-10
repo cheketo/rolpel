@@ -11,6 +11,15 @@ class CompanyBranch
 	const DEFAULT_IMG_DIR	 = '../../../../skin/images/branches/default/';
 	const IMG_DIR			     = '../../../../skin/images/branches/';
 
+  public static function GetBranch( $BranchID )
+  {
+
+      $Branch = Core::Select( self::TABLE, '*', self::TABLE_ID . "=" . $BranchID );
+
+      return $Branch[ 0 ];
+
+  }
+
 	public static function GetBranches($Branches)
 	{
 	  $TotalBranches = array();

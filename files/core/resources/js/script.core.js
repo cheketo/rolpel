@@ -33,8 +33,10 @@ function datePicker(element)
 
 function setDatePicker()
 {
+
   if($(".datePicker").length>0)
   {
+
     $.fn.datepicker.dates['es'] = {
       days: ["Domingo", "Lunes", "Martes", "Miércoles", "Juves", "Viernes", "Sábado"],
       daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
