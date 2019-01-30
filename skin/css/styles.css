@@ -1,4 +1,10 @@
 @charset "UTF-8";
+.text-pink {
+
+    color:pink;
+
+}
+
 .blueBack {
   background-color: #9795ef;
   color: #fff;

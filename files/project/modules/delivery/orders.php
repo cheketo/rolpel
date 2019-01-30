@@ -41,6 +41,8 @@
 
       echo Core::InsertElement( 'hidden', 'action', 'associate' );
 
+      echo Core::InsertElement( 'hidden', 'delivery', $ID );
+
   ?>
 
   <div class="box animated fadeIn" style="min-width:99%">
@@ -53,11 +55,21 @@
 
                   <div class="col-xs-12 col-md-5 col-lg-3">
 
-                      <?php echo Core::InsertElement( 'hidden', 'selected_purchases', '0' ); ?>
+                      <div class="" style="min-height:60em;background-color:#555;color:#EEE;">
 
-                      <div style="background-color:#555;color:#EEE;min-height:60em;padding:10px;" id="PurchaseList">
+                          <div class="txC" id="DeliveryOrdersTitle" style="padding-top:1em;font-size:24px;">
+
+                                <strong><i class="fa fa-truck"></i> Listado de Ordenes</strong>
+
+                          </div>
+
+                          <?php echo Core::InsertElement( 'hidden', 'selected_purchases', '0' ); ?>
+
+                          <div style="padding:10px;font-size:16px" id="PurchaseList">
 
 
+
+                          </div>
 
                       </div>
 
@@ -102,11 +114,17 @@
 
                                       $ID = $Purchase[ 'purchase_id' ];
 
+                                      $Items = Core::Select( PurchaseItem::TABLE . ' a INNER JOIN product b ON ( b.product_id = a.product_id )', 'a.*, (a.quantity - a.quantity_delivered) as quantity_remain, b.title', "a.purchase_id = " . $ID . " AND a.status <> 'F' AND quantity_delivered < quantity" );
+
                                       echo Core::InsertElement( 'text', 'purchase' . $ID, $ID, 'Hidden Purchase' );
 
                                       echo Core::InsertElement( 'text', 'purchase_data' . $ID,  str_replace( '"',"'", json_encode( $Purchase, JSON_HEX_QUOT ) ) );
 
+                                      echo Core::InsertElement( 'text', 'items_data' . $ID,  str_replace( '"',"'", json_encode( $Items, JSON_HEX_QUOT ) ) );
+
                                       echo Core::InsertElement( 'text', 'purchase_color' . $ID, $Color, 'Hidden Color' );
+
+
 
                                   }
 

@@ -46,7 +46,7 @@ VALIDATION ATRIBUTES:
 
 10) validateMinValue: Checks if the field have a minimum value.
 	Declaration: 'validateMinValue="25.07///Please, enter a number higher than 25.07"'
-	Data: MaxVal///Text
+	Data: MinVal///Text
 
 \****************************************************************/
 

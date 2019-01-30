@@ -1,6 +1,8 @@
 function initMap()
 {
 
+    // var directionsService = new google.maps.DirectionsService;
+
     lat = -34.6137;
     lng = -58.4560;
     var zoom = 13;
@@ -35,10 +37,24 @@ function initMap()
 
     );
 
+    // var directionsDisplay = new google.maps.DirectionsRenderer({map: map});
+
+    // var stepDisplay = new google.maps.InfoWindow;
+
+    // calculateAndDisplayRoute( directionsDisplay, directionsService, markerArray, stepDisplay, map );
+
     map.setOptions( { styles: styles[ 'hide' ] } );
 
+    var marker = new google.maps.Marker(
+    {
 
+      position: new google.maps.LatLng( -34.651763, -58.383059 ),
 
+      map: map,
+
+      icon: '../../../../skin/images/body/icons/home_pin.png'
+
+    });
 
     $( '.Purchase' ).each( function()
     {
@@ -47,15 +63,38 @@ function initMap()
 
         var purchase = $( '#purchase_data' + pID ).val().replace( /'/g, '"');
 
-				purchase = JSON.parse( purchase	 );
+				purchase = JSON.parse( purchase	);
 
         var latLng = new google.maps.LatLng( purchase[ 'lat' ], purchase[ 'lng' ] );
 
-        var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker(
+        {
+
           position: latLng,
+
           map: map,
+
           icon: '../../../../skin/images/body/icons/' + $( '#purchase_color' + pID ).val() + '_pin.png'
+
         });
+
+        // marker.infowindow.open( map, marker );
+
+        // var pathBetween = new google.maps.Polyline(
+        // {
+        //
+        //     path: latLng,
+        //
+        //     strokeColor: '#FF0000',
+        //
+        //     strokeOpacity: 1.0,
+        //
+        //     strokeWeight: 2
+        //
+        // });
+        //
+        // pathBetween.setMap( map );
+
 
         marker.infowindow = new google.maps.InfoWindow();
 
@@ -139,6 +178,8 @@ function initMap()
             var addButton = '<span id="add' + pID + '" class="btn btn-primary addPurchase ' + addHidden + '" purchase="' + pID + '"><i class="fa fa-plus"></i> Agregar al reparto</span>';
 
             var removeButton = '<span id="remove' + pID + '" class="btn btn-danger removePurchase ' + removeHidden + '" purchase="' + pID + '"><i class="fa fa-times"></i> Quitar del reparto</span>';
+
+            // marker.infowindow = new google.maps.InfoWindow();
 
             marker.infowindow.setContent( '<div>' + addressHTML + companyHTML + timetable + addButton + removeButton + '</div>' );
 
