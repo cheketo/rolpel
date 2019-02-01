@@ -34,46 +34,7 @@ class DeliveryOrder
 		////////////////////////////////////////////////////////////////////////////// PROCESS METHODS ///////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public function Insert()
-		{
-
-				// Basic Data
-				$DeliveryID			= $_POST[ 'delivery' ];
-
-				$Items = array();
-
-				foreach( $_POST as $Key => $Value)
-				{
-
-						$IDs = explode( '_', $Key );
-
-						if( $IDs[ 1 ] && $IDs[ 2 ] && $Value )
-						{
-
-								$PurchaseID = $IDs[ 1 ];
-
-								$ItemID = $IDs[ 2 ];
-
-								$Items[] = [ 'purchase_id' => $PurchaseID, 'item_id' => $ItemID, 'quantity' => $Value ];
-
-						}
-
-
-				}
-
-				// Saving Data
-
-				$NewID				= Core::Insert(
-
-														'delivery_order_item',
-
-														Truck::TABLE_ID . ',delivery_date, status, creation_date, created_by,' . CoreOrganization::TABLE_ID,
-
-														$TruckID . ",'" . $DeliveryDate . "', 'P', NOW()," . $_SESSION[ CoreUser::TABLE_ID ] . "," . $_SESSION[ 'organization_id' ]
-
-												);
-
-		}
+		
 
 }
 

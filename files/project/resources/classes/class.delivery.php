@@ -256,8 +256,8 @@ class Delivery
 			$HTML = '<div class="col-lg-3 col-md-5 col-sm-5 col-xs-3">
 								<div class="listRowInner">
 									<img class="img-circle hideMobile990" src="' . self::DEFAULT_IMG . '" alt="' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '">
-									<span class="listTextStrong">' . $Object->Data[ 'truck' ][ 'code' ] . '</span>
-									<span class="listTextStrong"><span class="label label-primary">' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</span></span>
+									<span class="listTextStrong">' . Core::DateTimeFormat( $Object->Data[ 'delivery_date' ], 'weekday' ) . ' ' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] )  . '</span>
+									<span class="listTextStrong"><span class="label label-primary">' . $Object->Data[ 'truck' ][ 'code' ] . '</span></span>
 									<span class="smallTitle"><b>(ID: ' . $Object->Data[ 'delivery_id' ] . ')</b></span>
 								</div>
 							</div>
@@ -294,20 +294,28 @@ class Delivery
 	protected static function MakeItemsListHTML( $Object )
 	{
 
-			$Object->GetOrderItems();
-			$Object->GetPurchaseItems();
+			// $Object->GetOrderItems();
+			// $Object->GetPurchaseItems();
 
-			foreach( $Object->Data[ 'orders' ] as $Order )
+			$Purchases = Core::Select( 'delivery_order_item a INNER JOIN ' . Purchase::TABLE . ' b ON ( b.purchase_id = a.purchase_id ) INNER JOIN company c ON ( c.company_id = b.company_id ) INNER JOIN company_branch d ON ( d.branch_id = b.branch_id )', 'DISTINCT a.purchase_id, a.position, c.name, d.address  ', self::TABLE_ID . ' = ' . $Object->Data[ self::TABLE_ID ], 'a.position' );
+			$Items = Core::Select( 'delivery_order_item a INNER JOIN ' . PurchaseItem::TABLE . ' b ON ( b.item_id = a.purchase_item_id ) INNER JOIN ' . Product::TABLE . ' c ON ( c.product_id = a.product_id ) ', ' a.*, c.title', self::TABLE_ID . ' = ' . $Object->Data[ self::TABLE_ID ], 'a.position' );
+
+			foreach( $Purchases as $Purchase )
 			{
 
-					$Branch = CompanyBranch::GetBranch( $Order[ 'purchase' ][ 'branch_id' ] );
+
 
 					$Products = '';
 
-					foreach( $Order[ 'items' ] as $Item )
+					foreach( $Items as $Item )
 					{
 
-							$Products .= '<span class="listTextStrong">' . $Item[ 'product' ] . ' - ' . $Branch[ 'address' ] . '</span>';
+							if( $Item[ Purchase::TABLE_ID ] == $Purchase[ Purchase::TABLE_ID ] )
+							{
+
+									$Products .= '<span class="listTextStrong">' . $Item[ 'title' ] . ' - ' . $Item[ 'quantity' ] . '</span>';
+
+							}
 
 					}
 
@@ -316,9 +324,9 @@ class Delivery
 					$HTML .= '
 								<div class="row ' . $RowClass . '" style="padding:5px;">
 									<div class="col-lg-4 col-sm-5 col-xs-12">
-										<div class="listRowInner">
-											<img class=" hideMobile990" src="' . Purchase::DEFAULT_IMG . '" alt="' . $Order[ 'order_id' ] . '">
-											<span class="listTextStrong">' . $Order[ 'purchase' ][ 'company' ] . ' - ' . $Branch[ 'address' ] . '</span>
+										<div class="listRowInner txL">
+											<img class=" hideMobile990" src="' . Purchase::DEFAULT_IMG . '" alt="' . $Purchase[ Purchase::TABLE_ID ] . '">
+											<span class="listTextStrong">' . $Purchase[ 'position' ] . '. ' . $Purchase[ 'name' ] . ' - ' . $Purchase[ 'address' ] . '</span>
 										</div>
 									</div>
 									<div class="col-lg-7 col-sm-2 col-xs-12">
@@ -327,14 +335,39 @@ class Delivery
 											' . $Products . '
 										</div>
 									</div>
-									<div class="col-sm-3 col-xs-12">
-										<div class="listRowInner">
-											<span class="smallTitle">Cantidad</span>
-											<span class="listTextStrong"><span class="label bg-navy">' . $Item[ 'total_quantity' ] . '</span></span>
-										</div>
-									</div>
+
 								</div>';
 			}
+
+			$RowClass = $RowClass != 'bg-gray'? 'bg-gray' : 'bg-gray-active';
+
+			$Products = '';
+
+			$Items = Core::Select( 'delivery_order_item a INNER JOIN ' . PurchaseItem::TABLE . ' b ON ( b.item_id = a.purchase_item_id ) INNER JOIN ' . Product::TABLE . ' c ON ( c.product_id = a.product_id ) ', ' SUM( a.quantity ) as quantity, c.title', self::TABLE_ID . ' = ' . $Object->Data[ self::TABLE_ID ], 'c.title', 'c.title');
+
+			foreach( $Items as $Item )
+			{
+
+					$Products .= '<div class="listTextStrong"><i class="fa fa-cube"></i> <span class="label label-warning">' . $Item[ 'title' ] . '</span> => <span class="label label-primary">' . $Item[ 'quantity' ] . '</span></div>';
+
+			}
+
+			$HTML .= '
+						<div class="row ' . $RowClass . '" style="padding:5px;">
+							<div class="col-xs-12">
+								<div class="listRowInner">
+										<div class="txC" style="padding-top:1em;font-size:24px;">
+	                        <strong><i class="fa fa-cubes"></i> Total a Cargar</strong>
+	                  </div>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div class="listRowInner txL">
+									' . $Products . '
+								</div>
+							</div>
+
+						</div>';
 
 			return $HTML;
 
@@ -383,8 +416,6 @@ class Delivery
 	public function Insert()
 	{
 
-
-
 			// Basic Data
 			$TruckID			= $_POST[ 'truck' ];
 
@@ -401,6 +432,153 @@ class Delivery
 													$TruckID . ",'" . $DeliveryDate . "', 'P', NOW()," . $_SESSION[ CoreUser::TABLE_ID ] . "," . $_SESSION[ 'organization_id' ]
 
 											);
+
+	}
+
+	public function Associate()
+	{
+
+			// Basic Data
+
+			$DeliveryID			= $_POST[ 'delivery' ];
+
+			$Items = array();
+
+			foreach( $_POST as $Key => $Value)
+			{
+
+					$IDs = explode( '_', $Key );
+
+					if( $IDs[ 0 ] == 'quantity' && $IDs[ 1 ] && $IDs[ 2 ] )
+					{
+
+							$PurchaseID = $IDs[ 1 ];
+
+							$ItemID = $IDs[ 2 ];
+
+							$Items[] = [ 'purchase_id' => $PurchaseID, 'item_id' => $ItemID, 'quantity' => $Value, 'position' => $_POST[ 'position_' . $PurchaseID . '_' . $ItemID ], 'product' => $_POST[ 'product_' . $PurchaseID . '_' . $ItemID ] ];
+
+					}
+
+			}
+
+			// Saving & Updating Data
+
+			$DeprecatedItems = Core::Select( 'delivery_order_item', '*', 'delivery_id =' . $DeliveryID );
+
+			foreach( $Items as $Key => $Item )
+			{
+
+					$DeprecatedItem = null;
+
+					foreach( $DeprecatedItems as $Key => $Deprecated )
+					{
+
+							if( $Deprecated[ 'purchase_item_id' ] == $Item[ 'item_id' ] )
+							{
+
+										$DeprecatedItem = $Deprecated;
+
+										if( $Item[ 'quantity' ] > 0 )
+										{
+
+												$DeprecatedItems[ $Key ][ 'must_remain' ] = true;
+
+										}
+
+										break;
+
+							}
+
+					}
+
+					// $PurchaseItem = Core::Select( 'purchase_item', '*', 'item_id =' . $Item[ 'item_id' ] )[0];
+
+					if( $DeprecatedItem )
+					{
+
+							Core::Update( 'delivery_order_item', 'quantity = ' . $Item[ 'quantity' ] . ', position = ' . $Item[ 'position' ] . ', updated_by = ' . $_SESSION[ CoreUser::TABLE_ID ], 'item_id = ' . $DeprecatedItem[ 'item_id' ] );
+
+							$QuantityDifference = abs( $Item[ 'quantity' ] - $DeprecatedItem[ 'quantity' ] );
+
+							if( $DeprecatedItem[ 'quantity' ] < $Item[ 'quantity' ] )
+							{
+
+									Core::Update( PurchaseItem::TABLE, 'quantity_reserved = quantity_reserved + ' . $QuantityDifference, 'item_id=' . $Item[ 'item_id' ] );
+
+							}else{
+
+									Core::Update( PurchaseItem::TABLE, 'quantity_reserved = quantity_reserved - ' . $QuantityDifference, 'item_id=' . $Item[ 'item_id' ] );
+
+							}
+
+					}elseif( $Item[ 'quantity' ] > 0 ){
+
+							Core::Insert(
+
+									'delivery_order_item',
+
+									Delivery::TABLE_ID . ',' . Purchase::TABLE_ID . ', purchase_item_id, product_id, position, quantity, creation_date, created_by,' . CoreOrganization::TABLE_ID,
+
+									$DeliveryID . "," . $Item[ 'purchase_id' ] . "," . $Item[ 'item_id' ] . "," . $Item[ 'product' ] . "," . $Item[ 'position' ] . "," . $Item[ 'quantity' ] . ", NOW()," . $_SESSION[ CoreUser::TABLE_ID ] . "," . $_SESSION[ 'organization_id' ]
+
+							);
+
+							Core::Update( PurchaseItem::TABLE, 'quantity_reserved = quantity_reserved + ' . $Item[ 'quantity' ], 'item_id=' . $Item[ 'item_id' ] );
+
+					}
+
+			}
+
+			// Deleting items that no longer are in delivery
+			foreach( $DeprecatedItems as $Item)
+			{
+
+					if( !$Item[ 'must_remain' ]  )
+					{
+
+							// $PurchaseItem = Core::Select( 'purchase_item', '*', 'item_id =' . $Item[ 'item_id' ] )[0];
+
+							Core::Delete( 'delivery_order_item', 'item_id=' . $Item[ 'item_id' ] );
+
+							Core::Update( PurchaseItem::TABLE, 'quantity_reserved = quantity_reserved - ' . $Item[ 'quantity' ], 'item_id=' . $Item[ 'item_id' ] );
+
+					}
+
+			}
+
+	}
+
+	public function Delete()
+	{
+
+			$DeliveryID = $_POST[ 'id' ];
+
+			$Delivery = Core::Select( self::TABLE, '*', self::TABLE_ID . ' = ' . $DeliveryID )[0];
+
+			if( $Delivery[ 'status' ] == 'P' )
+			{
+
+					Core::Update( PurchaseItem::TABLE . ' a ', 'a.quantity_reserved = a.quantity_reserved - ( SELECT b.quantity FROM delivery_order_item b WHERE b.purchase_item_id = a.item_id AND ' . Delivery::TABLE_ID . ' = ' . $DeliveryID . ' )', 'a.item_id IN ( SELECT c.purchase_item_id FROM delivery_order_item c WHERE c.' . self::TABLE_ID . ' = ' . $DeliveryID . ' )' );
+
+					Core::Delete( 'delivery_order_item', self::TABLE_ID . ' = ' . $DeliveryID );
+
+					Core::Delete( self::TABLE, self::TABLE_ID . ' = ' . $DeliveryID );
+
+			}else{
+
+					if( !$Delivery )
+					{
+
+							// echo "El ya reparto no existe.";
+
+					}else{
+
+							echo "No se puede eliminar un reparto que ya ha sido empezado.";
+
+					}
+
+			}
 
 	}
 

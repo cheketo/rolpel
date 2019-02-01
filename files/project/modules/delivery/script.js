@@ -14,7 +14,14 @@ $( document ).ready( function()
 		if( get[ 'msg' ] == 'update' )
 		{
 
-				notifySuccess( 'El reparto del <b>' + get[ 'element' ] + '</b> ha sido modificado correctamente' );
+				notifySuccess( 'El reparto del <b>' + get[ 'element' ] + '</b> ha sido modificado correctamente.' );
+
+		}
+
+		if( get[ 'msg' ] == 'associate' )
+		{
+
+				notifySuccess( 'Las ordenes de compra fueron asignadas al reparto de <b>' + get[ 'element' ] + '</b>.' );
 
 		}
 
@@ -66,6 +73,26 @@ $( function()
 
 		});
 
+		$( '#BtnAssociate' ).click( function()
+		{
+
+				var element = $( '#element' ).val();
+
+				var target	= 'list.php?status=P&msg=' + msg + '&element=' + element;
+
+				if( validate.validateFields( '*' ) )
+				{
+
+						askAndSubmit( target, role, '¿Desea crear el reparto del cami&oacute;n <b>' + element + '</b>?' );
+
+				}else{
+
+						notifyWarning( 'No se puede guardar hasta que corrija todos los errores de los campos.' );
+
+				}
+
+		});
+
 });
 
  /****************************************\
@@ -74,11 +101,90 @@ $( function()
 $( document ).ready( function()
 {
 
-		// addPurchase();
-		//
-		// removePurchase();
+		QuantityFieldChanged();
+
+		CalculateDeliveryItems();
+
+		addPurchase();
+
+		removePurchase();
 
 });
+
+function QuantityFieldChanged()
+{
+
+		$( '.ItemQuantity' ).on( 'change', function()
+		{
+
+			CalculateDeliveryItems();
+
+			return false;
+
+		});
+
+}
+
+function CalculateDeliveryItems()
+{
+
+		var items = new Array();
+
+		$( '.ItemQuantity' ).each( function()
+		{
+
+				var element = $( this );
+
+				var quantity = element.val();
+
+				if( quantity > 0 )
+				{
+
+						var ids = element.attr( 'id' ).split( '_' );
+
+						var purchaseID = ids[ 1 ];
+
+						var itemID = ids[ 2 ];
+
+						var product = element.attr( 'product' );
+
+						var name = $( '#title_' + purchaseID + '_' + itemID ).html();
+
+						if( items[ product ] )
+						{
+
+								items[ product ].quantity = parseInt( items[ product ].quantity ) + parseInt( quantity );
+
+						}else{
+
+								items[ product ] = { name: name ,quantity: parseInt( quantity ), product: product };
+
+						}
+
+				}
+
+		});
+
+		var html = '';
+
+		items.forEach( function( item )
+		{
+
+
+			var name = '<div class="col-xs-8">' + item.name + '</div>';
+
+			var quantity = '<div class="col-xs-4">' + item.quantity + '</div>';
+
+			var row = '<div class="row">' + name + quantity + '</div>';
+
+			html = html + row;
+
+		});
+
+		$( '#DeliveryItems' ).html( html );
+
+
+}
 
 function addPurchase()
 {
@@ -112,7 +218,9 @@ function addPurchase()
 						if( $( '.purchaseContainer' ).length > 0 )
 						{
 
-								var position = parseInt( $( '#PurchaseList' ).children().last().attr( 'position' ) ) + 1;
+								//var position = parseInt( $( '#PurchaseList' ).children().last().attr( 'position' ) ) + 1;
+
+								var position = $( '.purchaseContainer' ).length + 1;
 
 						}else{
 
@@ -129,11 +237,15 @@ function addPurchase()
 						itemsData.forEach( function( item )
 						{
 
-								var itemName = '<div class="col-xs-6">' + item.title + '</div>'
+								var itemProduct = '<input type="hidden" id="product_' + id + '_' + item.item_id + '" value="' + item.product_id + '">';
 
-								var itemQuantity = '<div class="col-xs-6"><input type="text" id="quantity_' + id + '_' + item.item_id + '" class="form-control txC" value="' + item.quantity_remain + '" validateEmpty="Ingrese una cantidad." validateOnlyNumbers="Ingrese n&uacute;meros &uacute;nicamente." validateMaxValue="' + item.quantity_remain + '///Ingrese una cantidad menor o igual a ' + item.quantity_remain + '" validateMinValue="1///Ingrese una cantidad mayor a cero."></div>'
+								var itemPosition = '<input type="hidden" id="position_' + id + '_' + item.item_id + '" value="' + position + '">';
 
-								var  itemHTML = '<div class="row" id="item_' + item.item_id + '">' + itemName + itemQuantity + '</div>';
+								var itemName = '<div class="col-xs-6" id="title_' + id + '_' + item.item_id + '" class="ItemName">' + item.title + itemPosition + '</div>'
+
+								var itemQuantity = '<div class="col-xs-6"><input type="text" product="' + item.product_id + '" id="quantity_' + id + '_' + item.item_id + '" class="form-control txC ItemQuantity" value="' + item.quantity_remain + '" validateEmpty="Ingrese una cantidad." validateOnlyNumbers="Ingrese n&uacute;meros &uacute;nicamente." validateMaxValue="' + item.quantity_remain + '///Ingrese una cantidad menor o igual a ' + item.quantity_remain + '" validateMinValue="0///Ingrese un n&uacute;mero entero positivo."></div>'
+
+								var  itemHTML = '<div class="row" id="item_' + item.item_id + '">' + itemProduct + itemName + itemQuantity + '</div>';
 
 								orderFields = orderFields + itemHTML;
 
@@ -149,6 +261,10 @@ function addPurchase()
 				}
 
 				validateDivChange();
+
+				QuantityFieldChanged();
+
+				CalculateDeliveryItems();
 
 				return false;
 
@@ -170,7 +286,7 @@ function removePurchase()
 
 				$( '#purchase_container' + id ).remove();
 
-				$( 'remove' + id ).addClass( 'Hidden' );
+				$( '#remove' + id ).addClass( 'Hidden' );
 
 				$( '#add' + id ).removeClass( 'Hidden' );
 
@@ -198,6 +314,10 @@ function removePurchase()
 				}
 
 				$( '#selected_purchases' ).val( pIDs.join( ',' ) );
+
+				QuantityFieldChanged();
+
+				CalculateDeliveryItems();
 
 				return false;
 

@@ -1,25 +1,17 @@
 <?php
     include("../../../core/resources/includes/inc.core.php");
 
-    $Customer = 'Y';
     $New = new Purchase();
 
-      $Field  = 'customer';
-      $Role   = 'Cliente';
-      $Title  = ' a Clientes';
-      $TitleIcon   = 'users';
-      $CompanyType = 'receiver';
-      $RowTitleClass = 'light-blue';
-
-
-    $FieldInternational = $_GET['international']? "AND international='".$_GET['international']."' ":"";
+    $CompanyType = 'receiver';
+    $RowTitleClass = 'light-blue';
 
     $ProductCodes = Product::GetFullCodes();
 
     $ExpireDate = strtotime(date('Y-m-d'));
     $ExpireDate = strtotime("+10 day", $ExpireDate);
 
-    $Head->SetTitle($Menu->GetTitle().$Title);
+    $Head->SetTitle($Menu->GetTitle() . 'a Clientes' );
     $Head->SetIcon($Menu->GetHTMLicon());
     $Head->SetStyle('../../../../vendors/datepicker/datepicker3.css'); // Date Picker Calendar
     $Head->SetStyle('../../../../vendors/dropzone/dropzone.min.css'); // Dropzone
@@ -37,22 +29,22 @@
 <?php include_once('../product/window.traceability.php'); ?>
 <?php include_once('../product/window.product.php'); ?>
 <?php include_once('../agent/window.agent.php'); ?>
-<?php if($Customer=='Y') include_once('window.email.php'); ?>
+<?php include_once('window.email.php'); ?>
 
   <div class="box animated fadeIn" style="min-width:99%">
     <div class="box-header flex-justify-center">
       <div class="innerContainer main_form" style="min-width:100%">
             <form id="PurchaseForm">
 
-            <h4 class="subTitleB"><i class="fa fa-<?php echo $TitleIcon ?>"></i> <?php echo $Role; ?> <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="<?php echo $Role; ?> a cual se le asociará la orden de compra."><i class="fa fa-question-circle "></i></span></h4>
+            <h4 class="subTitleB"><i class="fa fa-users"></i> Cliente <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Cliente a cual se le asociará la orden de compra."><i class="fa fa-question-circle "></i></span></h4>
             <div class="row form-group inline-form-custom">
               <div class="col-xs-12">
                   <?php
-                    echo Core::InsertElement('select','company','','form-control chosenSelect','validateEmpty="Seleccione un '.$Role.'" data-placeholder="Seleccione un '.$Role.'"',Core::Select(Company::TABLE,Company::TABLE_ID.',name',$Field."= 'Y' ".$FieldInternational." AND status='A' AND ".CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID],'name'),' ','');
+                    echo Core::InsertElement('select','company','','form-control chosenSelect','validateEmpty="Seleccione un cliente" data-placeholder="Seleccione un cliente"',Core::Select(Company::TABLE,Company::TABLE_ID.',name',"customer= 'Y' AND status='A' AND ".CoreOrganization::TABLE_ID."=".$_SESSION[CoreOrganization::TABLE_ID],'name'),' ','');
                   ?>
               </div>
             </div>
-            <h4 class="subTitleB"><i class="fa fa-building"></i> Sucursal <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Sucursal del <?php echo $Role; ?> seleccionado a la cual se le asociará la orden de compra."><i class="fa fa-question-circle "></i></span></h4>
+            <h4 class="subTitleB"><i class="fa fa-building"></i> Sucursal <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Sucursal del cliente seleccionado a la cual se le asociará la orden de compra."><i class="fa fa-question-circle "></i></span></h4>
             <div class="row form-group inline-form-custom">
               <div class="col-xs-12">
                   <div id="branch-wrapper">
@@ -67,7 +59,7 @@
                   <div id="agent-wrapper">
                     <?php //echo Core::InsertElement('select','agent','','form-control chosenSelect','validateEmpty="Seleccione un Contacto" disabled="disabled"','','0','Sin Contacto'); ?>
                     <?php echo Core::InsertElement("hidden","agent"); ?>
-                    <strong><button type="button" class="btn btn-lg btn-warning" id="ShowAgentBtn"><i class="fa fa-times"></i> Seleccionar Contacto</button></strong> <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Persona que trabaja en la empresa del <?php echo $Role ?> y es la responsable por la orden de compra. No es obligatorio seleccionar un contacto."><i class="fa fa-question-circle "></i></span>
+                    <strong><button type="button" class="btn btn-lg btn-warning" id="ShowAgentBtn"><i class="fa fa-times"></i> Seleccionar Contacto</button></strong> <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Persona que trabaja en la empresa del cliente y es la responsable por la orden de compra. No es obligatorio seleccionar un contacto."><i class="fa fa-question-circle "></i></span>
                   </div>
               </div>
             </div>
@@ -93,7 +85,6 @@
             <?php } ?>
 
             <!-- Delivery Date and Time -->
-            <?php if($Customer=="Y"){ ?>
             <?php
                 $MondayChecked = $Data['monday_from']? 'checked="checked"' : '';
                 $TuesdayChecked = $Data['tuesday_from']? 'checked="checked"' : '';
@@ -112,7 +103,7 @@
                 $SundayDisabled = $Data['sunday_from']? '"' : 'disabled="disabled"';
             ?>
             <div id="DeliveryDateTime" class="">
-              <h4 class="subTitleB"><i class="fa fa-clock-o"></i> Horarios de recepción <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Días y horarios de recepción del <?php echo $Role; ?>. Se carga por defecto con la información de la sucursal seleccionada."><i class="fa fa-question-circle "></i></span></h4>
+              <h4 class="subTitleB"><i class="fa fa-clock-o"></i> Horarios de recepción <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Días y horarios de recepción del cliente. Se carga por defecto con la información de la sucursal seleccionada."><i class="fa fa-question-circle "></i></span></h4>
 
                 <div class="row">
 
@@ -460,7 +451,6 @@
 
 
             </div>
-            <?php } ?>
 
             <!-- Products -->
             <h4 class="subTitleB"><i class="fa fa-cubes"></i> Productos <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Productos que integran la orden de compra."><i class="fa fa-question-circle "></i></span></h4>
@@ -591,10 +581,10 @@
                   <?php echo Core::InsertElement('textarea','additional_information','','form-control',' placeholder="Datos adicionales para uso interno"'); ?>
               </div>
             </div>
-            <h4 class="subTitleB"><i class="fa fa-info-circle"></i> Informaci&oacute;n Extra para el <?php echo $Role ?> <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Aquí se puede cargar la informaición que necesite el <?php echo $Role ?>."><i class="fa fa-question-circle "></i></span></h4>
+            <h4 class="subTitleB"><i class="fa fa-info-circle"></i> Informaci&oacute;n Extra para el cliente <span class="text-info cursor-pointer hint--right hint--bounce hint--info" aria-label="Aquí se puede cargar la informaición que necesite el cliente."><i class="fa fa-question-circle "></i></span></h4>
             <div class="row form-group inline-form-custom">
               <div class="col-xs-12">
-                  <?php echo Core::InsertElement('textarea','extra','','form-control',' placeholder="Datos adicionales para el '.$Role.'"'); ?>
+                  <?php echo Core::InsertElement('textarea','extra','','form-control',' placeholder="Datos adicionales para el cliente"'); ?>
               </div>
             </div>
           <hr>
@@ -602,7 +592,7 @@
             <button type="button" class="btn btn-success btnGreen" id="BtnCreate"><i class="fa fa-plus"></i> Crear Orden de Compra</button>
             <!--<button type="button" class="btn btn-success btnBlue" id="BtnCreateNext"><i class="fa fa-plus"></i> Crear y Agregar Otra</button>-->
 
-            <?php if($Customer=='Y') { ?><button type="button" class="btn btn-success btnBlue" id="BtnCreateAndEmail"><i class="fa fa-envelope"></i> Crear y Enviar por Email</button><?php } ?>
+            <button type="button" class="btn btn-success btnBlue" id="BtnCreateAndEmail"><i class="fa fa-envelope"></i> Crear y Enviar por Email</button>
             <button type="button" class="btn btn-error btnRed" id="BtnCancel"><i class="fa fa-times"></i> Cancelar</button>
           </div>
         </form></div>

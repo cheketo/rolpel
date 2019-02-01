@@ -56,6 +56,8 @@ function initMap()
 
     });
 
+    var locations = [];
+
     $( '.Purchase' ).each( function()
     {
 
@@ -65,7 +67,21 @@ function initMap()
 
 				purchase = JSON.parse( purchase	);
 
-        var latLng = new google.maps.LatLng( purchase[ 'lat' ], purchase[ 'lng' ] );
+        if( !locations[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] || purchase[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] == 'undefined' )
+        {
+            locations[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] = true;
+
+            var latLng = new google.maps.LatLng( purchase[ 'lat' ], purchase[ 'lng' ] );
+
+        }else{
+
+            var variation = 0.0001;
+
+            locations[ ( parseFloat( purchase[ 'lat' ] ) + variation ).toString() + ',' + ( parseFloat( purchase[ 'lng' ] ) + variation ).toString() ] = true;
+
+            var latLng = new google.maps.LatLng( (  parseFloat(purchase[ 'lat' ]) + variation ).toString() , ( parseFloat( purchase[ 'lng' ] ) + variation ).toString() );
+
+        }
 
         var marker = new google.maps.Marker(
         {
