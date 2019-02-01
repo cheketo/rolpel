@@ -303,8 +303,6 @@ class Delivery
 			foreach( $Purchases as $Purchase )
 			{
 
-
-
 					$Products = '';
 
 					foreach( $Items as $Item )

@@ -99,9 +99,10 @@ class Purchase
 
 							$HTML	.= '<a class="hint--bottom hint--bounce hint--warning deliveryElement" aria-label="Pasar a Reparto" process="'.PROCESS.'" id="delivery_'.$Object->ID.'"><button type="button" class="btn bg-brown"><i class="fa fa-truck"></i></button></a> ';
 
+							$HTML	.= '<a href="edit.php?id='.$Object->ID.self::GetParams().'" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
 
 					}
-					$HTML	.= '<a href="edit.php?id='.$Object->ID.self::GetParams().'" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
+
 					$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="'.PROCESS.'" id="delete_'.$Object->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
 					$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>?');
 					$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La orden de compra de <b>'.$Object->Data['company'].'</b> ha sido eliminada.');
@@ -117,12 +118,15 @@ class Purchase
 			return $HTML;
 		}
 
-		protected static function MakeListHTML($Object)
+		protected static function MakeListHTML( $Object )
 		{
+
+			$Branch = Core::Select( CompanyBranch::TABLE, 'address', CompanyBranch::TABLE_ID . ' = ' . $Object->Data[ 'branch_id' ] )[ 0 ];
+
 			$HTML = '<div class="col-lg-4 col-md-5 col-sm-5 col-xs-3">
 						<div class="listRowInner">
 							<img class="img-circle hideMobile990" src="'.Purchase::DEFAULT_IMG.'" alt="'.$Object->Data['company'].'">
-							<span class="listTextStrong">'.$Object->Data['company'].'</span>
+							<span class="listTextStrong">' . $Object->Data['company'] . ' (' . $Branch[ 'address' ]  . ')</span>
 							<span class="smallTitle"><b>(ID: '.$Object->Data['purchase_id'].')</b></span>
 						</div>
 					</div>
@@ -592,7 +596,44 @@ class Purchase
 
 				$ID	= $_POST[ 'id' ];
 
-				Core::Update( self::TABLE, "status = 'P'", self::TABLE_ID . "=" . $ID );
+
+				$IsValid = true;
+
+				$Deliverys = Core::Select( Delivery::TABLE, 'DISTINCT ' . Delivery::TABLE_ID, self::TABLE_ID . ' = ' . $ID );
+
+				foreach( $Deliverys as $Delivery )
+				{
+
+						if( $Delivery[ 'status' ] != 'P' )
+						{
+
+								$IsValid = false;
+
+								break;
+
+						}
+
+				}
+
+				if( $IsValid )
+				{
+
+						foreach( $Deliverys as $Delivery)
+						{
+
+								Core::Update( PurchaseItem::TABLE . ' a ', 'a.quantity_reserved = a.quantity_reserved - ( SELECT b.quantity FROM delivery_order_item b WHERE b.purchase_item_id = a.item_id AND ' . Delivery::TABLE_ID . ' = ' . $Delivery[ Delivery::TABLE_ID ] . ' )', 'a.item_id IN ( SELECT c.purchase_item_id FROM delivery_order_item c WHERE c.' . Delivery::TABLE_ID . ' = ' . $Delivery[ Delivery::TABLE_ID ] . ' )' );
+
+								Core::Delete( 'delivery_order_item', Delivery::TABLE_ID . ' = ' . $Delivery[ Delivery::TABLE_ID ] . ' AND ' . self::TABLE_ID . ' = ' . $ID );
+
+						}
+
+						Core::Update( self::TABLE, "status = 'P'", self::TABLE_ID . "=" . $ID );
+
+				}else{
+
+						echo 'La orden de compra no puede ser devuelta al estado pediente porque ya forma parte de un reparto activo.';
+
+				}
 
 		}
 
