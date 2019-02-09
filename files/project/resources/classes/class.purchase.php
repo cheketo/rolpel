@@ -599,7 +599,7 @@ class Purchase
 
 				$IsValid = true;
 
-				$Deliverys = Core::Select( Delivery::TABLE, 'DISTINCT ' . Delivery::TABLE_ID, self::TABLE_ID . ' = ' . $ID );
+				$Deliverys = Core::Select( 'delivery_order_item', 'DISTINCT ' . Delivery::TABLE_ID, self::TABLE_ID . ' = ' . $ID );
 
 				foreach( $Deliverys as $Delivery )
 				{
