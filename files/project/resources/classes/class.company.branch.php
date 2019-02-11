@@ -177,7 +177,7 @@ class CompanyBranch
 			$BranchName = (intval($ID)-1);
 			$Agents	= array();
 		}else{
-			$BranchName = $Data['name'];
+			$BranchName = $Data['branch_name'];
 			$Results	= Core::Select('relation_company_broker','broker_id',self::TABLE_ID.'='.$Data[self::TABLE_ID]);
 			foreach($Results as $Broker)
 		    {
