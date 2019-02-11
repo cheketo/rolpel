@@ -177,9 +177,9 @@ class CompanyBranch
 			$BranchName = (intval($ID)-1);
 			$Agents	= array();
 		}else{
-			$BranchName = $Data['branch_name'];
-			$Results	= Core::Select('relation_company_broker','broker_id',self::TABLE_ID.'='.$Data[self::TABLE_ID]);
-			foreach($Results as $Broker)
+  			$BranchName = $Data[ 'branch' ];
+  			$Results	= Core::Select('relation_company_broker','broker_id',self::TABLE_ID.'='.$Data[self::TABLE_ID]);
+			   foreach($Results as $Broker)
 		    {
 		      $Brokers .= $Brokers? ','.$Broker['broker_id'] : $Broker['broker_id'];
 		    }
@@ -195,16 +195,15 @@ class CompanyBranch
 		    	$Extra = $Agent['extra']? '<br><span><i class="fa fa-info-circle"></i> '.$Agent['extra'].'</span>':'';
 		    	$AgentsHTML .= '<div class="col-md-6 col-sm-6 col-xs-12 AgentCard"><div class="info-card-item"><input type="hidden" id="agent_name_'.$A.'_'.$ID.'" value="'.$Agent['name'].'" /><input type="hidden" id="agent_charge_'.$A.'_'.$ID.'" value="'.$Agent['charge'].'" /><input type="hidden" id="agent_email_'.$A.'_'.$ID.'" value="'.$Agent['email'].'" /><input type="hidden" id="agent_phone_'.$A.'_'.$ID.'" value="'.$Agent['phone'].'" /><input type="hidden" id="agent_extra_'.$A.'_'.$ID.'" value="'.$Agent['extra'].'" /><div class="close-btn DeleteAgent"><i class="fa fa-times"></i></div><span><i class="fa fa-user"></i> <b>'.$Agent['name'].'</b></span>'.$Charge.$Phone.$Email.$Extra.'</div></div>';
 		    }
-		    // if($A==0)
-		    // {
-		    // 	$NoAgents = '<span id="empty_agent_'.$ID.'" class="Info-Card-Empty info-card-empty">No hay representantes ingresados</span>';
-		    // }
+
 		}
 
 		if(!$A)
-	    {
-	    	$NoAgents = '<span id="empty_agent_'.$ID.'" class="Info-Card-Empty info-card-empty">No hay representantes ingresados</span>';
-	    }
+    {
+
+    	$NoAgents = '<span id="empty_agent_'.$ID.'" class="Info-Card-Empty info-card-empty">No hay representantes ingresados</span>';
+
+    }
 
 
     	if($ID>1)
@@ -214,7 +213,7 @@ class CompanyBranch
                             Nombre de la Sucursal:
                         </div>
                         <div class="col-xs-12 col-sm-8">
-                            '.Core::InsertElement('text','branch_name_'.$ID,$BranchName,'form-control branchname','branch="'.$ID.'" placeholder="Nombre" validateEmpty="Ingrese un nombre de sucursal"').'
+                            '.Core::InsertElement('text','branch_name_'.$ID,$BranchName,'form-control branchname','branchname="'.$BranchName.'" branch="'.$ID.'" placeholder="Nombre" validateEmpty="Ingrese un nombre de sucursal"').'
                         </div>
                         </div>';
     	}else{

@@ -86,6 +86,7 @@
             $Image = 'coal_power_plant.png';
             foreach($Branches as $Branch)
             {
+
               $I++;
           ?>
 
