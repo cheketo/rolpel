@@ -1,25 +1,25 @@
 <?php
     include("../../../core/resources/includes/inc.core.php");
-    
+
     $ID           = $_GET['id'];
     $Edit         = new Customer($ID);
     $Data         = $Edit->GetData();
     Core::ValidateID($Data);
     $Branches = Core::Select('customer_branch a, geolocation_country b, geolocation_province c, geolocation_region d, geolocation_zone e','a.*,b.name as country, c.name as province, d.name as region, e.name as zone','a.country_id = b.country_id AND a.province_id = c.province_id AND a.region_id = d.region_id AND a.zone_id = e.zone_id AND customer_id='.$ID,'a.branch_id');
-    
+
     $Head->SetTitle($Data['name']);
     $Head->SetIcon($Menu->GetHTMLicon());
     $Head->SetSubTitle($Menu->GetTitle());
-     
+
     $Head->SetStyle('../../../skin/css/maps.css'); // Google Maps CSS
     $Head->setHead();
     include('../../../project/resources/includes/inc.top.php');
-    
+
 ?>
   <div class="box animated fadeIn">
     <div class="box-header flex-justify-center">
       <div class="col-md-8 col-sm-12">
-        
+
           <div class="innerContainer main_form">
             <form id="new_company_form">
             <h4 class="subTitleB"><i class="fa fa-newspaper-o"></i> Datos del Cliente</h4>
@@ -80,7 +80,7 @@
           <h4 class="subTitleB"><i class="fa fa-map-pin"></i> Sucursales</h4>
           <div id="MapsErrorMessage" class="Hidden ErrorText Red">Complete los datos de la sucursal central.</div>
           <div id="branches_container">
-          <?php 
+          <?php
             $I=0;
             $Class = "bg-gray";
             $Image = 'coal_power_plant.png';
@@ -88,7 +88,7 @@
             {
               $I++;
           ?>
-          
+
           <div id="branch_row_<?php echo $I ?>" class="row branch_row listRow2 <?php echo $Class ?>" style="margin:0px!important;">
             <div class="col-lg-1 col-md-2 flex-justify-center hideMobile990">
               <div class="listRowInner">
@@ -96,7 +96,7 @@
               </div>
             </div>
             <div class="col-lg-9 col-md-7 col-sm-5 col-xs-7 flex-justify-center" style="margin-right:0px;">
-              <span class="listTextStrong" style="margin-top:15px!important;" id="branch_row_name_<?php echo $I ?>">Sucursal <?php echo $Branch['name']; ?></span>
+              <span class="listTextStrong" style="margin-top:15px!important;" id="branch_row_name_<?php echo $I ?>">Sucursal <?php echo $Branch['branch_name']; ?></span>
             </div>
             <div class="col-lg-1 col-md-2 col-sm-3 col-xs-5 flex-justify-center" style="margin-left:0px;">
               <button type="button" branch="<?php echo $I ?>" id="EditBranch<?php echo $I ?>" class="btn btnBlue EditBranch LoadedMap"><i class="fa fa-pencil"></i></button>
@@ -127,16 +127,16 @@
     </div><!-- box -->
   </div><!-- box -->
   <div id="ModalBranchesContainer">
-    <?php 
+    <?php
             $I=0;
             foreach($Branches as $Branch)
             {
               $I++;
-              
+
               $Edit->Getbranchmodal($I,$Branch);
             }
   ?>
-  
+
   </div>
 <?php
 $Foot->SetScript('../../js/script.map.autolocation.js');
@@ -146,4 +146,3 @@ $Foot->SetScript('../../../../vendors/inputmask3/jquery.inputmask.bundle.min.js'
 
 include('../../../project/resources/includes/inc.bottom.php');
 ?>
-
