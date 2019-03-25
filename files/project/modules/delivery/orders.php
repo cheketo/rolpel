@@ -10,7 +10,7 @@
 
       Core::ValidateID( $Data[ Delivery::TABLE_ID ] );
 
-      $Purchases = Core::Select( Purchase::TABLE . ' a INNER JOIN company_branch b ON ( b.branch_id = a.branch_id ) INNER JOIN company c ON ( c.company_id = a.company_id ) INNER JOIN ' . PurchaseItem::TABLE .' d ON ( d.purchase_id = a.purchase_id AND ( d.quantity > ( d.quantity_reserved + d.quantity_delivered ) OR d.item_id IN ( SELECT purchase_item_id FROM delivery_order_item WHERE delivery_id = ' . $ID  . ' ) ) )  ', 'DISTINCT a.purchase_id, a.*, b.address, b.lat, b.lng, c.name', "a.status = 'A'" );
+      $Purchases = Core::Select( Purchase::TABLE . ' a INNER JOIN company_branch b ON ( b.branch_id = a.branch_id ) INNER JOIN company c ON ( c.company_id = a.company_id ) INNER JOIN ' . PurchaseItem::TABLE . " d ON ( d.purchase_id = a.purchase_id AND d.status <> 'F' AND ( d.quantity > ( d.quantity_reserved + d.quantity_delivered ) OR d.item_id IN ( SELECT purchase_item_id FROM delivery_order_item WHERE delivery_id = " . $ID  . ' ) ) )  ', 'DISTINCT a.purchase_id, a.*, b.address, b.lat, b.lng, c.name', "a.status = 'A'" );
 
       // var_dump( Core::LastQuery() );
 

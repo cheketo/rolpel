@@ -93,6 +93,26 @@ $( function()
 
 		});
 
+		$( '#BtnDeliver' ).click( function()
+		{
+
+				var element = $( '#element' ).val();
+
+				var target	= 'list.php?status=A&msg=' + msg + '&element=' + element;
+
+				if( validate.validateFields( '*' ) )
+				{
+
+						askAndSubmit( target, role, '¿Desea terminar el reparto del cami&oacute;n <b>' + element + '</b>? No se podrá volver a editar una vez guardado.' );
+
+				}else{
+
+						notifyWarning( 'No se puede guardar hasta que corrija todos los errores de los campos.' );
+
+				}
+
+		});
+
 });
 
  /****************************************\
@@ -109,7 +129,284 @@ $( document ).ready( function()
 
 		removePurchase();
 
+		showDeliveryOrder();
+
+		changeDeliveryItems();
+
 });
+
+function AdditionalSearchFunctions()
+{
+
+		startDelivery();
+
+		rollBackDelivery();
+
+}
+
+ /****************************************\
+|          SHOW DELIVERY ORDER            |
+\****************************************/
+
+function showDeliveryOrder()
+{
+
+		$( '.PurchaseList' ).click( function()
+		{
+
+				var purchase = $( this ).attr( 'purchase' );
+
+				$( '.PurchaseItemsWrapper' ).addClass( 'Hidden' );
+
+				$( '.PurchaseItemsWrapper[id="PurchaseItemsWrapper' + purchase + '"]' ).removeClass( 'Hidden' );
+
+		});
+
+}
+
+/****************************************\
+|         CHANGE DELIVERY ITEMS          |
+\****************************************/
+
+function changeDeliveryItems()
+{
+
+		$( '.PurchaseItem' ).change( function()
+		{
+
+				var item = $( this ).attr( 'item' );
+
+				var purchase = $( this ).attr( 'purchase' );
+
+				var product = $( this ).attr( 'product' );
+
+				var productName = $( '#item_product_name_' + item ).html();
+
+				var quantity = parseInt( $( this ).val() );
+
+				var originalQuantity = parseInt( $( '#item_original_quantity_' + item ).val() );
+
+				if( originalQuantity - quantity != 0 && quantity < originalQuantity )
+				{
+
+						if( $( '#item_udelivered_' + item ).length > 0 )
+						{
+
+										$( '#item_udelivered_' + item ).html( originalQuantity - quantity );
+
+						}else{
+
+							 $( '#UndeliveredItems' + purchase ).append( '<div class="txC pad10" style="border-top:1px solid rgba(228, 228, 228, 0.8);">No se entregaron <span id="item_udelivered_' + item + '" >' + ( originalQuantity - quantity ) + '</span> unidades de <strong>' + productName + '</strong></div>' );
+
+						}
+
+				}else{
+
+						$( '#item_udelivered_' + item ).parent().remove();
+
+				}
+
+				var total_delivered = 0;
+
+				var total_undelivered = 0;
+
+				$( '.PurchaseItem[product="' + product + '"]' ).each( function()
+				{
+
+						var item = $( this ).attr( 'item' );
+
+						var quantity = parseInt( $( this ).val() );
+
+						var originalQuantity = parseInt( $( '#item_original_quantity_' + item ).val() );
+
+						if( quantity <= originalQuantity )
+						{
+
+								total_delivered = total_delivered + quantity;
+
+								total_undelivered = total_undelivered + ( originalQuantity - quantity );
+
+						}
+
+				});
+
+				if( total_undelivered > 0 )
+				{
+
+						$( '#item_total_undelivered_' + product ).parent().removeClass( 'Hidden' );
+
+						$( '#item_total_undelivered_' + product ).html( total_undelivered );
+
+				}else{
+
+						$( '#item_total_undelivered_' + product ).parent().addClass( 'Hidden' );
+
+						$( '#item_total_undelivered_' + product ).html( '0' );
+
+				}
+
+				if( total_delivered > 0 )
+				{
+
+						$( '#item_total_' + product ).parent().removeClass( 'Hidden' );
+
+						$( '#item_total_' + product ).html( total_delivered );
+
+				}else{
+
+						$( '#item_total_' + product ).parent().addClass( 'Hidden' );
+
+						$( '#item_total_' + product ).html( '0' );
+
+				}
+
+				console.log( total_undelivered );
+
+	 });
+
+}
+
+ /****************************************\
+|             START DELIVERY              |
+\****************************************/
+
+function startDelivery()
+{
+
+	$( '.deliveryOrder' ).click( function()
+	{
+
+			var element = $( this );
+
+			var day = element.attr( 'date' );
+
+			var truck = element.attr( 'truck' );
+
+			alertify.confirm( '¿Desea empezar el reparto del cami&oacute;n <b>' + truck + '</b> para el d&iacute;a <b>' + day + '</b>?', function( e )
+			{
+
+					if( e )
+					{
+
+							var ID = element.attr('id').split("_");
+
+							ID = ID[1];
+
+							var process = process_url;
+
+							var string	= 'id='+ ID +'&action=startdelivery&object=Delivery';//&status='+status;
+
+							$.ajax(
+							{
+
+									type: 'POST',
+
+									url: process,
+
+									data: string,
+
+									cache: false,
+
+									success: function( data )
+									{
+
+											if( data )
+											{
+
+													notifyError( 'Se produjo un error al empezar el reparto' );
+
+													console.log( 'Error al intentar cambiar de estado. Delivery=' + ID + '. Error: ' + data );
+
+											}else{
+
+													$( '.searchButton' ).click();
+
+													notifySuccess( 'El reparto del camión ' + truck + ' para el día ' + day + ' ha comenzado correctamente' );
+
+											}
+
+									}
+
+							});
+
+					}
+
+			});
+
+	});
+
+}
+
+ /****************************************\
+|           ROLL BACK DELIVERY            |
+\****************************************/
+
+function rollBackDelivery()
+{
+
+ $( '.rollBackDelivery' ).click( function()
+ {
+
+		 var element = $( this );
+
+		 var day = element.attr( 'date' );
+
+		 var truck = element.attr( 'truck' );
+
+		 alertify.confirm( '¿Desea regresar el reparto del cami&oacute;n <b>' + truck + '</b> para el d&iacute;a <b>' + day + '</b> a estado pendiente?', function( e )
+		 {
+
+				 if( e )
+				 {
+
+						 var ID = element.attr('id').split("_");
+
+						 ID = ID[1];
+
+						 var process = process_url;
+
+						 var string	= 'id='+ ID +'&action=rollbackdelivery&object=Delivery';//&status='+status;
+
+						 $.ajax(
+						 {
+
+								 type: 'POST',
+
+								 url: process,
+
+								 data: string,
+
+								 cache: false,
+
+								 success: function( data )
+								 {
+
+										 if( data )
+										 {
+
+												 notifyError( 'Se produjo un error al pasar el reparto a pendiente' );
+
+												 console.log( 'Error al intentar cambiar de estado. Delivery=' + ID + '. Error: ' + data );
+
+										 }else{
+
+												 $( '.searchButton' ).click();
+
+												 notifySuccess( 'El reparto del camión ' + truck + ' para el día ' + day + ' ha regresado a estado pendiente' );
+
+										 }
+
+								 }
+
+						 });
+
+				 }
+
+		 });
+
+ });
+
+}
 
 function QuantityFieldChanged()
 {

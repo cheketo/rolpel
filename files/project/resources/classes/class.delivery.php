@@ -42,7 +42,7 @@ class Delivery
 	public function GetOrders()
 	{
 
-			$this->Data[ 'orders' ] = Core::Select( DeliveryOrder::SEARCH_TABLE, '*', self::TABLE_ID . "=" . $this->ID, DeliveryOrder::TABLE_ID );
+			return $this->Data[ 'orders' ] = Core::Select( DeliveryOrderItem::SEARCH_TABLE, '*', self::TABLE_ID . "=" . $this->ID, DeliveryOrder::TABLE_ID );
 
 	}
 
@@ -177,7 +177,7 @@ class Delivery
 			if( $Mode != 'grid' )
 		 	{
 
-					$HTML .=	'<a class="hint--bottom hint--bounce" aria-label="M&aacute;s informaci&oacute;n"><button type="button" class="btn bg-navy ExpandButton" id="expand_' . $Object->ID . '"><i class="fa fa-plus"></i></button></a> ';;
+					$HTML .=	'<a class="hint--bottom hint--bounce" aria-label="M&aacute;s informaci&oacute;n"><button type="button" class="btn bg-navy ExpandButton" id="expand_' . $Object->ID . '"><i class="fa fa-plus"></i></button></a> ';
 
 			}
 
@@ -192,35 +192,51 @@ class Delivery
 							if( $Object->Data[ 'status' ] == 'P' )
 							{
 
-									$HTML	.= '<a class="hint--bottom hint--bounce hint--warning deliveryOrder" aria-label="Empezar a Reparto" process="' . PROCESS. '" id="delivery_' . $Object->ID . '" ><button type="button" class="btn bg-brown"><i class="fa fa-truck"></i></button></a> ';
+									if( count( $Object->GetOrders() ) > 0 )
+									{
+
+											$HTML	.= '<a class="hint--bottom hint--bounce hint--warning deliveryOrder" aria-label="Empezar a Reparto" process="' . PROCESS. '" truck="' . $Object->Data[ 'truck' ][ 'code' ] . '" date="' . Core::DateTimeFormat( $Object->Data[ 'delivery_date' ], 'weekday' ) . ' ' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] )  . '" id="delivery_' . $Object->ID . '" ><button type="button" class="btn bg-brown"><i class="fa fa-truck"></i></button></a> ';
+
+									}
 
 									$HTML	.= '<a class="hint--bottom hint--bounce hint--info orders" aria-label="Asignar Ordenes de Compra" href="orders.php?id=' . $Object->ID . '" process="' . PROCESS. '" id="orders_' . $Object->ID . '" ><button type="button" class="btn btn-primary"><i class="fa fa-dropbox"></i></button></a> ';
 
+									$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="' . PROCESS . '" id="delete_' . $Object->ID . '"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
+
+									$HTML	.= Core::InsertElement( 'hidden', 'delete_question_' . $Object->ID, '&iquest;Desea eliminar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>?' );
+
+									$HTML	.= Core::InsertElement( 'hidden', 'delete_text_ok_' . $Object->ID, 'El reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b> ha sido eliminado.' );
+
+									$HTML	.= Core::InsertElement( 'hidden', 'delete_text_error_' . $Object->ID, 'Hubo un error al intentar eliminar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>.' );
+
+							}else{
+
+									$HTML	.= '<a href="delivery.php?id=' . $Object->ID . '" class="hint--bottom hint--bounce hint--info" aria-label="Entrega del Reparto"><button type="button" class="btn btnBlue"><i class="fa fa-cart-arrow-down"></i></button></a>';
+
+									$HTML	.= '<a class="hint--bottom hint--bounce hint--error rollBackDelivery" aria-label="Devolver a Reparto Pendiente" process="' . PROCESS. '" truck="' . $Object->Data[ 'truck' ][ 'code' ] . '" date="' . Core::DateTimeFormat( $Object->Data[ 'delivery_date' ], 'weekday' ) . ' ' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] )  . '" id="rollback_' . $Object->ID . '" ><button type="button" class="btn bg-red"><i class="fa fa-times"></i></button></a> ';
+
 							}
 
-							$HTML	.= '<a href="edit.php?id=' . $Object->ID . '" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
+							// $HTML	.= '<a href="edit.php?id=' . $Object->ID . '" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
 
-							$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="' . PROCESS . '" id="delete_' . $Object->ID . '"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
+					}else{
 
-							$HTML	.= Core::InsertElement( 'hidden', 'delete_question_' . $Object->ID, '&iquest;Desea eliminar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>?' );
 
-							$HTML	.= Core::InsertElement( 'hidden', 'delete_text_ok_' . $Object->ID, 'El reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b> ha sido eliminado.' );
-
-							$HTML	.= Core::InsertElement( 'hidden', 'delete_text_error_' . $Object->ID, 'Hubo un error al intentar eliminar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>.' );
 
 					}
 
-			}else{
-
-					$HTML	.= '<a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" process="' . PROCESS . '" id="activate_' . $Object->ID . '"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
-
-					$HTML	.= Core::InsertElement( 'hidden', 'activate_question_' . $Object->ID, '&iquest;Desea activar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>?' );
-
-					$HTML	.= Core::InsertElement( 'hidden', 'activate_text_ok_' . $Object->ID, 'El reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b> ha sido activado.' );
-
-					$HTML	.= Core::InsertElement( 'hidden', 'activate_text_error_' . $Object->ID, 'Hubo un error al intentar activar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>.' );
-
 			}
+			// else{
+			//
+			// 		$HTML	.= '<a class="activateElement hint--bottom hint--bounce hint--success" aria-label="Activar" process="' . PROCESS . '" id="activate_' . $Object->ID . '"><button type="button" class="btn btnGreen"><i class="fa fa-check-circle"></i></button></a>';
+			//
+			// 		$HTML	.= Core::InsertElement( 'hidden', 'activate_question_' . $Object->ID, '&iquest;Desea activar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>?' );
+			//
+			// 		$HTML	.= Core::InsertElement( 'hidden', 'activate_text_ok_' . $Object->ID, 'El reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b> ha sido activado.' );
+			//
+			// 		$HTML	.= Core::InsertElement( 'hidden', 'activate_text_error_' . $Object->ID, 'Hubo un error al intentar activar el reparto del cami&oacute;n <b>' . $Object->Data[ 'truck' ][ 'code' ] . '</b> para el d&iacute;a <b>' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] ) . '</b>.' );
+			//
+			// }
 
 			return $HTML;
 
@@ -350,12 +366,35 @@ class Delivery
 
 			}
 
+			switch ( $Object->Data[ 'status' ] )
+			{
+
+					case 'P':
+
+							$Word = 'a Cargar';
+
+					break;
+
+					case 'A':
+
+							$Word = 'a Entregar';
+
+					break;
+
+					case 'F':
+
+							$Word = 'de Productos Entregados';
+
+					break;
+
+			}
+
 			$HTML .= '
 						<div class="row ' . $RowClass . '" style="padding:5px;">
 							<div class="col-xs-12">
 								<div class="listRowInner">
 										<div class="txC" style="padding-top:1em;font-size:24px;">
-	                        <strong><i class="fa fa-cubes"></i> Total a Cargar</strong>
+	                        <strong><i class="fa fa-cubes"></i> Total ' . $Word . '</strong>
 	                  </div>
 								</div>
 							</div>
@@ -547,6 +586,54 @@ class Delivery
 
 	}
 
+	public function Deliver()
+	{
+
+			if( $_POST[ 'items' ] > 0 )
+			{
+
+					$ID = $_POST[ 'delivery' ];
+
+					$Items = array();
+
+					for( $X = 0; $X<$_POST[ 'items' ]; $X++ )
+					{
+
+							$Item = $_POST[ 'item_id_' . $X ];
+
+							$Quantity = $_POST[ 'item_quantity_' . $X ];
+
+							$OriginalQuantity = $_POST[ 'item__original_quantity_' . $X ];
+
+							Core::Update( DeliveryOrderItem::TABLE, 'quantity_delivered = ' . $Quantity . ', quantity_returned = quantity - ' . $Quantity . ', updated_by = ' . $_SESSION[ CoreUser::TABLE_ID ], 'item_id = ' . $Item );
+
+							$DeliveryItem = Core::Select( DeliveryOrderItem::TABLE, '*', 'item_id = ' . $Item )[ 0 ];
+
+							Core::Update( PurchaseItem::TABLE, 'quantity_delivered = quantity_delivered + ' . $DeliveryItem[ 'quantity_delivered' ] . ',quantity_reserved = quantity_reserved - ' . ( $DeliveryItem[ 'quantity_delivered' ]  + $DeliveryItem[ 'quantity_returned' ] ), 'item_id = ' . $DeliveryItem[ 'purchase_item_id' ] );
+
+							$PurchaseItem = Core::Select( PurchaseItem::TABLE, '*', 'item_id = ' . $DeliveryItem[ 'purchase_item_id' ] )[ 0 ];
+
+							if( $PurchaseItem[ 'quantity' ] == $PurchaseItem[ 'quantity_delivered' ] )
+							{
+
+									Core::Update( PurchaseItem::TABLE, "status = 'F'", 'item_id = ' . $DeliveryItem[ 'purchase_item_id' ] );
+
+							}
+
+					}
+
+					Core::Update( self::TABLE, "status = 'F', end_date = NOW(), updated_by = " . $_SESSION[ CoreUser::TABLE_ID ] , self::TABLE_ID . "=" . $ID );
+
+
+			}else{
+
+					echo "Error: no hay items";
+
+			}
+
+
+	}
+
 	public function Delete()
 	{
 
@@ -580,12 +667,34 @@ class Delivery
 
 	}
 
+ public function Rollbackdelivery()
+ {
+
+		 $id 	= $_POST['id'];
+
+		 $delivery = new Delivery( $id );
+
+		 Core::Update( self::TABLE, "status = 'P', start_date = NULL, updated_by = " . $_SESSION[ CoreUser::TABLE_ID ] , self::TABLE_ID . "=" . $id );
+
+ }
+
+ public function Startdelivery()
+ {
+
+		 	$id 	= $_POST['id'];
+
+			$delivery = new Delivery( $id );
+
+			Core::Update( self::TABLE, "status = 'A', start_date = NOW(), updated_by = " . $_SESSION[ CoreUser::TABLE_ID ] , self::TABLE_ID . "=" . $id );
+
+ }
 
 
 	public function Update()
 	{
-		$ID 	= $_POST['id'];
-		$Edit	= new Purchase($ID);
+
+			$ID 	= $_POST['id'];
+			$Edit	= new Purchase($ID);
 
 		// ITEMS DATA
 		$Total = 0;
