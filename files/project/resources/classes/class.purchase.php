@@ -74,6 +74,15 @@ class Purchase
 			Core::Delete("purchase_file_new","status='A' AND DATEDIFF(CURDATE(),creation_date)>0");
 
 		}
+
+		public function IsReserved()
+		{
+
+				$Rows = Core::NumRows( DeliveryOrderItem::TABLE, 'purchase_id', self::TABLE_ID . '=' . $this->Data[ self::TABLE_ID ] );
+
+				return $Rows > 0;
+
+		}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////// SEARCHLIST FUNCTIONS ///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +97,12 @@ class Purchase
 					if($Object->Data['status']=="A")
 					{
 
-							$HTML	.= '<a class="hint--bottom hint--bounce hint--warning rollbackElement" aria-label="Regresar a Pendiente" process="'.PROCESS.'" id="rollback_'.$Object->ID.'"><button type="button" class="btn btn-warning"><i class="fa fa-rotate-left"></i></button></a> ';
+							if( !$Object->IsReserved() )
+							{
+
+									$HTML	.= '<a class="hint--bottom hint--bounce hint--warning rollbackElement" aria-label="Regresar a Pendiente" process="'.PROCESS.'" id="rollback_'.$Object->ID.'"><button type="button" class="btn btn-warning"><i class="fa fa-rotate-left"></i></button></a> ';
+
+							}
 
 					}
 
@@ -188,9 +202,13 @@ class Purchase
 
 		protected function SetSearchFields()
 		{
-			$this->SearchFields['purchase_id'] = Core::InsertElement('text','purchase_id','','form-control','placeholder="C&oacute;digo Cotiz."');
-			$this->SearchFields['title'] = Core::InsertElement('text','title','','form-control','placeholder="Producto"');
-			$this->SearchFields['quantity'] = Core::InsertElement('text','quantity','','form-control','placeholder="Cantidad"');
+
+				$this->SearchFields[ 'purchase_id' ] = Core::InsertElement( 'text', 'purchase_id', '', 'form-control', 'placeholder="C&oacute;digo de Orden"' );
+
+				$this->SearchFields[ 'company' ] = Core::InsertElement( 'text', 'company', '', 'form-control', 'placeholder="Cliente"' );
+
+				$this->SearchFields[ 'delivery_date' ] = Core::InsertElement( 'text', 'delivery_date', '', 'form-control delivery_date', 'placeholder="Fecha de Entrega"' );
+
 		}
 
 		protected function InsertSearchButtons()
@@ -200,9 +218,20 @@ class Purchase
 
 		public function ConfigureSearchRequest()
 		{
-			$_POST['view_order_mode'] = $_POST['view_order_mode']? $_POST['view_order_mode']:'DESC';
-			$_POST['view_order_field'] = $_POST['view_order_field']? $_POST['view_order_field']:'purchase_id';
-			$this->SetSearchRequest();
+
+				$_POST[ 'view_order_mode' ] = $_POST[ 'view_order_mode' ] ? $_POST[ 'view_order_mode' ] : 'DESC';
+
+				$_POST[ 'view_order_field' ] = $_POST[ 'view_order_field' ] ? $_POST[ 'view_order_field' ] : 'purchase_id';
+
+				if( $_POST[ 'delivery_date' ] )
+				{
+
+						$_POST[ 'delivery_date' ] = Core::FromDateToDB( $_POST[ 'delivery_date' ] );
+
+				}
+
+				$this->SetSearchRequest();
+
 		}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

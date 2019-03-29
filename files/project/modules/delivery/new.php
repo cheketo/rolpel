@@ -73,9 +73,9 @@
 
   <?php
 
-      $Foot->SetScript( '../../../../vendors/autocomplete/jquery.auto-complete.min.js');
+      $Foot->SetScript( '../../../../vendors/autocomplete/jquery.auto-complete.min.js' );
 
-      $Foot->SetScript( '../../../../vendors/datepicker/bootstrap-datepicker.js');
+      $Foot->SetScript( '../../../../vendors/datepicker/bootstrap-datepicker.js' );
 
       include( '../../../project/resources/includes/inc.bottom.php');
 

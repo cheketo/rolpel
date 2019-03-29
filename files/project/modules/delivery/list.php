@@ -10,6 +10,8 @@
 
     $Head->SetSubTitle( 'Repartos' );
 
+    $Head->SetStyle( '../../../../vendors/datepicker/datepicker3.css' ); // Date Picker Calendar
+
     $Head->setHead();
 
     include( '../../../project/resources/includes/inc.top.php' );
@@ -21,6 +23,8 @@
 
     /* Footer */
     $Foot->SetScript( '../../../core/resources/js/script.core.searchlist.js' );
+
+    $Foot->SetScript( '../../../../vendors/datepicker/bootstrap-datepicker.js' );
 
     include( '../../../project/resources/includes/inc.bottom.php' );
 

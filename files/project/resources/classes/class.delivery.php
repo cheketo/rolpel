@@ -211,7 +211,7 @@ class Delivery
 
 							}else{
 
-									$HTML	.= '<a href="delivery.php?id=' . $Object->ID . '" class="hint--bottom hint--bounce hint--info" aria-label="Entrega del Reparto"><button type="button" class="btn btnBlue"><i class="fa fa-cart-arrow-down"></i></button></a>';
+									$HTML	.= '<a href="delivery.php?id=' . $Object->ID . '" class=" hint--bottom hint--bounce hint--info" aria-label="Entrega del Reparto"><button type="button" class="btn btnBlue"><i class="fa fa-cart-arrow-down"></i></button></a>';
 
 									$HTML	.= '<a class="hint--bottom hint--bounce hint--error rollBackDelivery" aria-label="Devolver a Reparto Pendiente" process="' . PROCESS. '" truck="' . $Object->Data[ 'truck' ][ 'code' ] . '" date="' . Core::DateTimeFormat( $Object->Data[ 'delivery_date' ], 'weekday' ) . ' ' . Core::FromDBToDate( $Object->Data[ 'delivery_date' ] )  . '" id="rollback_' . $Object->ID . '" ><button type="button" class="btn bg-red"><i class="fa fa-times"></i></button></a> ';
 
@@ -613,10 +613,19 @@ class Delivery
 
 							$PurchaseItem = Core::Select( PurchaseItem::TABLE, '*', 'item_id = ' . $DeliveryItem[ 'purchase_item_id' ] )[ 0 ];
 
+							$PurchaseID = $PurchaseItem;
+
 							if( $PurchaseItem[ 'quantity' ] == $PurchaseItem[ 'quantity_delivered' ] )
 							{
 
 									Core::Update( PurchaseItem::TABLE, "status = 'F'", 'item_id = ' . $DeliveryItem[ 'purchase_item_id' ] );
+
+									if( Core::Select( Purchase::TABLE, 'COUNT(*) as total', 'purchase_id = ' . $PurchaseItem[ 'purchase_id' ] )[ 0 ][ 'total' ] == Core::Select( Purchase::TABLE. 'COUNT(*) as total', "status = 'F' purchase_id = " . $PurchaseItem[ 'purchase_id' ] )[ 0 ][ 'total' ] )
+									{
+
+											Core::Update( Purchase::TABLE, "status = 'F'", 'purchase_id = ' . $PurchaseItem[ 'purchase_id' ] );
+
+									}
 
 							}
 

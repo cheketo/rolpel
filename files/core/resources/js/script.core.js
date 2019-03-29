@@ -50,8 +50,11 @@ function setDatePicker()
       weekStart: 1
     };
 
-    $(".datePicker").each(function(){
-      datePicker(this);
+    $(".datePicker").each(function()
+    {
+
+        datePicker(this);
+
     });
   }
 
@@ -633,6 +636,40 @@ function validateDivChange()
         validate.validateOneField(this);
     });
 }
+
+//////////////////////////////////////////////////// Date Format ////////////////////////////////////////////////////
+
+function dateFormat( date )
+{
+
+    var rawDate = date.split( ' ' );
+
+    var finalDate = rawDate[ 0 ].split( '-' ).reverse().join( '/' );
+
+    return finalDate;
+
+}
+
+function weekday( date )
+{
+
+    var day = new Date( date );
+
+    switch ( day.getDay() )
+    {
+
+        case 0: return 'Domingo'; break;
+        case 1: return 'Lunes'; break;
+        case 2: return 'Martes'; break;
+        case 3: return 'Miercoles'; break;
+        case 4: return 'Jueves'; break;
+        case 5: return 'Viernes'; break;
+        case 6: return 'Sabado'; break;
+
+    }
+
+}
+
 //////////////////////////////////////////////////// Logout ////////////////////////////////////////////////////
 $(function(){
   $("#Logout").click(function(){

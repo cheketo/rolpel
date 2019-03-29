@@ -121,6 +121,8 @@ function initMap()
 
             var companyHTML = '<h4><i class="fa fa-building"></i> ' + purchase[ 'name' ] + '</h4>';
 
+            var dateHTML = '<h4><strong><i class="fa fa-calendar"></i> ' + weekday( purchase[ 'delivery_date' ] ) + ' ' + dateFormat( purchase[ 'delivery_date' ] ) + '</strong></h4>';
+
             var timetable = '<h5><i class="fa fa-clock-o"></i> D&iacute;as y Horarios de Recepci&oacute;n<br>';
 
             if( purchase[ 'monday_from' ] )
@@ -197,7 +199,7 @@ function initMap()
 
             // marker.infowindow = new google.maps.InfoWindow();
 
-            marker.infowindow.setContent( '<div>' + addressHTML + companyHTML + timetable + addButton + removeButton + '</div>' );
+            marker.infowindow.setContent( '<div>' + addressHTML + companyHTML + dateHTML + timetable + '<div class="txC">' + addButton + removeButton + '</div></div>' );
 
             marker.infowindow.open( map, marker );
 
