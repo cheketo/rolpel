@@ -797,7 +797,7 @@ function updateItemExpireDate()
 |    CALCULATE ITEM PRICE BY CUSTOMER    |
 \****************************************/
 $(document).ready(function(){
-	if($(".itemSelect").length>0 && get['customer']=='Y')
+	if($(".itemSelect").length>0)
 	{
 		$(".itemSelect").each(function(){
 			var item = $(this).attr('item');
@@ -831,6 +831,8 @@ function setItemChosen( id )
 
 				if( $( '#TextAutoCompleteitem_' + id ).val() )
 				{
+
+						console.log( product );
 
 						getProductInfo( product, id );
 
