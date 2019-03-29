@@ -620,7 +620,7 @@ class Delivery
 
 									Core::Update( PurchaseItem::TABLE, "status = 'F'", 'item_id = ' . $DeliveryItem[ 'purchase_item_id' ] );
 
-									if( Core::Select( Purchase::TABLE, 'COUNT(*) as total', 'purchase_id = ' . $PurchaseItem[ 'purchase_id' ] )[ 0 ][ 'total' ] == Core::Select( Purchase::TABLE, 'COUNT(*) as total', "status = 'F' purchase_id = " . $PurchaseItem[ 'purchase_id' ] )[ 0 ][ 'total' ] )
+									if( Core::Select( Purchase::TABLE, 'COUNT(*) as total', 'purchase_id = ' . $PurchaseItem[ 'purchase_id' ] )[ 0 ][ 'total' ] == Core::Select( Purchase::TABLE, 'COUNT(*) as total', "status = 'F' AND purchase_id = " . $PurchaseItem[ 'purchase_id' ] )[ 0 ][ 'total' ] )
 									{
 
 											Core::Update( Purchase::TABLE, "status = 'F'", 'purchase_id = ' . $PurchaseItem[ 'purchase_id' ] );
