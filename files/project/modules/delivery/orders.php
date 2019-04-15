@@ -177,7 +177,6 @@
 
                                                         <div>';
 
-
                                               break;
 
                                           }
@@ -215,6 +214,20 @@
                                             </div>';
 
                                   $Position++;
+
+                                  if( $RelatedPurchase[ 'extra' ] )
+                                  {
+
+                                      $HTML .= '<h5><i class="fa fa-user-secret"></i> Información para el cliente:<br><strong><span class="text-green">' . $RelatedPurchase[ 'extra' ] . '</span></strong></h5>';
+
+                                  }
+
+                                  if( $RelatedPurchase[ 'additional_information' ] )
+                                  {
+
+                                      $HTML .= '<h5><i class="fa fa-info-circle"></i> Información para el reparto:<br><strong><span class="text-warning">' . $RelatedPurchase[ 'additional_information' ] . '</span></strong></h5>';
+
+                                  }
 
                               }
 

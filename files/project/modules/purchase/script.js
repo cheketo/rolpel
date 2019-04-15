@@ -832,8 +832,6 @@ function setItemChosen( id )
 				if( $( '#TextAutoCompleteitem_' + id ).val() )
 				{
 
-						console.log( product );
-
 						getProductInfo( product, id );
 
 				}else{

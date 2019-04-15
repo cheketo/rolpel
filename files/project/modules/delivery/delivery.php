@@ -163,6 +163,18 @@
 
                                 </div>
 
+                                <!-- <?php if( $Purchase[ 'extra' ] ){ ?>
+
+                                    <h5><i class="fa fa-user-secret"></i> Información para el cliente:<br><strong><span class="text-green"><?= $Purchase[ 'extra' ] ?></span></strong></h5>
+
+                                <?php } ?>
+
+                                <?php if( $Purchase[ 'additional_information' ] ){ ?>
+
+                                    <h5><i class="fa fa-info-circle"></i> Información para el reparto:<br><strong><span class="text-warning"><?= $Purchase[ 'additional_information' ] ?></span></strong></h5>
+
+                                <?php } ?> -->
+
                             </div>
 
                         </div>

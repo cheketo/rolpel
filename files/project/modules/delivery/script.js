@@ -551,7 +551,25 @@ function addPurchase()
 
 						orderFields = orderFields + '</div>';
 
-						$( '#PurchaseList' ).append( '<div id="purchase_container' + id + '" purchase="' + id + '" class="purchaseContainer" position="' + position + '">' + orderTitle + orderFields + '<br></div>' )
+						var orderExtraInfo = '';
+
+            if(  purchaseData[ 'extra' ] )
+            {
+
+                orderExtraInfo = '<h5><i class="fa fa-user-secret"></i> Información para el cliente:<br><strong><span class="text-green">' + purchaseData[ 'extra' ] + '</span></strong></h5>'
+
+            }
+
+            var orderAdditionalInfo = '';
+
+            if(  purchaseData[ 'additional_information' ] )
+            {
+
+                orderAdditionalInfo = '<h5><i class="fa fa-info-circle"></i> Información para el reparto:<br><strong><span class="text-warning">' + purchaseData[ 'additional_information' ] + '</span></strong></h5>'
+
+            }
+
+						$( '#PurchaseList' ).append( '<div id="purchase_container' + id + '" purchase="' + id + '" class="purchaseContainer" position="' + position + '">' + orderTitle + orderFields + orderExtraInfo + orderAdditionalInfo + '<br></div>' )
 
 						$( '#remove' + id ).removeClass( 'Hidden' );
 

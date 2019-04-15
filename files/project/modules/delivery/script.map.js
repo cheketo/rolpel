@@ -176,6 +176,24 @@ function initMap()
 
             timetable = timetable + '</h5><br>';
 
+            var extraInfo = '';
+
+            if(  purchase[ 'extra' ] )
+            {
+
+                extraInfo = '<h5><i class="fa fa-user-secret"></i> Información para el cliente:<br><strong><span class="text-green">' + purchase[ 'extra' ] + '</span></strong></h5>'
+
+            }
+
+            var additionalInfo = '';
+
+            if(  purchase[ 'additional_information' ] )
+            {
+
+                additionalInfo = '<h5><i class="fa fa-info-circle"></i> Información para el reparto:<br><strong><span class="text-warning">' + purchase[ 'additional_information' ] + '</span></strong></h5>'
+
+            }
+
             var addHidden = '';
 
             var removeHidden = '';
@@ -199,7 +217,7 @@ function initMap()
 
             // marker.infowindow = new google.maps.InfoWindow();
 
-            marker.infowindow.setContent( '<div>' + addressHTML + companyHTML + dateHTML + timetable + '<div class="txC">' + addButton + removeButton + '</div></div>' );
+            marker.infowindow.setContent( '<div>' + addressHTML + companyHTML + dateHTML + timetable + extraInfo + additionalInfo + '<div class="txC">' + addButton + removeButton + '</div></div>' );
 
             marker.infowindow.open( map, marker );
 

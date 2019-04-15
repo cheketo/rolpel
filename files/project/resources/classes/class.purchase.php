@@ -192,6 +192,45 @@ class Purchase
 								</div>
 							</div>';
 			}
+
+			if( $Object->Data[ 'additional_information' ] )
+			{
+
+					$HTML .= '
+								<div class="row" style="padding:5px;">
+									<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 txR">
+										<div class="listRowInner">
+											<span class="smallTitle"><i class="fa fa-info-circle"></i> Información de Uso Interno:</span>
+										</div>
+									</div>
+									<div class="col-sm-12 col-xs-12 col-md-12 col-lg-10 txL">
+										<div class="listRowInner">
+											<span class="listTextStrong">' . $Object->Data[ 'additional_information' ] . '</span>
+										</div>
+									</div>
+								</div>';
+
+			}
+
+			if( $Object->Data[ 'extra' ] )
+			{
+
+					$HTML .= '
+								<div class="row" style="padding:5px;">
+									<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 txR">
+										<div class="listRowInner">
+											<span class="smallTitle"><i class="fa fa-info-circle"></i> Información de Para el Cliente:</span>
+										</div>
+									</div>
+									<div class="col-sm-12 col-xs-12 col-md-10 col-lg-10 txL">
+										<div class="listRowInner">
+											<span class="listTextStrong">' . $Object->Data[ 'extra' ] . '</span>
+										</div>
+									</div>
+								</div>';
+
+			}
+
 			return $HTML;
 		}
 

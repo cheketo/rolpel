@@ -313,7 +313,7 @@ class Delivery
 			// $Object->GetOrderItems();
 			// $Object->GetPurchaseItems();
 
-			$Purchases = Core::Select( 'delivery_order_item a INNER JOIN ' . Purchase::TABLE . ' b ON ( b.purchase_id = a.purchase_id ) INNER JOIN company c ON ( c.company_id = b.company_id ) INNER JOIN company_branch d ON ( d.branch_id = b.branch_id )', 'DISTINCT a.purchase_id, a.position, c.name, d.address  ', self::TABLE_ID . ' = ' . $Object->Data[ self::TABLE_ID ], 'a.position' );
+			$Purchases = Core::Select( 'delivery_order_item a INNER JOIN ' . Purchase::TABLE . ' b ON ( b.purchase_id = a.purchase_id ) INNER JOIN company c ON ( c.company_id = b.company_id ) INNER JOIN company_branch d ON ( d.branch_id = b.branch_id )', 'DISTINCT a.purchase_id, a.position, b.additional_information, b.extra, c.name, d.address  ', self::TABLE_ID . ' = ' . $Object->Data[ self::TABLE_ID ], 'a.position' );
 			$Items = Core::Select( 'delivery_order_item a INNER JOIN ' . PurchaseItem::TABLE . ' b ON ( b.item_id = a.purchase_item_id ) INNER JOIN ' . Product::TABLE . ' c ON ( c.product_id = a.product_id ) ', ' a.*, c.title', self::TABLE_ID . ' = ' . $Object->Data[ self::TABLE_ID ], 'a.position' );
 
 			foreach( $Purchases as $Purchase )
@@ -333,6 +333,34 @@ class Delivery
 
 					}
 
+					$additionalInformation = '';
+
+					if( $Purchase[ 'additional_information' ] )
+					{
+
+							$additionalInformation = '<div class="col-lg-3 col-sm-2 col-xs-12">
+																					<div class="listRowInner">
+																						<span class="smallTitle"><i class="fa fa-info-circle"></i> Información para el reparto</span>
+																						' . $Purchase[ 'additional_information' ] . '
+																					</div>
+																				</div>';
+
+					}
+
+					$extraInformation = '';
+
+					if( $Purchase[ 'extra' ] )
+					{
+
+							$extraInformation = '<div class="col-lg-3 col-sm-2 col-xs-12">
+																					<div class="listRowInner">
+																						<span class="smallTitle"><i class="fa fa-user-secret"></i> Información para el cliente</span>
+																						' . $Purchase[ 'extra' ] . '
+																					</div>
+																				</div>';
+
+					}
+
 					$RowClass = $RowClass != 'bg-gray'? 'bg-gray' : 'bg-gray-active';
 
 					$HTML .= '
@@ -343,13 +371,14 @@ class Delivery
 											<span class="listTextStrong">' . $Purchase[ 'position' ] . '. ' . $Purchase[ 'name' ] . ' - ' . $Purchase[ 'address' ] . '</span>
 										</div>
 									</div>
-									<div class="col-lg-7 col-sm-2 col-xs-12">
+									<div class="col-lg-2 col-sm-2 col-xs-12">
 										<div class="listRowInner">
 											<span class="smallTitle">Productos</span>
 											' . $Products . '
 										</div>
 									</div>
-
+									' . $additionalInformation . '
+								 	' . $extraInformation . '
 								</div>';
 			}
 
