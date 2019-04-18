@@ -1,4 +1,4 @@
-/****************************************\
+﻿/****************************************\
 |                  ALERTS                |
 \****************************************/
 $(document).ready(function(){
@@ -249,12 +249,17 @@ function DayCheck()
 function branchChange()
 {
 
-		$( "#branch" ).change( function()
+		if( $( '#branch' ).length > 0 )
 		{
-				displayDaysAndTime();
-				changeDaysAndTime();
 
-		});
+				$( "#branch" ).change( function()
+				{
+						displayDaysAndTime();
+						changeDaysAndTime();
+
+				});
+
+		}
 
 }
 
@@ -726,12 +731,22 @@ function showHistoryWindow()
 |          LOAD BRANCH SELECT            |
 \****************************************/
 $(function(){
-	$("#company").change(function(){
-		if($(this).val())
-		{
-			fillBranch();
-		}
+	
+	if( $( '#branch-wrapper' ).length > 0 )
+	{
+
+			$("#company").change(function()
+			{
+
+				if($(this).val())
+				{
+					fillBranch();
+				}
+
 	});
+
+	}
+
 });
 
 function fillBranch()
