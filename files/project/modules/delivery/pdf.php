@@ -229,18 +229,18 @@ foreach( $Purchases as $Purchase )
 
     $HTML .= '</table>';
 
-    if( $Purchase[ 'additional_information' ] )
-    {
-
-        $HTML .= '<div>&nbsp;</div>';
-
-        $HTML .= '<hr><h3 align="center">Detalles de ' . $Purchase[ 'name' ] . '</h3><hr>';
-
-        $HTML .= '<div>&nbsp;</div>';
-
-        $HTML .= '<div>' . $Purchase[ 'additional_information' ] . '</div>';
-
-    }
+    // if( $Purchase[ 'additional_information' ] )
+    // {
+    //
+    //     $HTML .= '<div>&nbsp;</div>';
+    //
+    //     $HTML .= '<hr><h3 align="center">Detalles de ' . $Purchase[ 'name' ] . '</h3><hr>';
+    //
+    //     $HTML .= '<div>&nbsp;</div>';
+    //
+    //     $HTML .= '<div>' . $Purchase[ 'additional_information' ] . '</div>';
+    //
+    // }
 
     if( $Purchase[ 'extra' ] )
     {
