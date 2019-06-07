@@ -26,6 +26,8 @@ $(document).ready(function(){
 
 		}
 
+		keyPressAddItem();
+
 });
 
 /****************************************\
@@ -555,6 +557,7 @@ function addItem()
 	                checkHistoryButtons();
 									toggleItemFields();
 									$( '#real_date' ).change();
+									$( '#TextAutoCompleteitem_' + id ).focus();
 	            }else{
 	                console.log('Sin información devuelta. Item='+id);
 	            }
@@ -731,7 +734,7 @@ function showHistoryWindow()
 |          LOAD BRANCH SELECT            |
 \****************************************/
 $(function(){
-	
+
 	if( $( '#branch-wrapper' ).length > 0 )
 	{
 
@@ -1183,3 +1186,65 @@ function rollbackElement()
 // 		rollbackElement();
 //
 // });
+
+function keyPressAddItem()
+{
+
+		// $( document ).on( "keypress", function( e )
+		// {
+		//
+		// 		if ( e.ctrlKey && ( e.which === 97 || e.which === 65 ) )
+		// 		{
+		//
+		// 				console.log( e );
+		//
+		// 		  	console.log( "You pressed ALT + A" );
+		//
+		// 		}
+		//
+		// });
+
+}
+
+var altPressed = false; //Variable to check if the the first button is pressed at this exact moment
+
+$( document ).keydown( function( e )
+{
+
+  	if ( e.ctrlKey )
+		{ //If it's ctrl key
+
+    		altPressed = true; //Set variable to true
+
+  	}
+
+}).keyup( function( e )
+{ //If user releases ctrl button
+
+	  if( e.ctrlKey )
+		{
+
+	    	altPressed = false; //Set it to false
+
+	  }
+
+}); //This way you know if ctrl key is pressed. You can change e.ctrlKey to any other key code you want
+
+$( document ).keydown( function( e )
+{ //For any other keypress event
+
+	  if( e.which == 32 )
+		{ //Checking if it's space button
+
+		    if( altPressed == true )
+				{ //If it's space, check if ctrl key is also pressed
+
+						$( "#add_purchase_item" ).click();
+
+			      altPressed = false; //Important! Set altPressed variable to false. Otherwise the code will work everytime you press the space button again
+
+		    }
+
+	  }
+
+});
