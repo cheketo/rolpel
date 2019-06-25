@@ -117,9 +117,9 @@
 
                                       echo Core::InsertElement( 'text', 'purchase' . $PurchaseID, $PurchaseID, 'Hidden Purchase' );
 
-                                      echo Core::InsertElement( 'text', 'purchase_data' . $PurchaseID,  str_replace( '"',"'", json_encode( $Purchase, JSON_HEX_QUOT ) ) );
+                                      echo Core::InsertElement( 'text', 'purchase_data' . $PurchaseID,  str_replace( '"',"'", json_encode( str_replace( "'","", $Purchase ), JSON_HEX_QUOT ) ) );
 
-                                      echo Core::InsertElement( 'text', 'items_data' . $PurchaseID,  str_replace( '"',"'", json_encode( $Items, JSON_HEX_QUOT ) ) );
+                                      echo Core::InsertElement( 'text', 'items_data' . $PurchaseID,  str_replace( '"',"'", json_encode( str_replace( "'","", $Items ), JSON_HEX_QUOT ) ) );
 
                                       echo Core::InsertElement( 'text', 'purchase_color' . $PurchaseID, $Purchases[ $Key ][ 'color' ], 'Hidden Color' );
 
