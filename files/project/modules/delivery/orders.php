@@ -85,19 +85,21 @@
 
                                   $Days = array( 'sunday', 'monday', 'tuesday', 'wednesday','thursday','friday', 'saturday');
 
+                                  $date = date("Y-m-d") . ' 00:00:00';
+
                                   foreach( $Purchases as $Key => $Purchase )
                                   {
 
-                                      if( $Purchase[ $Days[ $DayOfWeek ] . '_from' ]  && date("Y-m-d H:i:s") <= $Purchase[ 'delivery_date' ] )
+                                      if( $Purchase[ $Days[ $DayOfWeek ] . '_from' ]  && $date <= $Purchase[ 'delivery_date' ] )
                                       {
 
                                           $Purchases[ $Key ][ 'color' ] = 'green';
 
-                                      }elseif( !$Purchase[ $Days[ $DayOfWeek ] . '_from' ]  && date("Y-m-d H:i:s") <= $Purchase[ 'delivery_date' ] ){
+                                      }elseif( !$Purchase[ $Days[ $DayOfWeek ] . '_from' ]  && $date <= $Purchase[ 'delivery_date' ] ){
 
                                           $Purchases[ $Key ][ 'color' ] = 'blue';
 
-                                      }elseif( $Purchase[ $Days[ $DayOfWeek ] . '_from' ]  && date("Y-m-d H:i:s") > $Purchase[ 'delivery_date' ] ){
+                                      }elseif( $Purchase[ $Days[ $DayOfWeek ] . '_from' ]  && $date > $Purchase[ 'delivery_date' ] ){
 
                                           $Purchases[ $Key ][ 'color' ] = 'pink';
 

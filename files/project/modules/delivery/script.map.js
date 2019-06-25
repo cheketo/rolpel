@@ -67,6 +67,8 @@ function initMap()
 
 				purchase = JSON.parse( purchase	);
 
+        console.log( purchase );
+
         if( !locations[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] || purchase[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] == 'undefined' )
         {
             locations[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] = true;
