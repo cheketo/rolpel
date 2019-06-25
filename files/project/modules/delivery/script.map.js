@@ -65,9 +65,9 @@ function initMap()
 
         var purchase = $( '#purchase_data' + pID ).val().replace( /'/g, '"');
 
-				purchase = JSON.parse( purchase	);
-
         console.log( purchase );
+
+				purchase = JSON.parse( purchase	);
 
         if( !locations[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] || purchase[ purchase[ 'lat' ] + ',' + purchase[ 'lng' ] ] == 'undefined' )
         {
