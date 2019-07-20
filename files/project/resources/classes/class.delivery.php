@@ -189,7 +189,9 @@ class Delivery
 					if( $Object->Data[ 'status' ] != 'F' )
 					{
 
-							$HTML	.= '<a href="pdf.php?id=' . $Object->ID . '" target="_blank" class=" hint--bottom hint--bounce" aria-label="Ver en PDF"><button type="button" class="btn btn-default"><i class="fa fa-file-pdf-o text-red"></i></button></a>';
+							$HTML	.= '<a href="pdf_delivery.php?id=' . $Object->ID . '" target="_blank" class=" hint--bottom hint--bounce" aria-label="Ver Repartos en PDF"><button type="button" class="btn btn-default"><i class="fa fa-file-pdf-o text-red"></i></button></a> ';
+
+							$HTML	.= '<a href="pdf_production.php?id=' . $Object->ID . '" target="_blank" class=" hint--bottom hint--bounce" aria-label="Ver Fabricaci&oacute;n en PDF"><button type="button" class="btn btn-default"><i class="fa fa-file-powerpoint-o text-red"></i></button></a> ';
 
 							if( $Object->Data[ 'status' ] == 'P' )
 							{

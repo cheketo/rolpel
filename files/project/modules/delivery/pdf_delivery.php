@@ -35,7 +35,7 @@ $pdf->SetSubject( 'Reparto RolPel' );
 $pdf->SetKeywords( 'RolPel, PDF, reparto, orden, cartón');
 
 // set default header data
-$pdf->SetHeaderData( '../../../../skin/images/body/logos/rolpel.png', 50, 'Reparto Nº' . $ID, 'Camión: ' . $Delivery[ 'truck' ][ 'code' ] .  ' - Fecha: ' . Core::FromDBToDate( $Delivery[ 'delivery_date' ] ) . ' (' . Core::DateTimeFormat( $Delivery[ 'delivery_date' ], 'weekday' ) . ')', array(0,64,255), array(0,64,128) );
+$pdf->SetHeaderData( '', 50, 'Reparto Nº' . $ID, 'Camión: ' . $Delivery[ 'truck' ][ 'code' ] .  ' - Fecha: ' . Core::FromDBToDate( $Delivery[ 'delivery_date' ] ) . ' (' . Core::DateTimeFormat( $Delivery[ 'delivery_date' ], 'weekday' ) . ')', array(0,64,255), array(0,64,128) );
 $pdf->setFooterData( array( 0, 64, 0 ), array( 0, 64, 128 ) );
 
 // set header and footer fonts
@@ -71,7 +71,7 @@ $pdf->setFontSubsetting( true );
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf->SetFont( 'dejavusans', '', 14, '', true );
+$pdf->SetFont( 'dejavusans', '', 11, '', true );
 
 // Add a page
 // This method has several options, check the source code documentation for more information.
@@ -84,10 +84,10 @@ $pdf->setTextShadow( array( 'enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.
 
 $HTML = '<div>&nbsp;</div>';
 
-$HTML .= '<h1 style="text-align:center;">RECORRIDO</h1>';
+$HTML .= '<h3 style="text-align:center;">RECORRIDO</h3>';
 
-$HTML .= '<table width="100%">
-              <tr style="background-color:#AAA;line-height:50px;font-weight:bold;">
+$HTML .= '<table width="100%" border="1">
+              <tr style="line-height:50px;font-weight:bold;">
 
                   <td align="center">ORDEN</td>
                   <td align="center">CLIENTE</td>
@@ -99,21 +99,10 @@ $HTML .= '<table width="100%">
 foreach( $Purchases as $Purchase )
 {
 
-    if( $BgColor == 'CCC' )
-    {
-
-        $BgColor = 'EEE';
-
-    }else{
-
-        $BgColor = 'CCC';
-
-    }
-
-    $HTML .= '<tr style="background-color:#' . $BgColor . ';">
-                  <td align="center" style="line-height:50px;">' . $Purchase[ 'position' ] . '</td>
-                  <td align="center" style="line-height:50px;font-style:italic;">' . $Purchase[ 'name' ] . '</td>
-                  <td align="center" style="line-height:50px;color:green;font-weight:bold;">' . $Purchase[ 'address' ] . '</td>
+    $HTML .= '<tr style="line-height:20px;">
+                  <td align="center" style="">' . $Purchase[ 'position' ] . '</td>
+                  <td align="center" style="font-style:italic;">' . $Purchase[ 'name' ] . '</td>
+                  <td align="center" style="color:green;font-weight:bold;">' . $Purchase[ 'address' ] . '</td>
               </tr>';
 
 }
@@ -129,7 +118,7 @@ $BgColor = 'EEE';
 
 // Add a page
 // This method has several options, check the source code documentation for more information.
-$pdf->AddPage();
+// $pdf->AddPage();
 
 // set text shadow effect
 $pdf->setTextShadow( array( 'enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array( 196, 196, 196 ), 'opacity' => 1, 'blend_mode' => 'Normal' ) );
@@ -137,36 +126,39 @@ $pdf->setTextShadow( array( 'enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.
 // Creating Delivery HTML
 
 $HTML = '<div>&nbsp;</div>';
-$HTML .= '<h1 style="text-align:center;">TOTAL A CARGAR</h1>';
+$HTML .= '<h3 style="text-align:center;">TOTAL A CARGAR</h3>';
 
-$HTML .= '<table width="100%">
-              <tr style="background-color:#AAA;line-height:50px;font-weight:bold;">
+$HTML .= '<table width="100%" border="1">
+              <tr style="line-height:30px;font-weight:bold;">
 
-                  <td>&nbsp;</td>
                   <td align="center">PRODUCTO</td>
                   <td align="center">CANTIDAD</td>
 
               </tr>';
-
+$TotalItems = [];
 
 foreach( $Items as $Item )
 {
 
-    if( $BgColor == 'CCC' )
+    if( $TotalItems[ $Item[ 'title' ] ] )
     {
 
-        $BgColor = 'EEE';
+        $TotalItems[ $Item[ 'title' ] ] += $Item[ 'quantity' ];
 
     }else{
 
-        $BgColor = 'CCC';
+        $TotalItems[ $Item[ 'title' ] ] = $Item[ 'quantity' ];
 
     }
 
-    $HTML .= '<tr style="background-color:#' . $BgColor . ';">
-                  <td align="right" style="line-height:50px;">&nbsp;<img style="width:40px;height:40px;" src="' . Product::DEFAULT_IMG . '"></td>
-                  <td align="center" style="line-height:50px;font-style:italic;">' . $Item[ 'title' ] . '</td>
-                  <td align="center" style="line-height:50px;">' . $Item[ 'quantity' ] . '</td>
+}
+
+foreach( $TotalItems as $Key => $Value)
+{
+
+    $HTML .= '<tr style="line-height:20px;">
+                  <td align="center" style="font-style:italic;">' . $Key . '</td>
+                  <td align="center" style="">' . $Value . '</td>
               </tr>';
 
 }
@@ -181,20 +173,20 @@ $pdf->writeHTMLCell( 0, 0, '', '', $HTML, 0, 1, 0, true, '', true );
 foreach( $Purchases as $Purchase )
 {
 
-    $pdf->AddPage();
+    // $pdf->AddPage();
 
-    $BgColor == 'EEE';
+
 
     $HTML = '';
-    $HTML .= '<h1 style="text-align:center;">' . $Purchase[ 'position' ] . ' - ' . $Purchase[ 'name' ] . '</h1>';
-    $HTML .= '<div align="center"><img style="width:50px;height:50px;" src="' . Purchase::DEFAULT_IMG . '"></div>';
-    $HTML .= '<div style="text-align:center;font-size:20px;"><h2>(' . $Purchase[ 'address' ] . ')</h2></div>';
+    $HTML .= '<div>&nbsp;</div>';
+    $HTML .= '<h3 style="text-align:center;color:green">' . $Purchase[ 'position' ] . ' - ' . $Purchase[ 'name' ] . ' ';
+    // $HTML .= '<div align="center"><img style="width:50px;height:50px;" src="' . Purchase::DEFAULT_IMG . '"></div>';
+    $HTML .= '(' . $Purchase[ 'address' ] . ')</h3>';
     $HTML .= '<div>&nbsp;</div>';
 
-    $HTML .= '<table width="100%">
-                  <tr style="background-color:#AAA;line-height:50px;font-weight:bold;">
+    $HTML .= '<table width="100%" border="1">
+                  <tr style="line-height:30px;font-weight:bold;">
 
-                      <td>&nbsp;</td>
                       <td align="center">PRODUCTO</td>
                       <td align="center">CANTIDAD</td>
 
@@ -206,21 +198,11 @@ foreach( $Purchases as $Purchase )
         if( $Item[ Purchase::TABLE_ID ] == $Purchase[ Purchase::TABLE_ID ] )
         {
 
-          if( $BgColor == 'CCC' )
-          {
+          $HTML .= '<tr style="line-height:20px;">
 
-              $BgColor = 'EEE';
+                        <td align="center" style="font-style:italic;">' . $Item[ 'title' ] . '</td>
+                        <td align="center" style="">' . $Item[ 'quantity' ] . '</td>
 
-          }else{
-
-              $BgColor = 'CCC';
-
-          }
-
-          $HTML .= '<tr style="background-color:#' . $BgColor . ';">
-                        <td align="right" style="line-height:50px;">&nbsp;<img style="width:40px;height:40px;" src="' . Product::DEFAULT_IMG . '"></td>
-                        <td align="center" style="line-height:50px;font-style:italic;">' . $Item[ 'title' ] . '</td>
-                        <td align="center" style="line-height:50px;">' . $Item[ 'quantity' ] . '</td>
                     </tr>';
 
         }
@@ -249,9 +231,7 @@ foreach( $Purchases as $Purchase )
 
         $HTML .= '<hr><h3 align="center">Información para el cliente ' . $Purchase[ 'name' ] . '</h3><hr>';
 
-        $HTML .= '<div>&nbsp;</div>';
-
-        $HTML .= '<div style="font-style:italic;">' . $Purchase[ 'extra' ] . '</div>';
+        $HTML .= '<div style="color:purple">' . $Purchase[ 'extra' ] . '</div>';
 
     }
 
