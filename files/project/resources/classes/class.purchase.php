@@ -78,7 +78,7 @@ class Purchase
 		public function IsReserved()
 		{
 
-				$Rows = Core::NumRows( DeliveryOrderItem::TABLE, 'purchase_id', self::TABLE_ID . '=' . $this->Data[ self::TABLE_ID ] );
+				$Rows = Core::NumRows( DeliveryOrderItem::TABLE . ' a', 'purchase_id', self::TABLE_ID . '=' . $this->Data[ self::TABLE_ID ] . " AND ( SELECT count(*) FROM delivery b WHERE delivery_id = a.delivery_id AND ( status = 'A' OR status = 'F' ) ) > 0 " );
 
 				return $Rows > 0;
 
@@ -88,6 +88,12 @@ class Purchase
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		protected static function MakeActionButtonsHTML($Object,$Mode='list')
 		{
+
+			$DeleteButton = '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="'.PROCESS.'" id="delete_'.$Object->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
+			$DeleteButton	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>?');
+			$DeleteButton	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La orden de compra de <b>'.$Object->Data['company'].'</b> ha sido eliminada.');
+			$DeleteButton	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>.');
+
 			if($Mode!='grid') $HTML .=	'<a class="hint--bottom hint--bounce" aria-label="M&aacute;s informaci&oacute;n"><button type="button" class="btn bg-navy ExpandButton" id="expand_'.$Object->ID.'"><i class="fa fa-plus"></i></button></a> ';;
 			if($Object->Data['status']!="I")
 			{
@@ -102,6 +108,8 @@ class Purchase
 
 									$HTML	.= '<a class="hint--bottom hint--bounce hint--warning rollbackElement" aria-label="Regresar a Pendiente" process="'.PROCESS.'" id="rollback_'.$Object->ID.'"><button type="button" class="btn btn-warning"><i class="fa fa-rotate-left"></i></button></a> ';
 
+									$HTML	.= $DeleteButton;
+
 							}
 
 					}
@@ -115,12 +123,10 @@ class Purchase
 
 							$HTML	.= '<a href="edit.php?id='.$Object->ID.self::GetParams().'" class="hint--bottom hint--bounce hint--info" aria-label="Editar"><button type="button" class="btn btnBlue"><i class="fa fa-pencil"></i></button></a>';
 
+							$HTML	.= $DeleteButton;
+
 					}
 
-					$HTML	.= '<a class="deleteElement hint--bottom hint--bounce hint--error" aria-label="Eliminar" process="'.PROCESS.'" id="delete_'.$Object->ID.'"><button type="button" class="btn btnRed"><i class="fa fa-trash"></i></button></a>';
-					$HTML	.= Core::InsertElement('hidden','delete_question_'.$Object->ID,'&iquest;Desea eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>?');
-					$HTML	.= Core::InsertElement('hidden','delete_text_ok_'.$Object->ID,'La orden de compra de <b>'.$Object->Data['company'].'</b> ha sido eliminada.');
-					$HTML	.= Core::InsertElement('hidden','delete_text_error_'.$Object->ID,'Hubo un error al intentar eliminar la orden de compra de <b>'.$Object->Data['company'].'</b>.');
 				}
 				// $HTML	.= '<a class="hint--bottom hint--bounce hint--warning rollbackElement" aria-label="Regresar a Pendiente" process="'.PROCESS.'" id="rollback_'.$Object->ID.'"><button type="button" class="btn btn-warning"><i class="fa fa-rotate-left"></i></button></a> ';
 			}else{
@@ -641,6 +647,17 @@ class Purchase
 			self::Sendemail($ID,$_POST['receiver']);
 		}
 
+		public function delete()
+		{
+
+				$ID	= $_POST[ 'id' ];
+
+				$this->Rollback();
+
+				Core::Update( self::TABLE, "status = 'I'", self::TABLE_ID . "=" . $ID );
+
+		}
+
 		public function Store()
 		{
 
@@ -664,15 +681,17 @@ class Purchase
 
 				$ID	= $_POST[ 'id' ];
 
-
 				$IsValid = true;
 
 				$Deliverys = Core::Select( 'delivery_order_item', 'DISTINCT ' . Delivery::TABLE_ID, self::TABLE_ID . ' = ' . $ID );
 
-				foreach( $Deliverys as $Delivery )
+				foreach( $Deliverys as $Key => $DeliveryItem )
 				{
 
-						if( $Delivery[ 'status' ] != 'P' )
+						$Delivery = Core::Select( 'delivery', '*', ' delivery_id = ' . $DeliveryItem[ 'delivery_id' ] );
+
+						// if( $DeliveryItem[ 'status' ] != 'P' )
+						if( $DeliveryItem[ 'quantity_delivered' ] > 0 || $Delivery[ 'status' ] == 'A' || $Delivery[ 'status' ] == 'F' )
 						{
 
 								$IsValid = false;
@@ -699,7 +718,7 @@ class Purchase
 
 				}else{
 
-						echo 'La orden de compra no puede ser devuelta al estado pediente porque ya forma parte de un reparto activo.';
+						echo 'La orden de compra no puede ser eliminada o devuelta a estado pendiente porque ya forma parte de un reparto activo.';
 
 				}
 
