@@ -609,9 +609,9 @@ class Delivery
 
 							// $PurchaseItem = Core::Select( 'purchase_item', '*', 'item_id =' . $Item[ 'item_id' ] )[0];
 
-							Core::Delete( 'delivery_order_item', 'item_id=' . $Item[ 'item_id' ] );
+							Core::Update( PurchaseItem::TABLE, 'quantity_reserved = quantity_reserved - ' . $Item[ 'quantity' ], 'item_id=' . $Item[ 'purchase_item_id' ] );
 
-							Core::Update( PurchaseItem::TABLE, 'quantity_reserved = quantity_reserved - ' . $Item[ 'quantity' ], 'item_id=' . $Item[ 'item_id' ] );
+							Core::Delete( 'delivery_order_item', 'item_id=' . $Item[ 'item_id' ] );
 
 					}
 
