@@ -8,9 +8,13 @@
 
     $DB_CONFIG[ 'name' ]     = 'rolpel';
 
-    $DB_CONFIG[ 'user' ]     = 'root';
+    // $DB_CONFIG[ 'user' ]     = 'root';
+    //
+    // $DB_CONFIG[ 'password' ] = 'mysql';
 
-    $DB_CONFIG[ 'password' ] = 'mysql';
+    $DB_CONFIG[ 'user' ]     = 'homestead';
+
+    $DB_CONFIG[ 'password' ] = 'secret';
 
     $DB_CONFIG[ 'host' ]     = 'localhost';
 
