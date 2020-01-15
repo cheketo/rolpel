@@ -9,7 +9,7 @@
     $DB_CONFIG[ 'name' ]     = 'rolpel';
 
     // $DB_CONFIG[ 'user' ]     = 'root';
-    //
+    // Test comment
     // $DB_CONFIG[ 'password' ] = 'mysql';
 
     $DB_CONFIG[ 'user' ]     = 'homestead';
