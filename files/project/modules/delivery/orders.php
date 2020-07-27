@@ -14,7 +14,7 @@
 
       // var_dump( Core::LastQuery() );
 
-      $PreviousItems = Core::Select( PurchaseItem::TABLE . ' a LEFT JOIN delivery_order_item b ON ( b.purchase_item_id = a.item_id AND b.delivery_id = ' . $ID . ' )', 'a.item_id, a.purchase_id, a.product_id, IF( b.position, b.position, (SELECT position FROM delivery_order_item d WHERE d.delivery_id = ' . $ID . ' AND d.purchase_id = a.purchase_id ) ) as position , b.delivery_id, b.quantity', ' a.purchase_id IN ( SELECT purchase_id FROM delivery_order_item c WHERE c.delivery_id = ' . $ID . ' ) ', 'position' );
+      $PreviousItems = Core::Select( PurchaseItem::TABLE . ' a LEFT JOIN delivery_order_item b ON ( b.purchase_item_id = a.item_id AND b.delivery_id = ' . $ID . ' )', 'a.item_id, a.purchase_id, a.product_id, IF( b.position, b.position, (SELECT position FROM delivery_order_item d WHERE d.delivery_id = ' . $ID . ' AND d.purchase_id = a.purchase_id LIMIT 1 ) ) as position , b.delivery_id, b.quantity', ' a.purchase_id IN ( SELECT purchase_id FROM delivery_order_item c WHERE c.delivery_id = ' . $ID . ' ) ', 'position' );
 
       // $PreviousItems = Core::Select( 'delivery_order_item b LEFT JOIN ' . PurchaseItem::TABLE . ' a  ON ( a.purchase_id = b.purchase_id )', 'a.item_id, a.purchase_id, a.product_id, b.position, b.delivery_id, b.quantity', 'b.delivery_id = ' . $ID, 'a.item_id, a.product_id, b.position' );
 
